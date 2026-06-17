@@ -99,3 +99,27 @@ Stage Summary:
 - Same auth: admin / ganiyu2024 via sessionStorage
 - Removed dead code: admin-context.tsx, admin-panel.tsx, AdminProvider from providers
 - Lint clean, 0 console errors, all 7 admin tabs functional, navigation between / and /admin works both ways
+
+---
+Task ID: 4
+Agent: Main (Z.ai Code)
+Task: Investigate "404 this page could not found" reported by user.
+
+Work Log:
+- Checked dev.log: found `GET /admi 404` (typo — missing final "n") immediately before several successful `GET /admin 200` requests. The correct /admin route returns HTTP 200 and renders the full admin dashboard. The 404 was caused by a typo in the URL (/admi instead of /admin)
+- Verified via curl: /admin -> HTTP 200 (correct title "Admin Dashboard — Ganiyu Al-Hassan Oluwaseyi"), / -> HTTP 200
+- Verified via agent-browser: http://localhost:3000/admin renders the full admin dashboard (sidebar with 7 tabs, header, content) — 0 console errors
+- To prevent future confusion, created a premium custom 404 page at src/app/not-found.tsx:
+  * Large gradient "404" number with glow
+  * Compass icon, "Page Not Found" heading, helpful description
+  * "Back to Home" button (links to /)
+  * "Admin Dashboard" button (links to /admin)
+  * A tip chip showing the correct admin URL is "/admin"
+  * Particle background, glassmorphism, language/theme toggles — matches the portfolio's premium aesthetic
+- Ran `bun run lint` — 0 errors
+- Browser-verified the 404 page: visiting /admi (typo) renders the custom 404 with all links; clicking "Admin Dashboard" navigates to /admin which renders correctly; 0 console errors
+
+Stage Summary:
+- Root cause: URL typo (/admi instead of /admin). The /admin route itself works perfectly (HTTP 200, renders full dashboard)
+- Added custom not-found.tsx so any future mistyped URL shows a helpful premium 404 page with direct links to Home and Admin Dashboard, plus a tip showing the correct /admin path
+- Correct admin URL: /admin (with the "n")

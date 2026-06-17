@@ -58,29 +58,25 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
     >
       {/* Particle background */}
       <div className="absolute inset-0">
-        <ParticleBackground density={50} />
+        <ParticleBackground density={30} />
       </div>
 
-      {/* Floating geometric shapes */}
-      <motion.div
+      {/* Floating geometric shapes (CSS-driven for performance) */}
+      <div
         className="absolute left-[8%] top-[20%] h-20 w-20 rounded-2xl border border-[#FF5A1F]/30"
-        animate={{ y: [0, -30, 0], rotate: [0, 180, 360] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        style={{ animation: "float-rotate 12s ease-in-out infinite" }}
       />
-      <motion.div
+      <div
         className="absolute right-[12%] top-[15%] h-14 w-14 rounded-full border-2 border-[#FF5A1F]/20"
-        animate={{ y: [0, 25, 0], x: [0, 15, 0] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+        style={{ animation: "float-circle 9s ease-in-out infinite" }}
       />
-      <motion.div
-        className="absolute bottom-[18%] left-[15%] h-10 w-10 rotate-45 bg-[#FF5A1F]/10"
-        animate={{ y: [0, -20, 0], rotate: [45, 225, 405] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      <div
+        className="absolute bottom-[18%] left-[15%] h-10 w-10 bg-[#FF5A1F]/10"
+        style={{ animation: "float-diamond 10s ease-in-out infinite" }}
       />
-      <motion.div
+      <div
         className="absolute bottom-[25%] right-[8%] h-16 w-16 rounded-full bg-gradient-to-br from-[#FF5A1F]/20 to-transparent"
-        animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        style={{ animation: "float-orb 7s ease-in-out infinite" }}
       />
 
       {/* Gradient orbs */}
@@ -215,13 +211,12 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
         <span className="text-xs font-medium uppercase tracking-widest">
           {t.hero.scrollDown}
         </span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
+        <div
           className="flex h-9 w-5 items-start justify-center rounded-full border-2 border-current p-1"
+          style={{ animation: "float-badge-up 1.5s ease-in-out infinite" }}
         >
           <span className="h-2 w-1 rounded-full bg-current" />
-        </motion.div>
+        </div>
         <ArrowDown className="h-4 w-4" />
       </motion.button>
     </section>

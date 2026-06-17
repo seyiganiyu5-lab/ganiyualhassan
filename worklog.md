@@ -147,3 +147,51 @@ Stage Summary:
 - Added discreet footer "Admin" link (Shield icon + text, muted color) for reliable one-click access via Next.js client-side navigation
 - User can now access admin two ways: (1) click the small Admin link in the footer, or (2) type /admin in the URL (works, but preview panel's live typing may show intermediate 404s)
 - Lint clean, 0 console errors, navigation verified
+
+---
+Task ID: 6
+Agent: Main (Z.ai Code)
+Task: User reports "there is a problem with the website" — investigate and fix.
+
+Work Log:
+- Read dev.log and found critical issues:
+  * "⚠ Server is approaching the used memory threshold, restarting..." — dev server crashed from memory bloat
+  * "GET / 200 in 4.8s (render: 4.7s)" — single page render took 4.7s (should be ~200ms)
+  * "✓ Compiled in 378.1s" — 6+ minute recompilation
+  * Server was unresponsive (curl requests timing out)
+- Diagnosed root cause: home page had ~12 simultaneous infinite framer-motion animations (4 floating shapes, 2 avatar rotating rings, 2 floating badges, particle canvas with O(n²) connection loop using sqrt, typing effect, count-up, ping, scroll indicator). This caused:
+  * High memory consumption (Turbopack + framer-motion JS-driven animations)
+  * Slow SSR render (4.7s)
+  * Memory threshold crash → server restart → website down
+- Optimized ParticleBackground (src/components/portfolio/particle-background.tsx):
+  * Reduced default density from 60 to 35
+  * Changed particle area divisor from 14000 to 22000 (fewer particles per pixel)
+  * Replaced Math.sqrt distance check with squared-distance comparison (avoids expensive sqrt in O(n²) loop)
+  * Reduced connection distance from 120 to 110
+  * Added prefers-reduced-motion support (renders single static frame)
+  * Added debounced resize handler (200ms) to prevent particle re-initialization spam
+  * Reduced particle velocity and size for lighter rendering
+- Converted framer-motion infinite animations to CSS keyframes (GPU-accelerated, far less memory):
+  * Added 7 new CSS keyframes to globals.css: float-rotate, float-circle, float-diamond, float-orb, spin-reverse, float-badge-up, float-badge-down
+  * Hero section (hero-section.tsx): converted 4 floating shapes from <motion.div animate={...}> to plain <div style={{animation:...}}>. Converted scroll indicator bounce to CSS. Reduced particle density from 50 to 30.
+  * Animated avatar (animated-avatar.tsx): converted ALL framer-motion infinite loops to CSS — glow orb (float-orb), rotating rings (spin-slow/spin-reverse), floating badges (float-badge-up/down). Removed framer-motion import entirely. Kept SVG static (removed motion.g, motion.circle, motion.path, motion.text entrance animations).
+- Cleared stale .next cache and restarted dev server via start-dev.sh
+- Verified performance improvements:
+  * Render time: 4.7s → 339ms (14x faster)
+  * Response time: timeout → 53-103ms (45x faster)
+  * Memory: was hitting threshold → stable at ~1GB, no growth across 5 rapid requests
+  * No memory threshold warnings in log
+- Browser-verified via agent-browser:
+  * Home page loads with correct title, all sections render (Hero with name+CTAs, About with skills+journey, Projects with search+filters+cards)
+  * Theme toggle works (dark↔light)
+  * Language switch works (EN↔FR)
+  * /admin route works (dashboard with all 7 tabs, session persisted)
+  * 0 console errors
+- Lint: 0 errors
+- Full-page screenshot captured (593 KB)
+
+Stage Summary:
+- Root cause: too many simultaneous JS-driven infinite animations (framer-motion) + heavy particle canvas (O(n²) with sqrt) caused memory bloat → server crash → website down + 4.7s render times
+- Fix: converted all infinite animations from framer-motion (JS-driven) to CSS keyframes (GPU-accelerated), optimized particle background (squared-distance, fewer particles, debounced resize, reduced-motion support)
+- Results: render 4.7s→339ms (14x), response timeout→53ms (45x), memory stable (no threshold crashes), 0 console errors
+- Website is now fast and stable. All features still work (theme, language, admin, all sections)

@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 interface AnimatedAvatarProps {
   imageUrl?: string | null;
   name?: string;
@@ -11,10 +9,12 @@ export function AnimatedAvatar({ imageUrl, name = "G" }: AnimatedAvatarProps) {
   if (imageUrl) {
     return (
       <div className="relative mx-auto aspect-square w-full max-w-sm">
-        <motion.div
+        <div
           className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#FF5A1F] via-[#ff8a5f] to-[#FF5A1F] blur-2xl opacity-50"
-          animate={{ scale: [1, 1.1, 1], rotate: [0, 90, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            animation: "float-orb 8s ease-in-out infinite",
+            transformOrigin: "center",
+          }}
         />
         <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-[#FF5A1F]/30 glass-strong p-1">
           <img
@@ -31,22 +31,22 @@ export function AnimatedAvatar({ imageUrl, name = "G" }: AnimatedAvatarProps) {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-sm">
       {/* Glow orbs */}
-      <motion.div
+      <div
         className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#FF5A1F] via-[#ff8a5f] to-[#FF5A1F] blur-3xl opacity-40"
-        animate={{ scale: [1, 1.15, 1], rotate: [0, 90, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          animation: "float-orb 8s ease-in-out infinite",
+          transformOrigin: "center",
+        }}
       />
 
       {/* Rotating ring */}
-      <motion.div
+      <div
         className="absolute inset-0 rounded-full border-2 border-dashed border-[#FF5A1F]/40"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        style={{ animation: "spin-slow 30s linear infinite" }}
       />
-      <motion.div
+      <div
         className="absolute inset-4 rounded-full border border-[#FF5A1F]/20"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        style={{ animation: "spin-reverse 40s linear infinite" }}
       />
 
       {/* Inner avatar */}
@@ -68,65 +68,45 @@ export function AnimatedAvatar({ imageUrl, name = "G" }: AnimatedAvatarProps) {
             </linearGradient>
           </defs>
           {/* Silhouette */}
-          <motion.g
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-          >
+          <g>
             {/* Head */}
-            <motion.circle
-              cx="100"
-              cy="75"
-              r="32"
-              fill="url(#avatarGrad)"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            />
+            <circle cx="100" cy="75" r="32" fill="url(#avatarGrad)" />
             {/* Shoulders/body */}
-            <motion.path
+            <path
               d="M 40 180 Q 40 130 100 130 Q 160 130 160 180 Z"
               fill="url(#avatarGrad2)"
-              initial={{ scaleY: 0 }}
-              animate={{ scaleY: 1 }}
-              transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
               style={{ transformOrigin: "100px 180px" }}
             />
             {/* Initial */}
-            <motion.text
+            <text
               x="100"
               y="88"
               textAnchor="middle"
               className="font-black"
               fontSize="36"
               fill="#fff"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
             >
               G
-            </motion.text>
-          </motion.g>
+            </text>
+          </g>
         </svg>
       </div>
 
       {/* Floating badges */}
-      <motion.div
+      <div
         className="absolute -right-2 top-8 flex items-center gap-1.5 rounded-full glass-strong border border-border px-3 py-1.5 text-xs font-semibold shadow-lg"
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        style={{ animation: "float-badge-up 3s ease-in-out infinite" }}
       >
         <span className="h-2 w-2 rounded-full bg-[#FF5A1F]" />
         Creative
-      </motion.div>
-      <motion.div
+      </div>
+      <div
         className="absolute -left-2 bottom-16 flex items-center gap-1.5 rounded-full glass-strong border border-border px-3 py-1.5 text-xs font-semibold shadow-lg"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+        style={{ animation: "float-badge-down 3.5s ease-in-out infinite" }}
       >
         <span className="h-2 w-2 rounded-full bg-emerald-400" />
         Available
-      </motion.div>
+      </div>
     </div>
   );
 }

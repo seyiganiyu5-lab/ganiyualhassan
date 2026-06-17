@@ -14,11 +14,8 @@ import { ProjectsSection } from "@/components/portfolio/projects-section";
 import { CvSection } from "@/components/portfolio/cv-section";
 import { ServicesSection } from "@/components/portfolio/services-section";
 import { ContactSection } from "@/components/portfolio/contact-section";
-import { AdminPanel } from "@/components/admin/admin-panel";
-import { useAdmin } from "@/lib/admin-context";
 
 export default function Home() {
-  const { adminOpen, setAdminOpen } = useAdmin();
   const [settings, setSettings] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -51,7 +48,6 @@ export default function Home() {
       </div>
 
       <BackToTop />
-      <AdminPanel open={adminOpen} onClose={() => setAdminOpen(false)} />
     </>
   );
 }

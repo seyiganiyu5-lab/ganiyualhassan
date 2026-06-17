@@ -65,3 +65,37 @@ Stage Summary:
 - next.config.ts updated with allowedDevOrigins for the preview origin
 - Dev server is now stable (PIDs 13022/13037, PPID 1), serving HTTP 200 on :3000 and via Caddy gateway on :81
 - Preview panel now works: page renders fully, all sections + interactive elements functional, 0 console errors
+
+---
+Task ID: 3
+Agent: Main (Z.ai Code)
+Task: Move the admin dashboard off the main website into its own /admin route (user did not want admin on the main site).
+
+Work Log:
+- Read worklog.md (Tasks 1-2) to understand prior work: admin was a modal (AdminPanel) triggered by a Shield button in the navbar, controlled by useAdmin() context (adminOpen/setAdminOpen)
+- Audited all references to the admin modal: src/app/page.tsx (AdminPanel + useAdmin), src/components/portfolio/navbar.tsx (Shield button desktop + mobile admin link), src/components/providers.tsx (AdminProvider), src/lib/admin-context.tsx (context def), src/components/admin/admin-panel.tsx (modal component)
+- Created src/components/admin/admin-view.tsx — a full-page admin component (NOT a modal) with three states: loading, login screen (centered card on particle background with "Back to Website" link + language/theme toggles), and dashboard (sidebar with 7 tabs + main content + mobile drawer). Reuses all existing sub-components (AdminDashboard, AdminProjects, AdminMessages, AdminCv, AdminMedia, AdminSettings, AdminSeo). Auth managed via sessionStorage + /api/auth, same credentials (admin / ganiyu2024)
+- Added i18n keys: backToSite, adminAccess, welcomeBack (EN + FR) in src/lib/i18n/translations.ts
+- Created src/app/admin/layout.tsx (server component) — exports metadata with robots noindex/nofollow so admin isn't indexed
+- Created src/app/admin/page.tsx — renders <AdminView />
+- Updated src/components/portfolio/navbar.tsx — removed Shield icon import, removed useAdmin import, removed desktop admin button, removed mobile menu admin link
+- Updated src/app/page.tsx — removed AdminPanel import, removed useAdmin import/hook, removed <AdminPanel> from JSX. Home page is now purely the portfolio
+- Updated src/components/providers.tsx — removed AdminProvider (no longer needed since nothing uses useAdmin)
+- Deleted dead files: src/lib/admin-context.tsx and src/components/admin/admin-panel.tsx
+- Ran `bun run lint` — 0 errors
+- Browser-verified via agent-browser:
+  * Home page (/): renders correctly, navbar has NO admin/Shield button (only Home/About/Projects/Resume/Services/Contact + language/theme/menu), title correct
+  * Admin route (/admin): renders full-page login screen with "Back to Website" link, language/theme toggles, Admin Login heading, username/password form
+  * Login flow: filled admin/ganiyu2024, clicked Sign In → dashboard renders with sidebar (7 tabs: Dashboard, Projects, Messages, CV Management, Media Library, Settings, SEO), "Back to Website" link, Logout button, toast "Welcome back, Admin!"
+  * Tab switching: Projects tab shows project list with Edit/Add buttons; Settings tab shows all form fields pre-filled (hero name, tagline, avatar URL, social links, contact info)
+  * "Back to Website" link navigates back to / (home page)
+  * 0 console errors throughout
+- Dev log confirms: GET /admin 200, GET /api/stats 200, GET /api/messages 200 — all admin APIs functional on the new route
+
+Stage Summary:
+- Admin dashboard is now a dedicated /admin route, completely separated from the public portfolio
+- Main website (/) has zero admin UI — no Shield button in navbar, no admin link in mobile menu, no modal
+- /admin renders a premium full-page login (particle background, glassmorphism card, back-to-site link) → dashboard with sidebar navigation
+- Same auth: admin / ganiyu2024 via sessionStorage
+- Removed dead code: admin-context.tsx, admin-panel.tsx, AdminProvider from providers
+- Lint clean, 0 console errors, all 7 admin tabs functional, navigation between / and /admin works both ways

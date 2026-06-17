@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Shield } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
-import { useAdmin } from "@/lib/admin-context";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./language-switcher";
 import { cn } from "@/lib/utils";
@@ -20,7 +19,6 @@ const sections = [
 
 export function Navbar() {
   const t = useT();
-  const { setAdminOpen } = useAdmin();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -120,13 +118,6 @@ export function Navbar() {
               <LanguageSwitcher />
               <ThemeToggle />
               <button
-                onClick={() => setAdminOpen(true)}
-                className="hidden h-9 w-9 items-center justify-center rounded-full glass border border-border text-muted-foreground transition-colors hover:text-[#FF5A1F] sm:flex"
-                aria-label="Admin"
-              >
-                <Shield className="h-[18px] w-[18px]" />
-              </button>
-              <button
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="flex h-9 w-9 items-center justify-center rounded-full glass border border-border lg:hidden"
                 aria-label="Menu"
@@ -172,16 +163,6 @@ export function Navbar() {
                   {t.nav[s.key]}
                 </button>
               ))}
-              <button
-                onClick={() => {
-                  setMobileOpen(false);
-                  setAdminOpen(true);
-                }}
-                className="mt-4 flex items-center gap-2 rounded-xl px-4 py-3 text-left text-base font-medium text-muted-foreground hover:bg-muted"
-              >
-                <Shield className="h-4 w-4" />
-                {t.nav.admin}
-              </button>
             </motion.nav>
           </motion.div>
         )}

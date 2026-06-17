@@ -236,6 +236,9 @@ export const translations = {
       keywords: "Keywords (comma separated)",
       saved: "Settings saved successfully!",
       invalidCredentials: "Invalid credentials",
+      backToSite: "Back to Website",
+      adminAccess: "Secure Admin Access",
+      welcomeBack: "Welcome back, Admin!",
     },
   },
   fr: {
@@ -473,6 +476,9 @@ export const translations = {
       keywords: "Mots-clés (séparés par des virgules)",
       saved: "Paramètres enregistrés avec succès !",
       invalidCredentials: "Identifiants invalides",
+      backToSite: "Retour au Site",
+      adminAccess: "Accès Admin Sécurisé",
+      welcomeBack: "Bon retour, Admin !",
     },
   },
 } as const;

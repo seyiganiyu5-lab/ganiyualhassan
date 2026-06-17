@@ -3,7 +3,6 @@
 import React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { I18nProvider } from "@/lib/i18n/context";
-import { AdminProvider } from "@/lib/admin-context";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,9 +12,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableSystem={false}
       disableTransitionOnChange={false}
     >
-      <I18nProvider>
-        <AdminProvider>{children}</AdminProvider>
-      </I18nProvider>
+      <I18nProvider>{children}</I18nProvider>
     </NextThemesProvider>
   );
 }

@@ -123,3 +123,27 @@ Stage Summary:
 - Root cause: URL typo (/admi instead of /admin). The /admin route itself works perfectly (HTTP 200, renders full dashboard)
 - Added custom not-found.tsx so any future mistyped URL shows a helpful premium 404 page with direct links to Home and Admin Dashboard, plus a tip showing the correct /admin path
 - Correct admin URL: /admin (with the "n")
+
+---
+Task ID: 5
+Agent: Main (Z.ai Code)
+Task: User reports typing /admin in the preview panel shows "page not found" instead of the admin dashboard.
+
+Work Log:
+- Checked dev.log: found the smoking gun — `GET /admi 404` requests appearing immediately before `GET /admin 200` requests. Pattern: /admi (typo, 5 chars) 404 → /admin (correct, 6 chars) 200, repeating. This indicates the preview panel fires live keystroke-by-keystroke requests as the user types "/admin", and the intermediate "/admi" request 404s and gets shown before the final "/admin" resolves
+- Verified /admin route is genuinely functional: curl returns HTTP 200 with 25KB of correct "Admin Dashboard" content (title, sidebar tabs, no 404 text). Confirmed via gateway (port 81) and direct (port 3000)
+- Browser-verified: navigating directly to http://localhost:3000/admin renders the full admin dashboard (all 7 tabs, sidebar, header) with 0 console errors
+- Root cause: NOT a code bug. The /admin route works. The 404 comes from the preview panel's live URL-typing behavior firing intermediate requests (e.g. /admi) that 404
+- Solution: added a discreet, clickable "Admin" link to the footer (src/components/portfolio/footer.tsx) so the user can navigate to /admin with a single click using Next.js <Link> (client-side routing) — this completely bypasses the URL-typing issue
+  * Link is in the footer bottom bar, next to the "Back to top" button
+  * Styled as a small Shield icon + "Admin" text in muted color (text-muted-foreground/60, turns orange #FF5A1F on hover)
+  * Discreet enough to not clutter the main site, but easily clickable
+  * Uses aria-label="Admin Dashboard" for accessibility
+- Ran `bun run lint` — 0 errors
+- Browser-verified end-to-end: loaded home page → scrolled to footer → found "Admin Dashboard" link (ref e24) → clicked it → URL changed to /admin → admin dashboard rendered with all 7 tabs → 0 console errors
+
+Stage Summary:
+- /admin route confirmed working (HTTP 200, full dashboard renders) — the 404 was from /admi typo requests triggered by the preview panel's live URL typing
+- Added discreet footer "Admin" link (Shield icon + text, muted color) for reliable one-click access via Next.js client-side navigation
+- User can now access admin two ways: (1) click the small Admin link in the footer, or (2) type /admin in the URL (works, but preview panel's live typing may show intermediate 404s)
+- Lint clean, 0 console errors, navigation verified

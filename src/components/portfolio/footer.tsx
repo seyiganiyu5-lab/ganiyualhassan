@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useT } from "@/lib/i18n/context";
 import {
   Mail,
@@ -11,6 +12,7 @@ import {
   Heart,
   ArrowUp,
   Users,
+  Shield,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -197,13 +199,24 @@ export function Footer() {
             {t.footer.builtWith}
             <Heart className="h-3 w-3 fill-[#FF5A1F] text-[#FF5A1F]" />
           </p>
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex h-9 w-9 items-center justify-center rounded-full glass border border-border text-muted-foreground transition-colors hover:border-[#FF5A1F]/40 hover:text-[#FF5A1F]"
-            aria-label={t.common.backToTop}
-          >
-            <ArrowUp className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-3">
+            {/* Discreet admin access — small, muted link to /admin route */}
+            <Link
+              href="/admin"
+              className="flex items-center gap-1.5 text-xs text-muted-foreground/60 transition-colors hover:text-[#FF5A1F]"
+              aria-label="Admin Dashboard"
+            >
+              <Shield className="h-3 w-3" />
+              <span className="hidden sm:inline">{t.nav.admin}</span>
+            </Link>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="flex h-9 w-9 items-center justify-center rounded-full glass border border-border text-muted-foreground transition-colors hover:border-[#FF5A1F]/40 hover:text-[#FF5A1F]"
+              aria-label={t.common.backToTop}
+            >
+              <ArrowUp className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

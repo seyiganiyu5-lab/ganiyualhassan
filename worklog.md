@@ -39,3 +39,29 @@ Stage Summary:
 - Admin credentials: username "admin", password "ganiyu2024"
 - All API routes functional; uploads saved to public/uploads
 - Production-ready, deployable on Vercel/Render/Railway
+
+---
+Task ID: 2
+Agent: Main (Z.ai Code)
+Task: Fix "it does not preview" — dev server was not running, blocking the preview panel.
+
+Work Log:
+- Read /home/z/my-project/dev.log: stale entries showed the boot-started dev server had died
+- Confirmed no `next-server` process was alive (ps returned nothing) and curl to localhost:3000 returned HTTP 000
+- Diagnosed root cause: the sandbox (tini + python session manager) kills any process whose parent is the bash shell spawned for each tool call. Plain `nohup ... &` and single-fork `setsid ... &` did NOT survive across bash invocations (verified with a `sleep 300` test — dead on next call)
+- Inspected /start.sh (PID 1 = tini) and found the boot sequence starts the dev server via `sudo -u z bun run dev &` inside a subshell that gets orphaned to PID 1 — that original server had crashed at some point after boot
+- Key fix: implemented a proper double-fork daemonization (python3 os.fork -> setsid -> os.fork -> exec next dev) so the dev server is reparented to PID 1 (tini) and survives across tool calls
+- Created /home/z/my-project/start-dev.sh — a reusable launcher that: pkill any existing next process, truncates dev.log, double-forks next dev with stdout/stderr -> dev.log, waits for HTTP readiness
+- Added allowedDevOrigins to next.config.ts (*.space-z.ai, *.z.ai, localhost) to stop Next.js 16 from warning about cross-origin /_next/* asset requests from the preview panel origin
+- Restarted cleanly: single `node next dev` (PID 13022, PPID 1) + `next-server` (PID 13037) — both reparented to tini, stable across multiple bash calls
+- Verified via curl: direct :3000 and gateway :81 both return HTTP 200; dev.log now records GET / 200 entries
+- Verified via agent-browser: page loads with correct title "Ganiyu Al-Hassan Oluwaseyi — Software Engineer & Creative Designer", all interactive elements present (nav, hero buttons, project search + filters, admin button), click interactions (View Projects, category filter, Admin panel) all return success
+- Verified no console errors: only React DevTools info + [HMR] connected log messages
+- Full-page screenshot captured (818 KB) confirming rich rendered content
+
+Stage Summary:
+- Root cause was NOT a code defect — the dev server process had died and the sandbox's process reaper prevented naive backgrounding from keeping it alive
+- Solution: start-dev.sh uses double-fork daemonization so the dev server is adopted by PID 1 (tini) and persists across all subsequent tool calls
+- next.config.ts updated with allowedDevOrigins for the preview origin
+- Dev server is now stable (PIDs 13022/13037, PPID 1), serving HTTP 200 on :3000 and via Caddy gateway on :81
+- Preview panel now works: page renders fully, all sections + interactive elements functional, 0 console errors

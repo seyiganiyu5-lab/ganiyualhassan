@@ -7,6 +7,15 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  // Allow the sandbox preview panel (and other preview origins) to load
+  // Next.js dev assets (/_next/*) without being blocked by CORS.
+  allowedDevOrigins: [
+    "*.space-z.ai",
+    "*.preview.z.ai",
+    "*.z.ai",
+    "localhost",
+    "127.0.0.1",
+  ],
 };
 
 export default nextConfig;

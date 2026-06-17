@@ -1,0 +1,64 @@
+// Prisma schema for Ganiyu Al-Hassan Oluwaseyi Portfolio
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    String // website | graphic | branding | uiux | drawing
+  technologies String  @default("")
+  liveDemo    String?
+  githubLink  String?
+  images      String   @default("[]") // JSON array of image URLs
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String   @default("")
+  message   String
+  phone     String?
+  read      Boolean  @default(false)
+  replied   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String @default("")
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  type      String   @default("image") // image | logo | drawing | file
+  createdAt DateTime @default(now())
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Visitor {
+  id        String   @id @default(cuid())
+  count     Int      @default(0)
+  createdAt DateTime @default(now())
+}

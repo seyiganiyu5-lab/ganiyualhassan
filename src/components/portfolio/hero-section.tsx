@@ -8,10 +8,9 @@ import { ParticleBackground } from "./particle-background";
 import { useEffect, useState } from "react";
 
 const stats = [
-  { value: 40, suffix: "+", key: "projects" },
-  { value: 25, suffix: "+", key: "clients" },
-  { value: 4, suffix: "", key: "experience" },
-  { value: 10, suffix: "+", key: "awards" },
+  { value: 25, suffix: "+", key: "projects" },
+  { value: 2, suffix: "", key: "experience" },
+  { value: 5, suffix: "+", key: "awards" },
 ] as const;
 
 function CountUp({ to, suffix }: { to: number; suffix: string }) {
@@ -187,7 +186,7 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.55 }}
-            className="mt-10 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-border pt-6 sm:grid-cols-4"
+            className="mt-10 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-border pt-6 sm:grid-cols-3"
           >
             {stats.map((stat, i) => (
               <div

@@ -313,3 +313,23 @@ Stage Summary:
 - Software Engineering Student entry kept as "2024 — Present"
 - Updated in both English and French
 - Lint clean, 0 console errors, verified in browser
+
+---
+Task ID: 11
+Agent: Main (Z.ai Code)
+Task: User corrected the hero stats: 2 years of learning, 25+ projects done, 5+ achievements.
+
+Work Log:
+- Located the hero stats array in src/components/portfolio/hero-section.tsx (lines 10-15): was [{40+ projects}, {25+ clients}, {4 experience}, {10+ awards}]
+- User's labels matched existing translation keys ("Years Learning", "Projects Done", "Achievements"). User listed only 3 stats (didn't mention clients) → updated array to exactly the 3 specified: [{25+ projects}, {2 experience}, {5+ awards}]
+- Removed the "clients" stat (was "25+ Happy Clients") to match what the user wants shown
+- Changed the stats grid from sm:grid-cols-4 → sm:grid-cols-3 (3 items instead of 4); grid-cols-2 on mobile kept
+- The existing translation labels (EN: "Projects Done" / "Years Learning" / "Achievements", FR equivalents) already match the user's wording, so no translation changes needed. Left the unused "clients" translation key in place (harmless)
+- Ran `bun run lint` — 0 errors
+- Browser-verified via JSON eval: 25+ present ✓, 2 present ✓, 5+ present ✓, 40+ absent ✓, 10+ absent ✓, "Happy Clients" absent ✓, 0 errors
+
+Stage Summary:
+- Hero stats now show: 25+ Projects Done, 2 Years Learning, 5+ Achievements (3-column grid on desktop, 2-column on mobile)
+- Removed the "Happy Clients" stat the user didn't mention
+- Existing EN/FR labels already matched the user's wording
+- Lint clean, 0 console errors, verified in browser

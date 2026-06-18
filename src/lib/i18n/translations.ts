@@ -30,7 +30,7 @@ export const translations = {
       available: "Available for work",
       scrollDown: "Scroll to explore",
       overline: "Portfolio · 2024",
-      location: "Lagos, Nigeria",
+      location: "Abidjan, Côte d'Ivoire",
       roleLabel: "Currently",
       roleValue: "Software Engineering Student",
       stats: {
@@ -274,7 +274,7 @@ export const translations = {
       available: "Disponible pour travailler",
       scrollDown: "Faites défiler pour explorer",
       overline: "Portfolio · 2024",
-      location: "Lagos, Nigeria",
+      location: "Abidjan, Côte d'Ivoire",
       roleLabel: "Actuellement",
       roleValue: "Étudiant en Ingénierie Logicielle",
       stats: {

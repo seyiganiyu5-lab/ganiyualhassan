@@ -277,3 +277,19 @@ Stage Summary:
 - New i18n keys added (EN + FR) for overline, location, roleLabel, roleValue
 - Responsive: photo card on top + text below on mobile, side-by-side on desktop
 - Lint clean, 0 console errors, image confirmed loading (720px, complete), verified in both desktop and mobile viewports via VLM
+
+---
+Task ID: 9
+Agent: Main (Z.ai Code)
+Task: User asked why "Lagos, Nigeria" appears in the home hero — it was a hardcoded assumption, not real data. Fix it.
+
+Work Log:
+- Diagnosed root cause: during the editorial hero redesign (Task 8), I added a location chip and hardcoded "Lagos, Nigeria" as a placeholder guess in src/lib/i18n/translations.ts (EN line 33 + FR line 277) — never validated against the user's actual data
+- Checked the user's real settings via GET /api/settings: phone (+225) and WhatsApp (wa.me/225...) both use country code +225 = Côte d'Ivoire; user timezone is Africa/Abidjan → real location is Abidjan, Côte d'Ivoire
+- Updated both EN and FR translations: location "Lagos, Nigeria" → "Abidjan, Côte d'Ivoire"
+- Browser-verified: page now renders "Abidjan, Côte d'Ivoire" in the hero location chip; "Lagos, Nigeria" no longer present; 0 errors
+
+Stage Summary:
+- Root cause: hardcoded placeholder assumption from the Task 8 redesign, not user-provided data
+- Fixed to the correct location "Abidjan, Côte d'Ivoire" based on the +225 phone country code and Africa/Abidjan timezone
+- If the user's actual city differs, they can tell me and I'll update it again (or remove the chip entirely if they prefer no location shown)

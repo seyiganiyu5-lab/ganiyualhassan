@@ -29,6 +29,10 @@ export const translations = {
       contactMe: "Contact Me",
       available: "Available for work",
       scrollDown: "Scroll to explore",
+      overline: "Portfolio · 2024",
+      location: "Lagos, Nigeria",
+      roleLabel: "Currently",
+      roleValue: "Software Engineering Student",
       stats: {
         projects: "Projects Done",
         clients: "Happy Clients",
@@ -269,6 +273,10 @@ export const translations = {
       contactMe: "Me Contacter",
       available: "Disponible pour travailler",
       scrollDown: "Faites défiler pour explorer",
+      overline: "Portfolio · 2024",
+      location: "Lagos, Nigeria",
+      roleLabel: "Actuellement",
+      roleValue: "Étudiant en Ingénierie Logicielle",
       stats: {
         projects: "Projets Réalisés",
         clients: "Clients Satisfaits",

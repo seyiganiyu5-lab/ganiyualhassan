@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "(1) The portrait photo is visible, properly sized, and positioned at the top of the hero section. (2) The text content is readable with clear contrast against the dark background. (3) No layout issues, overlapping elements, or broken images are present in the hero section.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1781819356,
+  "id": "20260619054907fbf82596430c4ec0",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "20260619054907fbf82596430c4ec0",
+  "usage": {
+    "completion_tokens": 61,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 5774,
+    "prompt_tokens_details": {
+      "cached_tokens": 7
+    },
+    "total_tokens": 5835
+  }
+}

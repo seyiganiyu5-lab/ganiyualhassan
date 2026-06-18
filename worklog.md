@@ -241,3 +241,39 @@ Stage Summary:
 - All golden buttons use dark text (#000814) for WCAG-compliant contrast instead of low-contrast white
 - Changes span globals.css (full palette rewrite) + 27 component files (sed bulk-replace + contrast fix + SVG gradient)
 - Lint clean, dev server healthy, 0 console errors, verified visually via VLM in both themes + admin
+
+---
+Task ID: 8
+Agent: Main (Z.ai Code)
+Task: Put the user-uploaded photo (WhatsApp Image 2025-12-20 at 16.50.44.jpeg) in the home/hero image space and redesign the hero in a new style.
+
+Work Log:
+- Verified uploaded image: /home/z/my-project/upload/WhatsApp Image 2025-12-20 at 16.50.44.jpeg (124KB JPEG, 720x1280 portrait — a selfie of the portfolio owner, a young Black person in a blue traditional shirt in a shop setting)
+- Read current hero-section.tsx (two-column layout: left text, right circular AnimatedAvatar) and animated-avatar.tsx (circle frame with rotating rings + SVG silhouette, or circular photo when avatarUrl set)
+- Copied image to /home/z/my-project/public/uploads/profile.jpg so it's served as a static asset (HTTP 200, 124628 bytes confirmed)
+- Added new i18n keys (EN + FR) in src/lib/i18n/translations.ts: overline ("Portfolio · 2024"), location ("Lagos, Nigeria"), roleLabel ("Currently"/"Actuellement"), roleValue ("Software Engineering Student"/"Étudiant en Ingénierie Logicielle")
+- Completely rewrote src/components/portfolio/hero-section.tsx in a new EDITORIAL / MAGAZINE style:
+  * Layout changed from 2-column equal split to a 12-col grid (7-col text / 5-col photo) for an asymmetric, editorial feel
+  * Replaced the circular AnimatedAvatar with a new PortraitCard component: a tall portrait card (aspect-[4/5]) with golden gradient border (.gradient-border), ambient glow, a decorative rotating dashed ring (top-right), a live "Available" status chip overlaid on the photo (top-left, glass), and a bottom name plate with the role + name over a dark gradient — magazine cover style
+  * Photo uses object-cover object-top to focus on the subject's face; top sheen + bottom legibility gradient
+  * Floating "Creative · Developer & Designer" glass badge bottom-left (float animation), decorative corner ticks
+  * Text column restyled: vertical rotated "Portfolio · 2024" overline label (desktop left edge), uppercase tracked greeting overline, larger name headline (up to xl:text-7xl), typing title now in a pill with a Sparkles icon box, location chip added next to the available badge, stats restyled as a top-bordered strip with vertical dividers between columns
+  * CTAs refined: primary golden pill (View Projects), glass secondary (Download CV), and a compact circular icon button (Contact Me) to reduce visual weight
+  * profileSrc = avatarUrl || "/uploads/profile.jpg" so the admin-uploaded avatar (if set) still takes precedence, otherwise the new photo shows by default
+  * Kept ParticleBackground, grid-bg, floating geometric shapes, gradient orbs, and scroll indicator for continuity with the rest of the site
+  * AnimatedAvatar no longer imported by the hero (left the file in place; not bundled since unreferenced)
+- Ran `bun run lint` — 0 errors
+- Verified dev server: GET / 200 in 233ms (compile 39ms, render 194ms), profile.jpg served HTTP 200 (124628 bytes, image/jpeg)
+- Browser-verified via agent-browser + VLM:
+  * Desktop (1440x900): VLM confirmed "portrait photo of a person on the right side in a rectangular frame", "split layout (left text, right photo)", "large bold heading Ganiyu Al-Hassan Oluwaseyi in yellow/gold", "View Projects + Download CV buttons", "statistic badges 40+/25+/4/10+", "modern, professional, visually striking"
+  * DOM check: img src = http://localhost:3000/uploads/profile.jpg, naturalWidth 720, complete=true (image fully loaded, not broken)
+  * Mobile (iPhone 14): VLM confirmed "portrait photo visible, properly sized, positioned at top", "text content readable with clear contrast", "no layout issues, overlapping elements, or broken images"
+  * 0 console errors, 0 page errors across desktop + mobile
+- Captured 3 screenshots: hero-editorial-light.png (desktop dark), hero-editorial-dark.png, hero-editorial-mobile.png
+
+Stage Summary:
+- User's photo now lives in the hero image space, served from /uploads/profile.jpg (and admin can still override via Settings → avatar URL)
+- Hero completely restyled from "centered circular avatar with rotating rings" to an editorial/magazine split layout: 7-col text column with overline/tracked greeting/typography pill/divider stats + 5-col portrait card with golden gradient border, ambient glow, decorative rotating ring, status chip, and name plate
+- New i18n keys added (EN + FR) for overline, location, roleLabel, roleValue
+- Responsive: photo card on top + text below on mobile, side-by-side on desktop
+- Lint clean, 0 console errors, image confirmed loading (720px, complete), verified in both desktop and mobile viewports via VLM

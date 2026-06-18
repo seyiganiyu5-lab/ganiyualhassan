@@ -79,7 +79,7 @@ export function ParticleBackground({ density = 35 }: { density?: number }) {
           const distSq = dx * dx + dy * dy;
           if (distSq < connectionDistSq) {
             const opacity = (1 - distSq / connectionDistSq) * 0.12;
-            ctx.strokeStyle = `rgba(255, 90, 31, ${opacity})`;
+            ctx.strokeStyle = `rgba(255, 195, 0, ${opacity})`;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(pi.x, pi.y);

@@ -94,7 +94,7 @@ export function AdminView() {
   if (checking) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <span className="h-8 w-8 loader-ring rounded-full border-2 border-[#FF5A1F] border-t-transparent" />
+        <span className="h-8 w-8 loader-ring rounded-full border-2 border-[#FFC300] border-t-transparent" />
       </div>
     );
   }
@@ -126,11 +126,11 @@ export function AdminView() {
           className="relative z-10 w-full max-w-md"
         >
           <div className="relative overflow-hidden rounded-3xl glass-strong border border-border p-8 shadow-2xl">
-            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#FF5A1F]/10 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-[#FF5A1F]/5 blur-3xl" />
+            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#FFC300]/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-[#FFC300]/5 blur-3xl" />
 
             <div className="relative text-center">
-              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF5A1F] to-[#ff8a5f] text-white shadow-lg glow-orange">
+              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FFC300] to-[#FFD60A] text-white shadow-lg glow-orange">
                 <Shield className="h-8 w-8" />
               </span>
               <h2 className="mt-4 text-2xl font-black">{t.admin.login}</h2>
@@ -157,7 +157,7 @@ export function AdminView() {
                       setCredentials({ ...credentials, username: e.target.value })
                     }
                     placeholder="admin"
-                    className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#FF5A1F]/50"
+                    className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
                   />
                 </div>
               </div>
@@ -179,14 +179,14 @@ export function AdminView() {
                       setCredentials({ ...credentials, password: e.target.value })
                     }
                     placeholder="••••••••"
-                    className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#FF5A1F]/50"
+                    className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
                   />
                 </div>
               </div>
               <button
                 type="submit"
                 disabled={loggingIn}
-                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#FF5A1F] px-6 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] disabled:opacity-60"
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#FFC300] px-6 text-sm font-semibold text-[#000814] shadow-lg transition-transform hover:scale-[1.02] disabled:opacity-60"
               >
                 {loggingIn ? (
                   <span className="h-4 w-4 loader-ring rounded-full border-2 border-white border-t-transparent" />
@@ -199,7 +199,7 @@ export function AdminView() {
 
             <div className="mt-4 rounded-lg bg-muted/50 p-3 text-center text-xs text-muted-foreground">
               Demo credentials:{" "}
-              <span className="font-mono font-semibold text-[#FF5A1F]">
+              <span className="font-mono font-semibold text-[#FFC300]">
                 admin / ganiyu2024
               </span>
             </div>
@@ -218,7 +218,7 @@ export function AdminView() {
       <aside className="hidden w-64 shrink-0 flex-col border-r border-border bg-card/50 md:flex">
         <div className="flex items-center gap-2.5 border-b border-border px-5 py-4">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#FF5A1F] text-white font-black shadow-md glow-orange-sm transition-transform group-hover:scale-105">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#FFC300] text-[#000814] font-black shadow-md glow-orange-sm transition-transform group-hover:scale-105">
               G
             </span>
             <div>
@@ -238,7 +238,7 @@ export function AdminView() {
               className={cn(
                 "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                 activeTab === tab.id
-                  ? "bg-[#FF5A1F] text-white shadow-md"
+                  ? "bg-[#FFC300] text-[#000814] shadow-md"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
@@ -282,7 +282,7 @@ export function AdminView() {
           >
             <div className="flex items-center justify-between border-b border-border px-5 py-4">
               <Link href="/" className="flex items-center gap-2.5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#FF5A1F] text-white font-black">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#FFC300] text-[#000814] font-black">
                   G
                 </span>
                 <div>
@@ -310,7 +310,7 @@ export function AdminView() {
                   className={cn(
                     "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                     activeTab === tab.id
-                      ? "bg-[#FF5A1F] text-white shadow-md"
+                      ? "bg-[#FFC300] text-[#000814] shadow-md"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   )}
                 >

@@ -79,7 +79,7 @@ export function AdminMessages() {
             className={cn(
               "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
               filter === f
-                ? "bg-[#FF5A1F] text-white"
+                ? "bg-[#FFC300] text-[#000814]"
                 : "glass border border-border text-muted-foreground"
             )}
           >
@@ -115,13 +115,13 @@ export function AdminMessages() {
               animate={{ opacity: 1, y: 0 }}
               className={cn(
                 "rounded-xl border p-4 transition-colors",
-                msg.read ? "border-border bg-card/30" : "border-[#FF5A1F]/30 bg-[#FF5A1F]/5"
+                msg.read ? "border-border bg-card/30" : "border-[#FFC300]/30 bg-[#FFC300]/5"
               )}
             >
               <div className="flex items-start gap-3">
                 <button
                   onClick={() => update(msg.id, { read: !msg.read })}
-                  className="mt-0.5 text-muted-foreground hover:text-[#FF5A1F]"
+                  className="mt-0.5 text-muted-foreground hover:text-[#FFC300]"
                 >
                   {msg.read ? <MailOpen className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
                 </button>
@@ -146,7 +146,7 @@ export function AdminMessages() {
                   <div className="mt-3 flex flex-wrap gap-2">
                     <a
                       href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.subject)}`}
-                      className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#FF5A1F] px-3 text-xs font-semibold text-white"
+                      className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#FFC300] px-3 text-xs font-semibold text-[#000814]"
                     >
                       <Mail className="h-3 w-3" /> Reply
                     </a>

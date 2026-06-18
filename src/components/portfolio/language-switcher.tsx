@@ -17,7 +17,7 @@ export function LanguageSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="flex h-9 items-center gap-1.5 rounded-full glass border border-border px-3 text-sm font-medium text-foreground transition-colors hover:text-[#FF5A1F]"
+          className="flex h-9 items-center gap-1.5 rounded-full glass border border-border px-3 text-sm font-medium text-foreground transition-colors hover:text-[#FFC300]"
           aria-label="Switch language"
         >
           <Globe className="h-4 w-4" />
@@ -41,7 +41,7 @@ export function LanguageSwitcher() {
             {locale === lang.code && (
               <motion.span
                 layoutId="lang-active"
-                className="h-2 w-2 rounded-full bg-[#FF5A1F]"
+                className="h-2 w-2 rounded-full bg-[#FFC300]"
               />
             )}
           </DropdownMenuItem>

@@ -68,7 +68,7 @@ export function AdminCv() {
       {/* Current CV */}
       <div className="rounded-2xl glass border border-border p-6">
         <h3 className="mb-3 flex items-center gap-2 font-bold">
-          <FileText className="h-4 w-4 text-[#FF5A1F]" />
+          <FileText className="h-4 w-4 text-[#FFC300]" />
           {t.admin.currentCv}
         </h3>
         {cvUrl ? (
@@ -81,7 +81,7 @@ export function AdminCv() {
                   href={cvUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-[#FF5A1F] hover:underline"
+                  className="text-xs text-[#FFC300] hover:underline"
                 >
                   {cvUrl}
                 </a>
@@ -106,11 +106,11 @@ export function AdminCv() {
         className="rounded-2xl gradient-border p-6"
       >
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <Upload className="h-4 w-4 text-[#FF5A1F]" />
+          <Upload className="h-4 w-4 text-[#FFC300]" />
           {t.admin.uploadCv}
         </h3>
         <div className="space-y-4">
-          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border p-8 text-center transition-colors hover:border-[#FF5A1F]/50">
+          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border p-8 text-center transition-colors hover:border-[#FFC300]/50">
             <Upload className="h-8 w-8 text-muted-foreground" />
             <span className="text-sm font-medium">
               {file ? file.name : "Click to select a PDF file"}
@@ -126,7 +126,7 @@ export function AdminCv() {
           <button
             onClick={handleUpload}
             disabled={!file || uploading}
-            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#FF5A1F] text-sm font-semibold text-white disabled:opacity-60"
+            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#FFC300] text-sm font-semibold text-[#000814] disabled:opacity-60"
           >
             {uploading ? (
               <span className="h-4 w-4 loader-ring rounded-full border-2 border-white border-t-transparent" />

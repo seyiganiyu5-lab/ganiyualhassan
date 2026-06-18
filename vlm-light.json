@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The color scheme of this light - mode website screenshot is primarily composed of a clean white background with black text, creating a bright and minimalistic look. The accent color used for buttons and highlights is a vibrant yellow, which adds a lively touch to the design.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1781817880,
+  "id": "202606190524330d5e7db807d64f42",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "202606190524330d5e7db807d64f42",
+  "usage": {
+    "completion_tokens": 53,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 6098,
+    "prompt_tokens_details": {
+      "cached_tokens": 6
+    },
+    "total_tokens": 6151
+  }
+}

@@ -50,7 +50,7 @@ export function AnimatedCursor() {
       ) {
         outline.style.width = "56px";
         outline.style.height = "56px";
-        outline.style.background = "rgba(255, 90, 31, 0.15)";
+        outline.style.background = "rgba(255, 195, 0, 0.15)";
       }
     };
     const onHoverLeave = (e: Event) => {

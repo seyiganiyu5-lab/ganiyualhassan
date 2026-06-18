@@ -48,7 +48,7 @@ export function AdminSettings() {
       {/* Hero */}
       <section className="rounded-2xl glass border border-border p-5">
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <User className="h-4 w-4 text-[#FF5A1F]" />
+          <User className="h-4 w-4 text-[#FFC300]" />
           Homepage
         </h3>
         <div className="space-y-3">
@@ -75,7 +75,7 @@ export function AdminSettings() {
       {/* Social links */}
       <section className="rounded-2xl glass border border-border p-5">
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <Link2 className="h-4 w-4 text-[#FF5A1F]" />
+          <Link2 className="h-4 w-4 text-[#FFC300]" />
           {t.admin.socialLinks}
         </h3>
         <div className="space-y-3">
@@ -95,7 +95,7 @@ export function AdminSettings() {
       {/* Contact info */}
       <section className="rounded-2xl glass border border-border p-5">
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <Phone className="h-4 w-4 text-[#FF5A1F]" />
+          <Phone className="h-4 w-4 text-[#FFC300]" />
           {t.admin.contactInfo}
         </h3>
         <div className="space-y-3">
@@ -115,7 +115,7 @@ export function AdminSettings() {
       <button
         type="submit"
         disabled={saving}
-        className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FF5A1F] px-8 text-sm font-semibold text-white disabled:opacity-60"
+        className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FFC300] px-8 text-sm font-semibold text-[#000814] disabled:opacity-60"
       >
         {saving ? (
           <span className="h-4 w-4 loader-ring rounded-full border-2 border-white border-t-transparent" />
@@ -150,14 +150,14 @@ function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FF5A1F]/50"
+          className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FFC300]/50"
         />
       ) : (
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FF5A1F]/50"
+          className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
         />
       )}
     </div>

@@ -32,11 +32,11 @@ function SkillBar({ name, level, delay }: { name: string; level: number; delay: 
     <div ref={ref} className="space-y-1.5">
       <div className="flex items-center justify-between text-sm">
         <span className="font-medium">{name}</span>
-        <span className="text-xs font-semibold text-[#FF5A1F]">{level}%</span>
+        <span className="text-xs font-semibold text-[#FFC300]">{level}%</span>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-muted">
         <motion.div
-          className="h-full rounded-full bg-gradient-to-r from-[#FF5A1F] to-[#ff8a5f]"
+          className="h-full rounded-full bg-gradient-to-r from-[#FFC300] to-[#FFD60A]"
           initial={{ width: 0 }}
           animate={inView ? { width: `${level}%` } : { width: 0 }}
           transition={{ duration: 1.2, delay, ease: "easeOut" }}
@@ -56,7 +56,7 @@ export function AboutSection() {
   return (
     <section id="about" className="relative py-24 sm:py-32">
       <div className="absolute inset-0 grid-bg opacity-30" />
-      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FF5A1F]/40 to-transparent" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFC300]/40 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading subtitle={t.about.subtitle} title={t.about.title} />
@@ -70,10 +70,10 @@ export function AboutSection() {
             transition={{ duration: 0.6 }}
             className="relative overflow-hidden rounded-3xl gradient-border p-6 sm:p-8"
           >
-            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#FF5A1F]/10 blur-3xl" />
+            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#FFC300]/10 blur-3xl" />
             <div className="relative">
               <h3 className="mb-4 flex items-center gap-2 text-xl font-bold">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FF5A1F]/10 text-[#FF5A1F]">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFC300]/10 text-[#FFC300]">
                   <PenTool className="h-4 w-4" />
                 </span>
                 Who I Am
@@ -106,9 +106,9 @@ export function AboutSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group flex flex-col items-start gap-3 rounded-2xl glass border border-border p-5 transition-all hover:border-[#FF5A1F]/40 hover:shadow-lg"
+                className="group flex flex-col items-start gap-3 rounded-2xl glass border border-border p-5 transition-all hover:border-[#FFC300]/40 hover:shadow-lg"
               >
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FF5A1F]/10 text-[#FF5A1F] transition-transform group-hover:scale-110">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300] transition-transform group-hover:scale-110">
                   <item.icon className="h-5 w-5" />
                 </span>
                 <div>
@@ -147,7 +147,7 @@ export function AboutSection() {
                   className="rounded-2xl glass border border-border p-6"
                 >
                   <div className="mb-5 flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FF5A1F]/10 text-[#FF5A1F]">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300]">
                       <Icon className="h-5 w-5" />
                     </span>
                     <h4 className="font-bold">{t.about.skills[cat]}</h4>
@@ -180,7 +180,7 @@ export function AboutSection() {
           </motion.h3>
           <div className="relative mx-auto max-w-3xl">
             {/* Vertical line */}
-            <div className="absolute left-4 top-0 h-full w-px bg-gradient-to-b from-[#FF5A1F] via-[#FF5A1F]/30 to-transparent sm:left-1/2 sm:-translate-x-1/2" />
+            <div className="absolute left-4 top-0 h-full w-px bg-gradient-to-b from-[#FFC300] via-[#FFC300]/30 to-transparent sm:left-1/2 sm:-translate-x-1/2" />
 
             <div className="space-y-8">
               {t.about.timeline.map((item, i) => {
@@ -200,7 +200,7 @@ export function AboutSection() {
                   >
                     {/* Node */}
                     <div className="absolute left-4 top-1 z-10 -translate-x-1/2 sm:left-1/2">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF5A1F] text-white shadow-lg glow-orange-sm ring-4 ring-background">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFC300] text-[#000814] shadow-lg glow-orange-sm ring-4 ring-background">
                         <Icon className="h-4 w-4" />
                       </span>
                     </div>
@@ -210,11 +210,11 @@ export function AboutSection() {
                     <div className="flex-1">
                       <div
                         className={cn(
-                          "rounded-2xl glass border border-border p-5 transition-all hover:border-[#FF5A1F]/40 hover:shadow-lg",
+                          "rounded-2xl glass border border-border p-5 transition-all hover:border-[#FFC300]/40 hover:shadow-lg",
                           isLeft ? "sm:mr-8" : "sm:ml-8"
                         )}
                       >
-                        <span className="text-xs font-semibold uppercase tracking-wider text-[#FF5A1F]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#FFC300]">
                           {item.year}
                         </span>
                         <h4 className="mt-1 font-bold">{item.title}</h4>

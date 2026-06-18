@@ -36,7 +36,7 @@ export function AdminDashboard() {
   }, []);
 
   const cards = [
-    { label: t.admin.totalProjects, value: stats.totalProjects, icon: FolderGit2, color: "#FF5A1F" },
+    { label: t.admin.totalProjects, value: stats.totalProjects, icon: FolderGit2, color: "#FFC300" },
     { label: t.admin.totalMessages, value: stats.totalMessages, icon: Mail, color: "#10b981" },
     { label: t.admin.websiteViews, value: stats.websiteViews, icon: Eye, color: "#3b82f6" },
     { label: t.admin.downloads, value: stats.downloads, icon: Download, color: "#a855f7" },
@@ -75,7 +75,7 @@ export function AdminDashboard() {
       {/* Recent messages */}
       <div className="rounded-2xl glass border border-border p-5">
         <div className="mb-4 flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-[#FF5A1F]" />
+          <TrendingUp className="h-4 w-4 text-[#FFC300]" />
           <h3 className="font-bold">Recent Messages</h3>
         </div>
         {recentMessages.length === 0 ? (
@@ -88,7 +88,7 @@ export function AdminDashboard() {
                 className="flex items-center gap-3 rounded-xl border border-border p-3 transition-colors hover:bg-muted/50"
               >
                 <span
-                  className={`h-2 w-2 rounded-full ${msg.read ? "bg-muted-foreground" : "bg-[#FF5A1F]"}`}
+                  className={`h-2 w-2 rounded-full ${msg.read ? "bg-muted-foreground" : "bg-[#FFC300]"}`}
                 />
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-sm font-semibold">{msg.subject || msg.name}</div>

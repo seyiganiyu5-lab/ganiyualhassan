@@ -76,7 +76,7 @@ export function AdminMedia() {
     <div className="space-y-6">
       {/* Upload zone */}
       <div className="rounded-2xl gradient-border p-5">
-        <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border p-6 text-center transition-colors hover:border-[#FF5A1F]/50">
+        <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border p-6 text-center transition-colors hover:border-[#FFC300]/50">
           <Upload className="h-8 w-8 text-muted-foreground" />
           <span className="text-sm font-medium">
             {files && files.length > 0
@@ -96,7 +96,7 @@ export function AdminMedia() {
           <button
             onClick={handleUpload}
             disabled={uploading}
-            className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#FF5A1F] text-sm font-semibold text-white disabled:opacity-60"
+            className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#FFC300] text-sm font-semibold text-[#000814] disabled:opacity-60"
           >
             {uploading ? (
               <span className="h-4 w-4 loader-ring rounded-full border-2 border-white border-t-transparent" />

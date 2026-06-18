@@ -122,7 +122,7 @@ export function AdminProjects() {
         </p>
         <button
           onClick={() => setEditing({ ...emptyForm })}
-          className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#FF5A1F] px-4 text-sm font-semibold text-white transition-transform hover:scale-105"
+          className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#FFC300] px-4 text-sm font-semibold text-[#000814] transition-transform hover:scale-105"
         >
           <Plus className="h-4 w-4" />
           {t.admin.addProject}
@@ -145,7 +145,7 @@ export function AdminProjects() {
                     <img src={p.images[0]} alt={p.title} className="h-full w-full object-cover" />
                   )}
                   {p.featured && (
-                    <span className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#FF5A1F] text-white">
+                    <span className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#FFC300] text-[#000814]">
                       <Star className="h-3 w-3 fill-white" />
                     </span>
                   )}
@@ -153,7 +153,7 @@ export function AdminProjects() {
                 <div className="p-3">
                   <div className="flex items-start justify-between gap-2">
                     <h4 className="text-sm font-bold leading-tight">{p.title}</h4>
-                    <span className="shrink-0 rounded bg-[#FF5A1F]/10 px-1.5 py-0.5 text-[10px] font-semibold text-[#FF5A1F]">
+                    <span className="shrink-0 rounded bg-[#FFC300]/10 px-1.5 py-0.5 text-[10px] font-semibold text-[#FFC300]">
                       {p.category}
                     </span>
                   </div>
@@ -251,7 +251,7 @@ function ProjectFormModal({
               required
               value={data.title}
               onChange={(e) => setData({ ...data, title: e.target.value })}
-              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FF5A1F]/50"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
             />
           </div>
 
@@ -264,7 +264,7 @@ function ProjectFormModal({
               rows={3}
               value={data.description}
               onChange={(e) => setData({ ...data, description: e.target.value })}
-              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FF5A1F]/50"
+              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FFC300]/50"
             />
           </div>
 
@@ -278,7 +278,7 @@ function ProjectFormModal({
                 onChange={(e) =>
                   setData({ ...data, category: e.target.value as ProjectCategory })
                 }
-                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FF5A1F]/50"
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
               >
                 {categories.map((c) => (
                   <option key={c} value={c}>
@@ -295,7 +295,7 @@ function ProjectFormModal({
                 value={data.technologies}
                 onChange={(e) => setData({ ...data, technologies: e.target.value })}
                 placeholder="React, Next.js, ..."
-                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FF5A1F]/50"
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
               />
             </div>
           </div>
@@ -309,7 +309,7 @@ function ProjectFormModal({
                 value={data.liveDemo}
                 onChange={(e) => setData({ ...data, liveDemo: e.target.value })}
                 placeholder="https://..."
-                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FF5A1F]/50"
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
               />
             </div>
             <div>
@@ -320,7 +320,7 @@ function ProjectFormModal({
                 value={data.githubLink}
                 onChange={(e) => setData({ ...data, githubLink: e.target.value })}
                 placeholder="https://github.com/..."
-                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FF5A1F]/50"
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
               />
             </div>
           </div>
@@ -334,7 +334,7 @@ function ProjectFormModal({
               value={data.imagesText}
               onChange={(e) => setData({ ...data, imagesText: e.target.value })}
               placeholder="https://image1.jpg&#10;https://image2.jpg"
-              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FF5A1F]/50"
+              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FFC300]/50"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
               You can upload images in the Media Library tab and paste URLs here.
@@ -346,7 +346,7 @@ function ProjectFormModal({
               type="checkbox"
               checked={data.featured}
               onChange={(e) => setData({ ...data, featured: e.target.checked })}
-              className="h-4 w-4 accent-[#FF5A1F]"
+              className="h-4 w-4 accent-[#FFC300]"
             />
             <span className="text-sm">{t.admin.projectFeatured}</span>
           </label>
@@ -356,7 +356,7 @@ function ProjectFormModal({
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex h-10 flex-1 items-center justify-center rounded-lg bg-[#FF5A1F] text-sm font-semibold text-white disabled:opacity-60"
+            className="inline-flex h-10 flex-1 items-center justify-center rounded-lg bg-[#FFC300] text-sm font-semibold text-[#000814] disabled:opacity-60"
           >
             {t.admin.save}
           </button>

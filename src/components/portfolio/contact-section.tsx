@@ -71,7 +71,7 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="relative py-24 sm:py-32">
-      <div className="pointer-events-none absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-[#FF5A1F]/8 blur-[120px]" />
+      <div className="pointer-events-none absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-[#FFC300]/8 blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading subtitle={t.contact.subtitle} title={t.contact.title} />
@@ -96,9 +96,9 @@ export function ContactSection() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08 }}
                   whileHover={{ y: -4 }}
-                  className="group flex flex-col gap-3 rounded-2xl glass border border-border p-5 transition-all hover:border-[#FF5A1F]/40 hover:shadow-lg"
+                  className="group flex flex-col gap-3 rounded-2xl glass border border-border p-5 transition-all hover:border-[#FFC300]/40 hover:shadow-lg"
                 >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FF5A1F]/10 text-[#FF5A1F] transition-transform group-hover:scale-110">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300] transition-transform group-hover:scale-110">
                     <item.icon className="h-5 w-5" />
                   </span>
                   <div>
@@ -136,7 +136,7 @@ export function ContactSection() {
               className="overflow-hidden rounded-2xl glass border border-border"
             >
               <div className="flex items-center gap-2 border-b border-border p-4">
-                <MapPin className="h-4 w-4 text-[#FF5A1F]" />
+                <MapPin className="h-4 w-4 text-[#FFC300]" />
                 <span className="text-sm font-semibold">{t.contact.findMe}</span>
               </div>
               <iframe
@@ -156,7 +156,7 @@ export function ContactSection() {
             className="rounded-3xl glass-strong border border-border p-6 sm:p-8"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FF5A1F] text-white shadow-lg">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FFC300] text-[#000814] shadow-lg">
                 <Send className="h-5 w-5" />
               </span>
               <h3 className="text-xl font-bold">{t.contact.formTitle}</h3>
@@ -175,7 +175,7 @@ export function ContactSection() {
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       placeholder={t.contact.namePlaceholder}
-                      className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#FF5A1F]/50"
+                      className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
                     />
                   </div>
                 </div>
@@ -191,7 +191,7 @@ export function ContactSection() {
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       placeholder={t.contact.emailPlaceholder}
-                      className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#FF5A1F]/50"
+                      className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
                     />
                   </div>
                 </div>
@@ -205,7 +205,7 @@ export function ContactSection() {
                   value={form.subject}
                   onChange={(e) => setForm({ ...form, subject: e.target.value })}
                   placeholder={t.contact.subjectPlaceholder}
-                  className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none transition-colors focus:border-[#FF5A1F]/50"
+                  className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
                 />
               </div>
               <div>
@@ -218,13 +218,13 @@ export function ContactSection() {
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   placeholder={t.contact.messagePlaceholder}
-                  className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-[#FF5A1F]/50"
+                  className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
                 />
               </div>
               <button
                 type="submit"
                 disabled={sending}
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#FF5A1F] px-6 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] disabled:opacity-60"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#FFC300] px-6 text-sm font-semibold text-[#000814] shadow-lg transition-transform hover:scale-[1.02] disabled:opacity-60"
               >
                 {sending ? (
                   <>

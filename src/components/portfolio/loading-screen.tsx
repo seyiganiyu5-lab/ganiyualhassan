@@ -26,7 +26,7 @@ export function LoadingScreen() {
             {/* Loader ring */}
             <div className="relative h-24 w-24">
               <div className="absolute inset-0 rounded-full border-2 border-muted" />
-              <div className="loader-ring absolute inset-0 rounded-full border-2 border-transparent border-t-[#FF5A1F] border-r-[#FF5A1F]" />
+              <div className="loader-ring absolute inset-0 rounded-full border-2 border-transparent border-t-[#FFC300] border-r-[#FFC300]" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="brand-gradient-text text-3xl font-black">G</span>
               </div>

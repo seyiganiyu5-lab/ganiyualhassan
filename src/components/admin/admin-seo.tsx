@@ -43,7 +43,7 @@ export function AdminSeo() {
     <form onSubmit={handleSave} className="mx-auto max-w-3xl space-y-6">
       <section className="rounded-2xl glass border border-border p-5">
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <Search className="h-4 w-4 text-[#FF5A1F]" />
+          <Search className="h-4 w-4 text-[#FFC300]" />
           {t.admin.seoSettings}
         </h3>
         <div className="space-y-4">
@@ -54,7 +54,7 @@ export function AdminSeo() {
             <input
               value={settings.metaTitle || ""}
               onChange={(e) => update("metaTitle", e.target.value)}
-              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FF5A1F]/50"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
               {(settings.metaTitle || "").length}/60 characters (recommended max)
@@ -68,7 +68,7 @@ export function AdminSeo() {
               rows={3}
               value={settings.metaDescription || ""}
               onChange={(e) => update("metaDescription", e.target.value)}
-              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FF5A1F]/50"
+              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FFC300]/50"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
               {(settings.metaDescription || "").length}/160 characters (recommended max)
@@ -82,7 +82,7 @@ export function AdminSeo() {
               value={settings.keywords || ""}
               onChange={(e) => update("keywords", e.target.value)}
               placeholder="Ganiyu, Software Engineer, Designer..."
-              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FF5A1F]/50"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
             />
           </div>
           <div>
@@ -93,7 +93,7 @@ export function AdminSeo() {
               value={settings.ogImage || ""}
               onChange={(e) => update("ogImage", e.target.value)}
               placeholder="https://..."
-              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FF5A1F]/50"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
             />
           </div>
         </div>
@@ -121,7 +121,7 @@ export function AdminSeo() {
       <button
         type="submit"
         disabled={saving}
-        className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FF5A1F] px-8 text-sm font-semibold text-white disabled:opacity-60"
+        className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FFC300] px-8 text-sm font-semibold text-[#000814] disabled:opacity-60"
       >
         {saving ? (
           <span className="h-4 w-4 loader-ring rounded-full border-2 border-white border-t-transparent" />

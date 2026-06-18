@@ -15,7 +15,7 @@ export function FloatingSocial() {
       icon: Mail,
       label: "Email",
       href: "mailto:seyiganiyu5@gmail.com",
-      color: "#FF5A1F",
+      color: "#FFC300",
     },
     {
       icon: Linkedin,
@@ -50,7 +50,7 @@ export function FloatingSocial() {
           </span>
         </motion.a>
       ))}
-      <div className="mx-auto h-16 w-px bg-gradient-to-b from-[#FF5A1F] to-transparent" />
+      <div className="mx-auto h-16 w-px bg-gradient-to-b from-[#FFC300] to-transparent" />
     </div>
   );
 }

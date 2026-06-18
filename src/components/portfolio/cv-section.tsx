@@ -75,7 +75,7 @@ Creative: Drawing, Digital Illustration, Creative Thinking
 
   return (
     <section id="cv" className="relative py-24 sm:py-32">
-      <div className="pointer-events-none absolute left-0 top-1/3 h-96 w-96 rounded-full bg-[#FF5A1F]/5 blur-[120px]" />
+      <div className="pointer-events-none absolute left-0 top-1/3 h-96 w-96 rounded-full bg-[#FFC300]/5 blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading subtitle={t.cv.subtitle} title={t.cv.title} />
@@ -89,7 +89,7 @@ Creative: Drawing, Digital Illustration, Creative Thinking
         >
           <button
             onClick={handleDownload}
-            className="inline-flex h-12 items-center gap-2 rounded-full bg-[#FF5A1F] px-6 text-sm font-semibold text-white shadow-lg glow-orange-sm transition-all hover:scale-105 hover:glow-orange"
+            className="inline-flex h-12 items-center gap-2 rounded-full bg-[#FFC300] px-6 text-sm font-semibold text-[#000814] shadow-lg glow-orange-sm transition-all hover:scale-105 hover:glow-orange"
           >
             <Download className="h-4 w-4" />
             {t.cv.download}
@@ -108,7 +108,7 @@ Creative: Drawing, Digital Illustration, Creative Thinking
               className="rounded-2xl glass border border-border p-6"
             >
               <div className="mb-6 flex items-center gap-3">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FF5A1F]/10 text-[#FF5A1F]">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300]">
                   <section.icon className="h-5 w-5" />
                 </span>
                 <h3 className="text-lg font-bold">{t.cv[section.key]}</h3>
@@ -122,10 +122,10 @@ Creative: Drawing, Digital Illustration, Creative Thinking
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.08 }}
-                    className="relative border-l-2 border-[#FF5A1F]/20 pl-4"
+                    className="relative border-l-2 border-[#FFC300]/20 pl-4"
                   >
-                    <div className="absolute -left-[5px] top-1.5 h-2 w-2 rounded-full bg-[#FF5A1F]" />
-                    <span className="text-xs font-semibold text-[#FF5A1F]">
+                    <div className="absolute -left-[5px] top-1.5 h-2 w-2 rounded-full bg-[#FFC300]" />
+                    <span className="text-xs font-semibold text-[#FFC300]">
                       {item.period}
                     </span>
                     <h4 className="mt-1 font-bold leading-tight">{item.title}</h4>
@@ -152,7 +152,7 @@ Creative: Drawing, Digital Illustration, Creative Thinking
               { icon: MapPin, label: "Location", value: "Côte d'Ivoire" },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FF5A1F]/10 text-[#FF5A1F]">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300]">
                   <item.icon className="h-4 w-4" />
                 </span>
                 <div className="min-w-0">

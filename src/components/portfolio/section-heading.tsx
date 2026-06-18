@@ -27,9 +27,9 @@ export function SectionHeading({
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="inline-flex items-center gap-2 rounded-full border border-[#FF5A1F]/30 bg-[#FF5A1F]/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#FF5A1F]"
+        className="inline-flex items-center gap-2 rounded-full border border-[#FFC300]/30 bg-[#FFC300]/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#FFC300]"
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-[#FF5A1F]" />
+        <span className="h-1.5 w-1.5 rounded-full bg-[#FFC300]" />
         {subtitle}
       </motion.span>
       <motion.h2

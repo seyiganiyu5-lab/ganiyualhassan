@@ -10,13 +10,13 @@ export function AnimatedAvatar({ imageUrl, name = "G" }: AnimatedAvatarProps) {
     return (
       <div className="relative mx-auto aspect-square w-full max-w-sm">
         <div
-          className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#FF5A1F] via-[#ff8a5f] to-[#FF5A1F] blur-2xl opacity-50"
+          className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#FFC300] via-[#FFD60A] to-[#FFC300] blur-2xl opacity-50"
           style={{
             animation: "float-orb 8s ease-in-out infinite",
             transformOrigin: "center",
           }}
         />
-        <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-[#FF5A1F]/30 glass-strong p-1">
+        <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-[#FFC300]/30 glass-strong p-1">
           <img
             src={imageUrl}
             alt={name}
@@ -32,7 +32,7 @@ export function AnimatedAvatar({ imageUrl, name = "G" }: AnimatedAvatarProps) {
     <div className="relative mx-auto aspect-square w-full max-w-sm">
       {/* Glow orbs */}
       <div
-        className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#FF5A1F] via-[#ff8a5f] to-[#FF5A1F] blur-3xl opacity-40"
+        className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#FFC300] via-[#FFD60A] to-[#FFC300] blur-3xl opacity-40"
         style={{
           animation: "float-orb 8s ease-in-out infinite",
           transformOrigin: "center",
@@ -41,16 +41,16 @@ export function AnimatedAvatar({ imageUrl, name = "G" }: AnimatedAvatarProps) {
 
       {/* Rotating ring */}
       <div
-        className="absolute inset-0 rounded-full border-2 border-dashed border-[#FF5A1F]/40"
+        className="absolute inset-0 rounded-full border-2 border-dashed border-[#FFC300]/40"
         style={{ animation: "spin-slow 30s linear infinite" }}
       />
       <div
-        className="absolute inset-4 rounded-full border border-[#FF5A1F]/20"
+        className="absolute inset-4 rounded-full border border-[#FFC300]/20"
         style={{ animation: "spin-reverse 40s linear infinite" }}
       />
 
       {/* Inner avatar */}
-      <div className="absolute inset-8 overflow-hidden rounded-full glass-strong border border-[#FF5A1F]/30">
+      <div className="absolute inset-8 overflow-hidden rounded-full glass-strong border border-[#FFC300]/30">
         <div className="grid-bg absolute inset-0 opacity-30" />
         <svg
           viewBox="0 0 200 200"
@@ -59,12 +59,12 @@ export function AnimatedAvatar({ imageUrl, name = "G" }: AnimatedAvatarProps) {
         >
           <defs>
             <linearGradient id="avatarGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#FF5A1F" />
-              <stop offset="100%" stopColor="#ff8a5f" />
+              <stop offset="0%" stopColor="#FFC300" />
+              <stop offset="100%" stopColor="#FFD60A" />
             </linearGradient>
             <linearGradient id="avatarGrad2" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0%" stopColor="#121212" />
-              <stop offset="100%" stopColor="#FF5A1F" />
+              <stop offset="0%" stopColor="#000814" />
+              <stop offset="100%" stopColor="#FFC300" />
             </linearGradient>
           </defs>
           {/* Silhouette */}
@@ -97,7 +97,7 @@ export function AnimatedAvatar({ imageUrl, name = "G" }: AnimatedAvatarProps) {
         className="absolute -right-2 top-8 flex items-center gap-1.5 rounded-full glass-strong border border-border px-3 py-1.5 text-xs font-semibold shadow-lg"
         style={{ animation: "float-badge-up 3s ease-in-out infinite" }}
       >
-        <span className="h-2 w-2 rounded-full bg-[#FF5A1F]" />
+        <span className="h-2 w-2 rounded-full bg-[#FFC300]" />
         Creative
       </div>
       <div

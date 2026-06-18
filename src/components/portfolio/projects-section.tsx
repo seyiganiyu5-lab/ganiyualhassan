@@ -41,7 +41,7 @@ export function ProjectsSection() {
 
   return (
     <section id="projects" className="relative py-24 sm:py-32">
-      <div className="pointer-events-none absolute right-0 top-1/4 h-96 w-96 rounded-full bg-[#FF5A1F]/5 blur-[120px]" />
+      <div className="pointer-events-none absolute right-0 top-1/4 h-96 w-96 rounded-full bg-[#FFC300]/5 blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading subtitle={t.projects.subtitle} title={t.projects.title} />
@@ -56,7 +56,7 @@ export function ProjectsSection() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t.projects.searchPlaceholder}
-              className="h-11 w-full rounded-full glass border border-border pl-11 pr-4 text-sm outline-none transition-colors focus:border-[#FF5A1F]/50"
+              className="h-11 w-full rounded-full glass border border-border pl-11 pr-4 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
             />
             {search && (
               <button
@@ -145,7 +145,7 @@ function FilterButton({
       className={cn(
         "rounded-full px-4 py-2 text-sm font-medium transition-all",
         active
-          ? "bg-[#FF5A1F] text-white shadow-md glow-orange-sm"
+          ? "bg-[#FFC300] text-[#000814] shadow-md glow-orange-sm"
           : "glass border border-border text-muted-foreground hover:text-foreground"
       )}
     >
@@ -171,7 +171,7 @@ function ProjectCard({
       transition={{ duration: 0.3 }}
       whileHover={{ y: -6 }}
       onClick={onClick}
-      className="group relative cursor-pointer overflow-hidden rounded-2xl glass border border-border transition-all hover:border-[#FF5A1F]/40 hover:shadow-xl"
+      className="group relative cursor-pointer overflow-hidden rounded-2xl glass border border-border transition-all hover:border-[#FFC300]/40 hover:shadow-xl"
     >
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
@@ -183,20 +183,20 @@ function ProjectCard({
             loading="lazy"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FF5A1F]/20 to-muted">
-            <FolderGit2 className="h-12 w-12 text-[#FF5A1F]/40" />
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FFC300]/20 to-muted">
+            <FolderGit2 className="h-12 w-12 text-[#FFC300]/40" />
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 
         {/* Category badge */}
-        <span className="absolute left-3 top-3 rounded-full bg-background/80 px-3 py-1 text-xs font-semibold text-[#FF5A1F] backdrop-blur">
+        <span className="absolute left-3 top-3 rounded-full bg-background/80 px-3 py-1 text-xs font-semibold text-[#FFC300] backdrop-blur">
           {t.projects.categories[project.category]}
         </span>
 
         {/* Featured star */}
         {project.featured && (
-          <span className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-[#FF5A1F] text-white shadow-lg">
+          <span className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-[#FFC300] text-[#000814] shadow-lg">
             ★
           </span>
         )}
@@ -211,7 +211,7 @@ function ProjectCard({
 
       {/* Content */}
       <div className="p-5">
-        <h3 className="font-bold transition-colors group-hover:text-[#FF5A1F]">
+        <h3 className="font-bold transition-colors group-hover:text-[#FFC300]">
           {project.title}
         </h3>
         <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
@@ -225,7 +225,7 @@ function ProjectCard({
             .map((tech, i) => (
               <span
                 key={i}
-                className="rounded-md bg-[#FF5A1F]/10 px-2 py-0.5 text-[11px] font-medium text-[#FF5A1F]"
+                className="rounded-md bg-[#FFC300]/10 px-2 py-0.5 text-[11px] font-medium text-[#FFC300]"
               >
                 {tech.trim()}
               </span>
@@ -239,7 +239,7 @@ function ProjectCard({
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-[#FF5A1F]"
+              className="flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-[#FFC300]"
             >
               <ExternalLink className="h-3.5 w-3.5" />
               {t.projects.liveDemo}
@@ -251,7 +251,7 @@ function ProjectCard({
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-[#FF5A1F]"
+              className="flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-[#FFC300]"
             >
               <Github className="h-3.5 w-3.5" />
               {t.projects.github}

@@ -48,7 +48,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           >
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur transition-colors hover:bg-[#FF5A1F] hover:text-white"
+              className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur transition-colors hover:bg-[#FFC300] hover:text-[#000814]"
               aria-label="Close"
             >
               <X className="h-5 w-5" />
@@ -110,14 +110,14 @@ function ModalContent({
             <>
               <button
                 onClick={prev}
-                className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur transition-colors hover:bg-[#FF5A1F] hover:text-white"
+                className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur transition-colors hover:bg-[#FFC300] hover:text-[#000814]"
                 aria-label="Previous"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 onClick={next}
-                className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur transition-colors hover:bg-[#FF5A1F] hover:text-white"
+                className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur transition-colors hover:bg-[#FFC300] hover:text-[#000814]"
                 aria-label="Next"
               >
                 <ChevronRight className="h-5 w-5" />
@@ -129,7 +129,7 @@ function ModalContent({
                     key={i}
                     onClick={() => setActiveImage(i)}
                     className={`h-2 rounded-full transition-all ${
-                      i === activeImage ? "w-8 bg-[#FF5A1F]" : "w-2 bg-white/50"
+                      i === activeImage ? "w-8 bg-[#FFC300]" : "w-2 bg-white/50"
                     }`}
                     aria-label={`Image ${i + 1}`}
                   />
@@ -142,7 +142,7 @@ function ModalContent({
 
       {/* Content */}
       <div className="p-6 sm:p-8">
-        <span className="inline-block rounded-full bg-[#FF5A1F]/10 px-3 py-1 text-xs font-semibold text-[#FF5A1F]">
+        <span className="inline-block rounded-full bg-[#FFC300]/10 px-3 py-1 text-xs font-semibold text-[#FFC300]">
           {t.projects.categories[project.category]}
         </span>
         <h2 className="mt-3 text-2xl font-black sm:text-3xl">{project.title}</h2>
@@ -176,7 +176,7 @@ function ModalContent({
               href={project.liveDemo}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 items-center gap-2 rounded-full bg-[#FF5A1F] px-6 text-sm font-semibold text-white transition-transform hover:scale-105"
+              className="inline-flex h-11 items-center gap-2 rounded-full bg-[#FFC300] px-6 text-sm font-semibold text-[#000814] transition-transform hover:scale-105"
             >
               <ExternalLink className="h-4 w-4" />
               {t.projects.liveDemo}
@@ -187,7 +187,7 @@ function ModalContent({
               href={project.githubLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 items-center gap-2 rounded-full glass border border-border px-6 text-sm font-semibold transition-colors hover:border-[#FF5A1F]/40 hover:text-[#FF5A1F]"
+              className="inline-flex h-11 items-center gap-2 rounded-full glass border border-border px-6 text-sm font-semibold transition-colors hover:border-[#FFC300]/40 hover:text-[#FFC300]"
             >
               <Github className="h-4 w-4" />
               {t.projects.github}

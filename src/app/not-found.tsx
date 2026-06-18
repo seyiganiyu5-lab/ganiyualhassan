@@ -30,15 +30,15 @@ export default function NotFound() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-            className="block bg-gradient-to-br from-[#FF5A1F] to-[#ff8a5f] bg-clip-text text-8xl font-black text-transparent sm:text-9xl"
+            className="block bg-gradient-to-br from-[#FFC300] to-[#FFD60A] bg-clip-text text-8xl font-black text-transparent sm:text-9xl"
           >
             404
           </motion.span>
-          <div className="pointer-events-none absolute inset-0 -z-10 mx-auto h-40 w-40 rounded-full bg-[#FF5A1F]/20 blur-3xl" />
+          <div className="pointer-events-none absolute inset-0 -z-10 mx-auto h-40 w-40 rounded-full bg-[#FFC300]/20 blur-3xl" />
         </div>
 
         {/* Compass icon */}
-        <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl glass border border-border text-[#FF5A1F] shadow-lg">
+        <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl glass border border-border text-[#FFC300] shadow-lg">
           <Compass className="h-7 w-7" />
         </span>
 
@@ -52,14 +52,14 @@ export default function NotFound() {
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
             href="/"
-            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#FF5A1F] px-6 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] sm:w-auto"
+            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#FFC300] px-6 text-sm font-semibold text-[#000814] shadow-lg transition-transform hover:scale-[1.02] sm:w-auto"
           >
             <Home className="h-4 w-4" />
             Back to Home
           </Link>
           <Link
             href="/admin"
-            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card/50 px-6 text-sm font-semibold text-foreground shadow-sm backdrop-blur transition-colors hover:border-[#FF5A1F]/50 hover:text-[#FF5A1F] sm:w-auto"
+            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card/50 px-6 text-sm font-semibold text-foreground shadow-sm backdrop-blur transition-colors hover:border-[#FFC300]/50 hover:text-[#FFC300] sm:w-auto"
           >
             <Shield className="h-4 w-4" />
             Admin Dashboard
@@ -69,7 +69,7 @@ export default function NotFound() {
         {/* Hint about admin URL */}
         <div className="mt-8 inline-flex items-center gap-2 rounded-full glass border border-border px-4 py-2 text-xs text-muted-foreground">
           <span>Tip: the admin URL is</span>
-          <code className="rounded bg-muted px-1.5 py-0.5 font-mono font-semibold text-[#FF5A1F]">
+          <code className="rounded bg-muted px-1.5 py-0.5 font-mono font-semibold text-[#FFC300]">
             /admin
           </code>
         </div>

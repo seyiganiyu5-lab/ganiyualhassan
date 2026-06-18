@@ -195,3 +195,49 @@ Stage Summary:
 - Fix: converted all infinite animations from framer-motion (JS-driven) to CSS keyframes (GPU-accelerated), optimized particle background (squared-distance, fewer particles, debounced resize, reduced-motion support)
 - Results: render 4.7s→339ms (14x), response timeout→53ms (45x), memory stable (no threshold crashes), 0 console errors
 - Website is now fast and stable. All features still work (theme, language, admin, all sections)
+
+---
+Task ID: 7
+Agent: Main (Z.ai Code)
+Task: Change the website color scheme to the "Golden Twilight" palette from the user-uploaded image.
+
+Work Log:
+- Read worklog.md (Tasks 1-6) to understand prior work: brand was orange #FF5A1F + light gray #E5E5E5 + dark black #121212
+- Analyzed /home/z/my-project/upload/Golden Twilight.png using z-ai vision CLI (VLM skill). Extracted exact hex palette:
+  * #000814 (Deep Black)
+  * #001D3D (Dark Navy)
+  * #003566 (Rich Blue)
+  * #FFC300 (Golden Yellow)
+  * #FFD60A (Light Yellow)
+- Grep-audited all 27 files referencing the old orange palette (FF5A1F / ff8a5f / ff7a4f / ffb088 / rgba(255,90,31))
+- Rewrote src/app/globals.css completely with the Golden Twilight palette:
+  * Light mode: --brand #FFC300 (golden), --primary #FFC300 / --primary-foreground #000814 (dark text on gold), --secondary #003566 (rich blue), --background #ffffff, --foreground #000814, --accent #fff8db (cream tint), --accent-foreground #001D3D
+  * Dark mode: --background #000814 (deep black-blue), --foreground #F5E6B8 (warm cream), --card #001D3D (dark navy), --secondary #003566 / --secondary-foreground #FFD60A, --border rgba(255,195,0,0.12) (subtle golden border)
+  * Updated all utility classes: .glass (navy glassmorphism in dark), .brand-gradient-text (golden gradient), .glow-orange (golden glow rgba(255,195,0,...)), .gradient-border (golden), .grid-bg (golden grid lines), .pulse-glow (golden), scrollbar (golden + light-yellow hover), ::selection (golden bg + dark text), cursor-outline (#FFC300 border)
+  * Chart colors: #FFC300, #FFD60A, #003566, #001D3D, #000814
+- Bulk-replaced hardcoded color values across all 27 component .tsx files via sed:
+  * #FF5A1F → #FFC300 (orange → golden primary)
+  * #ff8a5f → #FFD60A (light orange → light yellow)
+  * #ff7a4f → #FFD60A (orange hover → light yellow)
+  * #ffb088 → #FFE567 (pale orange → pale gold)
+  * rgba(255, 90, 31) → rgba(255, 195, 0) (orange rgba → golden rgba)
+  * Verified 0 remaining orange references after sed
+- Fixed text contrast on golden buttons: golden #FFC300 with white text fails WCAG (~1.4:1 ratio). Used sed with address filtering (/bg-\[#FFC300\][^/]/) to convert text-white → text-[#000814] ONLY on full-opacity golden backgrounds (excludes tinted variants like /10, /5). This gives ~12:1 contrast (dark text on gold). Covered 30+ button/badge instances across portfolio + admin components, plus hover:text-white → hover:text-[#000814] on project-modal controls.
+- Updated the single remaining hardcoded #121212 (SVG gradient stop in animated-avatar.tsx silhouette) → #000814 for palette consistency.
+- Ran `bun run lint` — 0 errors
+- Verified dev server: home (/) HTTP 200 in 241ms, admin (/admin) HTTP 200 in 157ms, recompilation succeeded with no errors
+- Browser-verified via agent-browser + VLM:
+  * Dark mode home: computed --brand #ffc300, --primary #ffc300, background rgb(0,8,20)=#000814, foreground rgb(245,230,184)=#F5E6B8. VLM confirmed: "dark navy blue dominant background... bright yellow primary accent... light text for readability"
+  * Light mode home: toggled theme, background rgb(255,255,255)=white, foreground rgb(0,8,20)=#000814. VLM confirmed: "clean white background with black text... vibrant yellow accent for buttons and highlights"
+  * Admin route: brand #ffc300 applied, title correct, login (admin/ganiyu2024) succeeds, dashboard renders with "Dashboard/Welcome" content visible
+  * 0 console errors, 0 page errors across all pages
+- Captured 4 verification screenshots: golden-twilight-dark.png, golden-twilight-light.png, golden-twilight-admin.png, golden-twilight-admin-dashboard.png
+
+Stage Summary:
+- Website color scheme fully transformed from orange/gray/black to the Golden Twilight palette: deep black-blue (#000814) + dark navy (#001D3D) + rich blue (#003566) + golden yellow (#FFC300) + light yellow (#FFD60A)
+- Primary brand/accent color is now golden yellow #FFC300 (replaced orange #FF5A1F everywhere)
+- Dark mode uses deep black-blue background with warm cream text and navy glassmorphism cards
+- Light mode uses white background with deep-black text and golden accents
+- All golden buttons use dark text (#000814) for WCAG-compliant contrast instead of low-contrast white
+- Changes span globals.css (full palette rewrite) + 27 component files (sed bulk-replace + contrast fix + SVG gradient)
+- Lint clean, dev server healthy, 0 console errors, verified visually via VLM in both themes + admin

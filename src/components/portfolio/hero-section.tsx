@@ -63,25 +63,25 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
 
       {/* Floating geometric shapes (CSS-driven for performance) */}
       <div
-        className="absolute left-[8%] top-[20%] h-20 w-20 rounded-2xl border border-[#FF5A1F]/30"
+        className="absolute left-[8%] top-[20%] h-20 w-20 rounded-2xl border border-[#FFC300]/30"
         style={{ animation: "float-rotate 12s ease-in-out infinite" }}
       />
       <div
-        className="absolute right-[12%] top-[15%] h-14 w-14 rounded-full border-2 border-[#FF5A1F]/20"
+        className="absolute right-[12%] top-[15%] h-14 w-14 rounded-full border-2 border-[#FFC300]/20"
         style={{ animation: "float-circle 9s ease-in-out infinite" }}
       />
       <div
-        className="absolute bottom-[18%] left-[15%] h-10 w-10 bg-[#FF5A1F]/10"
+        className="absolute bottom-[18%] left-[15%] h-10 w-10 bg-[#FFC300]/10"
         style={{ animation: "float-diamond 10s ease-in-out infinite" }}
       />
       <div
-        className="absolute bottom-[25%] right-[8%] h-16 w-16 rounded-full bg-gradient-to-br from-[#FF5A1F]/20 to-transparent"
+        className="absolute bottom-[25%] right-[8%] h-16 w-16 rounded-full bg-gradient-to-br from-[#FFC300]/20 to-transparent"
         style={{ animation: "float-orb 7s ease-in-out infinite" }}
       />
 
       {/* Gradient orbs */}
-      <div className="pointer-events-none absolute -left-40 top-1/4 h-96 w-96 rounded-full bg-[#FF5A1F]/10 blur-[120px]" />
-      <div className="pointer-events-none absolute -right-40 bottom-1/4 h-96 w-96 rounded-full bg-[#ff8a5f]/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -left-40 top-1/4 h-96 w-96 rounded-full bg-[#FFC300]/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -right-40 bottom-1/4 h-96 w-96 rounded-full bg-[#FFD60A]/10 blur-[120px]" />
 
       <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:px-6 lg:grid-cols-2">
         {/* Left content */}
@@ -124,9 +124,9 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mt-4 flex min-h-[2.5rem] items-center justify-center gap-2 text-xl font-bold sm:text-2xl lg:justify-start"
           >
-            <Sparkles className="h-5 w-5 text-[#FF5A1F]" />
+            <Sparkles className="h-5 w-5 text-[#FFC300]" />
             <span className="text-foreground">{text}</span>
-            <span className="animate-blink text-[#FF5A1F]">|</span>
+            <span className="animate-blink text-[#FFC300]">|</span>
           </motion.div>
 
           <motion.p
@@ -147,21 +147,21 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
           >
             <button
               onClick={() => scrollTo("projects")}
-              className="group inline-flex h-12 items-center gap-2 rounded-full bg-[#FF5A1F] px-6 text-sm font-semibold text-white shadow-lg glow-orange-sm transition-all hover:scale-105 hover:glow-orange"
+              className="group inline-flex h-12 items-center gap-2 rounded-full bg-[#FFC300] px-6 text-sm font-semibold text-[#000814] shadow-lg glow-orange-sm transition-all hover:scale-105 hover:glow-orange"
             >
               <FolderGit2 className="h-4 w-4" />
               {t.hero.viewProjects}
             </button>
             <button
               onClick={() => scrollTo("cv")}
-              className="inline-flex h-12 items-center gap-2 rounded-full glass border border-border px-6 text-sm font-semibold text-foreground transition-all hover:border-[#FF5A1F]/40 hover:text-[#FF5A1F]"
+              className="inline-flex h-12 items-center gap-2 rounded-full glass border border-border px-6 text-sm font-semibold text-foreground transition-all hover:border-[#FFC300]/40 hover:text-[#FFC300]"
             >
               <Download className="h-4 w-4" />
               {t.hero.downloadCv}
             </button>
             <button
               onClick={() => scrollTo("contact")}
-              className="inline-flex h-12 items-center gap-2 rounded-full border border-[#FF5A1F] bg-[#FF5A1F]/5 px-6 text-sm font-semibold text-[#FF5A1F] transition-all hover:bg-[#FF5A1F]/10"
+              className="inline-flex h-12 items-center gap-2 rounded-full border border-[#FFC300] bg-[#FFC300]/5 px-6 text-sm font-semibold text-[#FFC300] transition-all hover:bg-[#FFC300]/10"
             >
               <Send className="h-4 w-4" />
               {t.hero.contactMe}
@@ -205,7 +205,7 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
-        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground transition-colors hover:text-[#FF5A1F] sm:flex"
+        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground transition-colors hover:text-[#FFC300] sm:flex"
         aria-label="Scroll down"
       >
         <span className="text-xs font-medium uppercase tracking-widest">

@@ -78,7 +78,7 @@ export function Navbar() {
               className="flex items-center gap-2.5 group"
               aria-label="Home"
             >
-              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-[#FF5A1F] text-white font-black text-lg shadow-md glow-orange-sm transition-transform group-hover:scale-105">
+              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-[#FFC300] text-[#000814] font-black text-lg shadow-md glow-orange-sm transition-transform group-hover:scale-105">
                 G
                 <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-emerald-400 ring-2 ring-background" />
               </div>
@@ -97,14 +97,14 @@ export function Navbar() {
                   className={cn(
                     "relative rounded-full px-4 py-2 text-sm font-medium transition-colors",
                     activeSection === s.id
-                      ? "text-[#FF5A1F]"
+                      ? "text-[#FFC300]"
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {activeSection === s.id && (
                     <motion.span
                       layoutId="nav-active"
-                      className="absolute inset-0 rounded-full bg-[#FF5A1F]/10"
+                      className="absolute inset-0 rounded-full bg-[#FFC300]/10"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -156,7 +156,7 @@ export function Navbar() {
                   className={cn(
                     "rounded-xl px-4 py-3 text-left text-base font-medium transition-colors",
                     activeSection === s.id
-                      ? "bg-[#FF5A1F]/10 text-[#FF5A1F]"
+                      ? "bg-[#FFC300]/10 text-[#FFC300]"
                       : "text-foreground hover:bg-muted"
                   )}
                 >

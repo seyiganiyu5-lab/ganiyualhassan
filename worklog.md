@@ -293,3 +293,23 @@ Stage Summary:
 - Root cause: hardcoded placeholder assumption from the Task 8 redesign, not user-provided data
 - Fixed to the correct location "Abidjan, Côte d'Ivoire" based on the +225 phone country code and Africa/Abidjan timezone
 - If the user's actual city differs, they can tell me and I'll update it again (or remove the chip entirely if they prefer no location shown)
+
+---
+Task ID: 10
+Agent: Main (Z.ai Code)
+Task: User corrected the "My Journey" timeline years — Freelance Web & Graphic Design, UI/UX & Branding Specialist, and Started Creative Journey all started in 2025 (not 2021/2022/2023).
+
+Work Log:
+- Located the "My Journey" timeline data in src/lib/i18n/translations.ts (EN lines 84-89, FR lines 328-333) — rendered by about-section.tsx via t.about.timeline.map()
+- Original timeline (reverse chronological): 2024—Present Software Engineering Student, 2023 Freelance, 2022 UI/UX & Branding, 2021 Started Creative Journey
+- Updated per user's correction: all three creative entries now 2025; reordered so the array stays reverse-chronological (most recent first): Freelance (2025) → UI/UX & Branding (2025) → Started Creative Journey (2025) → Software Engineering Student (2024 — Present)
+- Applied identical changes to both EN and FR translations
+- Ran `bun run lint` — 0 errors
+- Browser-verified: page renders all four timeline entries; "2025" appears 3 times (the three creative milestones); all four titles present (Freelance Web, UI/UX & Branding, Started Creative, Software Engineering Student); 0 errors
+- Note: 2021/2022/2023 still appear elsewhere on the page — those are in the CV section's Experience/Certifications data (separate from "My Journey"), which the user did not ask to change
+
+Stage Summary:
+- "My Journey" timeline now correctly reflects that the user started all three creative endeavors (Freelance Web & Graphic Design, UI/UX & Branding Specialist, Started Creative Journey) in 2025
+- Software Engineering Student entry kept as "2024 — Present"
+- Updated in both English and French
+- Lint clean, 0 console errors, verified in browser

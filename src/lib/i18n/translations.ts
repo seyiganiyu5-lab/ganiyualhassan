@@ -82,10 +82,10 @@ export const translations = {
         ],
       },
       timeline: [
+        { year: "2025", title: "Freelance Web & Graphic Designer", desc: "Delivered websites, brand identities, and digital artwork for diverse clients and businesses." },
+        { year: "2025", title: "UI/UX & Branding Specialist", desc: "Specialized in creating intuitive interfaces and cohesive brand identity systems." },
+        { year: "2025", title: "Started Creative Journey", desc: "Began exploring graphic design, illustration, and the foundations of web development." },
         { year: "2024 — Present", title: "Software Engineering Student", desc: "Pursuing software engineering with focus on full-stack development, design systems, and cloud technologies." },
-        { year: "2023", title: "Freelance Web & Graphic Designer", desc: "Delivered websites, brand identities, and digital artwork for diverse clients and businesses." },
-        { year: "2022", title: "UI/UX & Branding Specialist", desc: "Specialized in creating intuitive interfaces and cohesive brand identity systems." },
-        { year: "2021", title: "Started Creative Journey", desc: "Began exploring graphic design, illustration, and the foundations of web development." },
       ],
     },
     projects: {
@@ -326,10 +326,10 @@ export const translations = {
         ],
       },
       timeline: [
+        { year: "2025", title: "Graphiste & Développeur Web Freelance", desc: "Réalisation de sites web, d'identités de marque et d'œuvres numériques pour divers clients et entreprises." },
+        { year: "2025", title: "Spécialiste UI/UX & Branding", desc: "Spécialisé dans la création d'interfaces intuitives et de systèmes d'identité de marque cohérents." },
+        { year: "2025", title: "Début du Parcours Créatif", desc: "Exploration du design graphique, de l'illustration et des fondations du développement web." },
         { year: "2024 — Présent", title: "Étudiant en Ingénierie Logicielle", desc: "Études en ingénierie logicielle axées sur le développement full-stack, les systèmes de design et les technologies cloud." },
-        { year: "2023", title: "Graphiste & Développeur Web Freelance", desc: "Réalisation de sites web, d'identités de marque et d'œuvres numériques pour divers clients et entreprises." },
-        { year: "2022", title: "Spécialiste UI/UX & Branding", desc: "Spécialisé dans la création d'interfaces intuitives et de systèmes d'identité de marque cohérents." },
-        { year: "2021", title: "Début du Parcours Créatif", desc: "Exploration du design graphique, de l'illustration et des fondations du développement web." },
       ],
     },
     projects: {

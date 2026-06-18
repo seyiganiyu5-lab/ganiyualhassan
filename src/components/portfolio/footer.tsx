@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Link from "next/link";
 import { useT } from "@/lib/i18n/context";
 import {
   Mail,
@@ -9,10 +7,8 @@ import {
   Linkedin,
   MessageCircle,
   Send,
-  Heart,
   ArrowUp,
   Users,
-  Shield,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -195,28 +191,13 @@ export function Footer() {
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
             © {new Date().getFullYear()} Ganiyu Al-Hassan Oluwaseyi. {t.footer.rights}
           </p>
-          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            {t.footer.builtWith}
-            <Heart className="h-3 w-3 fill-[#FFC300] text-[#FFC300]" />
-          </p>
-          <div className="flex items-center gap-3">
-            {/* Discreet admin access — small, muted link to /admin route */}
-            <Link
-              href="/admin"
-              className="flex items-center gap-1.5 text-xs text-muted-foreground/60 transition-colors hover:text-[#FFC300]"
-              aria-label="Admin Dashboard"
-            >
-              <Shield className="h-3 w-3" />
-              <span className="hidden sm:inline">{t.nav.admin}</span>
-            </Link>
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="flex h-9 w-9 items-center justify-center rounded-full glass border border-border text-muted-foreground transition-colors hover:border-[#FFC300]/40 hover:text-[#FFC300]"
-              aria-label={t.common.backToTop}
-            >
-              <ArrowUp className="h-4 w-4" />
-            </button>
-          </div>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="flex h-9 w-9 items-center justify-center rounded-full glass border border-border text-muted-foreground transition-colors hover:border-[#FFC300]/40 hover:text-[#FFC300]"
+            aria-label={t.common.backToTop}
+          >
+            <ArrowUp className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </footer>

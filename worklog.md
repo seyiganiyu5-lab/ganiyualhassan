@@ -333,3 +333,27 @@ Stage Summary:
 - Removed the "Happy Clients" stat the user didn't mention
 - Existing EN/FR labels already matched the user's wording
 - Lint clean, 0 console errors, verified in browser
+
+---
+Task ID: 12
+Agent: Main (Z.ai Code)
+Task: Remove "Built with Next.js, TypeScript & Framer Motion" text and the admin Shield link from the footer.
+
+Work Log:
+- Read src/components/portfolio/footer.tsx — found both elements in the bottom bar:
+  * Lines 198-201: <p> with {t.footer.builtWith} + a Heart icon ("Built with Next.js, TypeScript & Framer Motion")
+  * Lines 204-211: <Link href="/admin"> with a Shield icon + "Admin" text (the discreet admin access added in Task 5)
+- Removed the "Built with" paragraph entirely (including the Heart icon)
+- Removed the admin <Link> entirely (including the Shield icon + text)
+- Kept the copyright line ("© 2026 Ganiyu Al-Hassan Oluwaseyi. All rights reserved.") and the back-to-top button
+- Cleaned up now-unused imports: removed `motion` (framer-motion), `Link` (next/link), `Heart` and `Shield` (lucide-react) from the import statements
+- Ran `bun run lint` — 0 errors
+- Browser-verified scoped to <footer> element: footerHasBuiltWith=false ✓, footerHasShield=false ✓, copyright present ✓, back-to-top present ✓, 0 errors
+- Note: the translation key t.footer.builtWith still exists in translations.ts (EN + FR) but is now unreferenced — left in place as harmless dead data. The "Built with" / "Next.js, TypeScript" strings that still appear on the page are from the Projects section seed data (a project description + technologies list), not the footer.
+
+Stage Summary:
+- Footer bottom bar is now minimal: just the copyright line + back-to-top button
+- "Built with Next.js, TypeScript & Framer Motion" text removed
+- Admin Shield link removed (the /admin route itself still works if you type it directly in the URL, but there's no longer a visible link on the public site)
+- Unused imports cleaned up (motion, Link, Heart, Shield)
+- Lint clean, 0 console errors, verified in browser

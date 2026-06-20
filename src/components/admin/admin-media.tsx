@@ -62,9 +62,17 @@ export function AdminMedia() {
 
   const handleDelete = async (id: string, url: string) => {
     if (!confirm(t.admin.confirmDelete)) return;
-    // Note: we'd need a delete endpoint; for now just remove from view
-    setMedia(media.filter((m) => m.id !== id));
-    toast.success("Removed from library");
+    try {
+      const res = await fetch(`/api/upload?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setMedia(media.filter((m) => m.id !== id));
+        toast.success("Deleted from library");
+      } else {
+        toast.error("Delete failed");
+      }
+    } catch {
+      toast.error("Delete failed");
+    }
   };
 
   const copyUrl = (url: string) => {

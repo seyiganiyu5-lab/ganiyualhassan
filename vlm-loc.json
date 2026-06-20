@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The left column of the contact section (below the WhatsApp button) contains text - based location cards, not a map/embed. The bottom card in the left column is a LinkedIn card, displaying the LinkedIn icon and the username “al - hassan - ganiyu” in a dark - themed, text - based layout.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1781998533,
+  "id": "20260621073530f2a10d05120a461c",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "20260621073530f2a10d05120a461c",
+  "usage": {
+    "completion_tokens": 68,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 1021,
+    "prompt_tokens_details": {
+      "cached_tokens": 6
+    },
+    "total_tokens": 1089
+  }
+}

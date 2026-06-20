@@ -394,3 +394,35 @@ Stage Summary:
 - "Get a Quote" text on cards now always visible (opacity-70) instead of hidden until hover
 - Lint clean, 0 console errors, full click→scroll→pre-select→fill→submit flow verified
 - Note: 2 test messages were created during verification (1 via curl, 1 via browser) — user can delete them from Admin → Messages tab
+
+---
+Task ID: 14
+Agent: Main (Z.ai Code)
+Task: User chose option A — remove the map embed for security, replace with a clean text-based location card.
+
+Work Log:
+- Removed the OpenStreetMap <iframe> embed from src/components/portfolio/contact-section.tsx (was lines 131-148, centered on Côte d'Ivoire with a regional bounding box). This eliminates: (a) geographic visual exposure, (b) third-party tracking from openstreetmap.org
+- Added a clean, secure text-based "Location card" in its place with three info rows, each with a golden icon box + uppercase label + bold value:
+  1. MapPin → "Location" / "Abidjan, Côte d'Ivoire"
+  2. Clock → "Timezone" / "GMT / UTC+0"
+  3. Globe → "Availability" / "Available for remote work worldwide"
+- Added new i18n keys (EN + FR): findMe changed from "Find me on the map"/"Trouvez-moi sur la carte" → "Location"/"Localisation"; added locationBased, timezoneLabel, timezone, remoteLabel, remoteWork
+- Added lucide-react imports: Globe, Clock (for the new icon rows)
+- Kept the same card shell styling as the old map (glass border, header row with MapPin + label) so the visual balance of the contact section is preserved
+- Ran `bun run lint` — 0 errors
+- Browser-verified via JSON eval on #contact section:
+  * hasIframe: false (map embed gone) ✓
+  * hasLocationCard: true ("Abidjan" text present) ✓
+  * hasTimezone: true ("GMT" text present) ✓
+  * hasRemote: true (remote work text present) ✓
+  * hasOldMapTitle: false ("Find me on the map" gone) ✓
+  * 0 console errors
+
+Stage Summary:
+- Map embed completely removed for security — no more geographic visual exposure or third-party map tracking
+- Replaced with a premium text-based location card showing: Location (Abidjan, Côte d'Ivoire), Timezone (GMT/UTC+0), Availability (Available for remote work worldwide)
+- The "Available for remote work worldwide" line reframes the location info positively — tells clients you're not limited by geography
+- Visual balance of contact section preserved (same card shell styling)
+- Updated in both EN and FR
+- Lint clean, 0 console errors, verified in browser
+- The user's actual contact channels (phone, WhatsApp, email, LinkedIn) remain unchanged — those are the necessary exposure for a portfolio; the map was unnecessary decoration

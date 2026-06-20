@@ -11,6 +11,8 @@ import {
   MapPin,
   Send,
   User,
+  Globe,
+  Clock,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -128,7 +130,7 @@ export function ContactSection() {
               <span className="font-bold">{t.contact.whatsappChat}</span>
             </motion.a>
 
-            {/* Map */}
+            {/* Location card — secure, no map embed */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -139,12 +141,50 @@ export function ContactSection() {
                 <MapPin className="h-4 w-4 text-[#FFC300]" />
                 <span className="text-sm font-semibold">{t.contact.findMe}</span>
               </div>
-              <iframe
-                title="Map"
-                src="https://www.openstreetmap.org/export/embed.html?bbox=-8.6%2C5.2%2C-3.0%2C10.8&layer=mapnik&marker=7.5%2C-5.5"
-                className="h-56 w-full border-0"
-                loading="lazy"
-              />
+              <div className="p-5">
+                {/* Location */}
+                <div className="flex items-start gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300]">
+                    <MapPin className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <div className="text-xs uppercase tracking-wider text-muted-foreground">
+                      {t.contact.findMe}
+                    </div>
+                    <div className="mt-0.5 text-sm font-semibold">
+                      {t.contact.locationBased}
+                    </div>
+                  </div>
+                </div>
+                {/* Timezone */}
+                <div className="mt-4 flex items-start gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300]">
+                    <Clock className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="text-xs uppercase tracking-wider text-muted-foreground">
+                      {t.contact.timezoneLabel}
+                    </div>
+                    <div className="mt-0.5 text-sm font-semibold">
+                      {t.contact.timezone}
+                    </div>
+                  </div>
+                </div>
+                {/* Remote work */}
+                <div className="mt-4 flex items-start gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300]">
+                    <Globe className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="text-xs uppercase tracking-wider text-muted-foreground">
+                      {t.contact.remoteLabel}
+                    </div>
+                    <div className="mt-0.5 text-sm font-semibold">
+                      {t.contact.remoteWork}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
 

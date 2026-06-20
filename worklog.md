@@ -464,3 +464,42 @@ Stage Summary:
 - The hero image uploader shows a live 4:5 preview matching the hero card aspect ratio, with a "Default" badge when using the fallback image, loading spinner during upload, and a Remove button when a custom image is set
 - Lint clean, 0 console errors, full upload→save→home-display flow verified end-to-end
 - Note: 1 test image (test-hero.jpg) was uploaded during verification and is now in the Media Library — user can delete it from Admin → Media Library (the delete button now works)
+
+---
+Task ID: hero-image-tab-v2
+Agent: Main (Z.ai Code)
+Task: User reported "there is not uploading image feature in the admin" — the previous session's claimed "Hero Image" tab was never actually wired into the sidebar. Build a proper, prominent, dedicated Hero Image upload tab.
+
+Work Log:
+- Inspected current state: admin-view.tsx had 7 tabs (dashboard, projects, messages, cv, media, settings, seo) — no hero-image tab. The only uploader lived buried in Settings (admin-settings.tsx HeroImageUploader) requiring an extra "Save" click.
+- Added i18n strings for a new "Hero Image" tab to both EN and FR in translations.ts (heroImage tab label + 14 supporting strings: title, subtitle, drop, formats, current, default, custom, upload, uploading, save, saving, saved, reset, resetDone, selectFirst, preview, liveHint).
+- Created new dedicated component src/components/admin/admin-hero-image.tsx with:
+  * Header card explaining the feature
+  * Left card: live preview in exact 4:5 hero frame, ambient glow, gradient border, status badge (Custom vs Default), Reset-to-default action, Save/Cancel actions when a file is pending, helpful "open homepage + refresh" hint
+  * Right card: large drag-and-drop zone (also click-to-browse), file-type + 10MB validation, selected-file chip with name/size, "How it works" 4-step guide
+  * Pipeline: pick file → preview locally → click "Save as Hero Image" → POST base64 to /api/upload → PUT returned URL as avatarUrl to /api/settings → toast success → state updates. All in one step (no separate Save button needed).
+- Wired new tab into admin-view.tsx sidebar as 2nd item (right after Dashboard, before Projects) using UserCircle icon — most prominent position.
+- Cleaned up admin-settings.tsx: removed the old inline HeroImageUploader (and its now-unused imports useRef, motion, Upload, Trash2, Loader2). Replaced it with a small pointer card directing users to the dedicated Hero Image tab. Settings tab still keeps heroName + heroTagline text fields.
+- Lint: 0 errors.
+- Browser end-to-end verification (Agent Browser):
+  * Logged into /admin with admin/ganiyu2024
+  * Confirmed "Hero Image" tab appears as 2nd sidebar item
+  * Clicked tab → "Homepage Hero Image" heading, "CURRENT HERO IMAGE" preview, "UPLOAD NEW IMAGE" drop zone all rendered
+  * Uploaded /public/uploads/1781998978901-test-hero.jpg via the hidden file input
+  * UI showed "Save as Hero Image" + "Cancel" buttons after file selection
+  * Clicked "Save as Hero Image" → success toast "Hero image updated! Visit the homepage to see it live."
+  * DB check: GET /api/settings returned avatarUrl: "/uploads/1781999606485-1781998978901-test-hero.jpg"
+  * File on disk verified: 124628 bytes
+  * Opened home page: hero <img> src matched the saved URL, naturalWidth=720, complete=true
+  * 0 console errors, 0 page errors
+  * Tested reset: clicked "Reset to Default Photo", accepted confirm dialog, toast "Reverted to the default photo." appeared
+  * DB check: avatarUrl reverted to "" (empty string)
+  * Home page hero <img> src reverted to "/uploads/profile.jpg", naturalWidth=720, complete=true
+
+Stage Summary:
+- New prominent "Hero Image" tab is the 2nd item in the admin sidebar — impossible to miss.
+- One-step upload: pick image → click Save → it's live (no separate "Save Settings" click required).
+- Supports drag-and-drop AND click-to-browse, with live 4:5 preview matching the home page hero frame exactly.
+- Reset-to-default button restores the original /uploads/profile.jpg.
+- Settings tab de-duplicated: only text fields (heroName, heroTagline) remain; image is owned by the dedicated tab.
+- Files: src/components/admin/admin-hero-image.tsx (new), src/components/admin/admin-view.tsx (tab added), src/components/admin/admin-settings.tsx (cleaned), src/lib/i18n/translations.ts (EN+FR strings).

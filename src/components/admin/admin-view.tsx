@@ -18,9 +18,11 @@ import {
   ArrowLeft,
   Menu,
   X,
+  UserCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AdminDashboard } from "./dashboard";
+import { AdminHeroImage } from "./admin-hero-image";
 import { AdminProjects } from "./projects";
 import { AdminMessages } from "./messages";
 import { AdminCv } from "./admin-cv";
@@ -82,6 +84,7 @@ export function AdminView() {
 
   const tabs = [
     { id: "dashboard", label: t.admin.dashboard, icon: LayoutDashboard },
+    { id: "hero-image", label: t.admin.heroImage, icon: UserCircle },
     { id: "projects", label: t.admin.projects, icon: FolderGit2 },
     { id: "messages", label: t.admin.messages, icon: Mail },
     { id: "cv", label: t.admin.cv, icon: FileText },
@@ -369,6 +372,7 @@ export function AdminView() {
         {/* Tab content */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6">
           {activeTab === "dashboard" && <AdminDashboard />}
+          {activeTab === "hero-image" && <AdminHeroImage />}
           {activeTab === "projects" && <AdminProjects />}
           {activeTab === "messages" && <AdminMessages />}
           {activeTab === "cv" && <AdminCv />}

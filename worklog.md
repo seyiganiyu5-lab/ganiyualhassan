@@ -357,3 +357,40 @@ Stage Summary:
 - Admin Shield link removed (the /admin route itself still works if you type it directly in the URL, but there's no longer a visible link on the public site)
 - Unused imports cleaned up (motion, Link, Heart, Shield)
 - Lint clean, 0 console errors, verified in browser
+
+---
+Task ID: 13
+Agent: Main (Z.ai Code)
+Task: User asked if the "Get a Quote" on service cards is meant to work when clicked. It wasn't — fix it.
+
+Work Log:
+- Diagnosed: two "Get a Quote" elements existed in services-section.tsx:
+  1. On the 7 service cards (line 94-97): decorative text with arrow, appeared on hover (opacity-0 → group-hover:opacity-100), NO onClick, NO link — looked clickable but did nothing. UX bug.
+  2. On the pricing inquiry form submit button (line 198-205): this one DID work — POSTs to /api/messages, saves to DB, shows toast, clears form.
+- Verified the /api/messages POST endpoint works via curl (returned a saved message with id, read:false, etc.)
+- Fixed the service cards to be fully clickable:
+  * Added `useRef` import and a `formRef` on the pricing inquiry <motion.div>
+  * Added `handleCardClick(serviceTitle)` — sets form.service to the clicked card's title, scrolls the form into view (smooth, centered), and focuses the name input after 600ms
+  * Added `onClick`, `role="button"`, `tabIndex={0}`, and `onKeyDown` (Enter/Space) to each service card for click + keyboard accessibility
+  * Added `cursor-pointer` and `focus-visible:ring` to card className
+  * Changed the "Get a Quote" text on cards from opacity-0→opacity-100 (hover-only) to opacity-70→opacity-100 (always visible, brightens on hover) so users can see it's interactive
+  * Added `group-hover:translate-x-1` to the arrow for a micro-interaction
+  * Added `scroll-mt-24` to the form so it doesn't hide under the sticky navbar when scrolled to
+  * Added `name="quote-name"` to the name input so handleCardClick can focus it
+  * Fixed the icon gradient text from text-white → text-[#000814] for WCAG contrast on the golden icon background
+- Also fixed a leftover orange color in the pricing panel: the left info panel had bg-gradient-to-br from-[#FFC300] to-[#ff7a3f] (missed in the Task 7 color swap). Changed to from-[#003566] to-[#001D3D] (rich blue → dark navy) for a proper Golden Twilight look. Updated the decorative blur orbs to bg-[#FFC300]/20 and /10, the Sparkles icon to text-[#FFC300], the body text to text-white/80, and the checkmark circles to bg-[#FFC300]/20 text-[#FFC300] — all white text on dark blue now has excellent contrast
+- Ran `bun run lint` — 0 errors
+- Browser-verified end-to-end:
+  * Service cards now show as `button` role in the accessibility tree (7 cards detected)
+  * Clicked "Graphic Design" card → form scrolled into view, dropdown auto-selected "Graphic Design", form visible
+  * Filled name/email/message, clicked "Get a Quote" submit → form cleared (POST succeeded)
+  * 0 console errors, 0 page errors
+
+Stage Summary:
+- Service cards are now fully clickable (mouse + keyboard): clicking a card scrolls to the pricing form, pre-selects that service in the dropdown, and focuses the name field
+- The form submit button still works as before (POST /api/messages → saved to DB → toast → form clears)
+- Fixed leftover #ff7a3f orange in the pricing panel → proper Golden Twilight deep-blue gradient with golden accents
+- Fixed icon contrast (text-white → text-[#000814] on golden icon backgrounds)
+- "Get a Quote" text on cards now always visible (opacity-70) instead of hidden until hover
+- Lint clean, 0 console errors, full click→scroll→pre-select→fill→submit flow verified
+- Note: 2 test messages were created during verification (1 via curl, 1 via browser) — user can delete them from Admin → Messages tab

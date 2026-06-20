@@ -13,7 +13,7 @@ import {
   Cpu,
   ArrowRight,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -30,6 +30,16 @@ export function ServicesSection() {
   const t = useT();
   const [form, setForm] = useState({ name: "", email: "", service: "", message: "" });
   const [sending, setSending] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  // Clicking a service card scrolls to the pricing form and pre-selects that service
+  const handleCardClick = (serviceTitle: string) => {
+    setForm((prev) => ({ ...prev, service: serviceTitle }));
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    // Focus the name field so the user can start typing immediately
+    const nameInput = formRef.current?.querySelector<HTMLInputElement>("input[name=\"quote-name\"]");
+    setTimeout(() => nameInput?.focus(), 600);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,11 +88,20 @@ export function ServicesSection() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
                 whileHover={{ y: -6 }}
-                className="group relative overflow-hidden rounded-2xl glass border border-border p-6 transition-all hover:border-[#FFC300]/40 hover:shadow-xl"
+                onClick={() => handleCardClick(service.title)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleCardClick(service.title);
+                  }
+                }}
+                className="group relative cursor-pointer overflow-hidden rounded-2xl glass border border-border p-6 transition-all hover:border-[#FFC300]/40 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC300]/50"
               >
                 <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#FFC300]/5 blur-2xl transition-opacity group-hover:opacity-100 opacity-0" />
                 <div className="relative">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FFC300] to-[#FFD60A] text-white shadow-lg transition-transform group-hover:scale-110 group-hover:rotate-6">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FFC300] to-[#FFD60A] text-[#000814] shadow-lg transition-transform group-hover:scale-110 group-hover:rotate-6">
                     <Icon className="h-6 w-6" />
                   </span>
                   <h3 className="mt-5 text-lg font-bold transition-colors group-hover:text-[#FFC300]">
@@ -91,9 +110,9 @@ export function ServicesSection() {
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {service.desc}
                   </p>
-                  <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-[#FFC300] opacity-0 transition-opacity group-hover:opacity-100">
+                  <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-[#FFC300] transition-opacity group-hover:opacity-100 opacity-70">
                     {t.services.getQuote}
-                    <ArrowRight className="h-4 w-4" />
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </div>
                 </div>
               </motion.div>
@@ -103,28 +122,29 @@ export function ServicesSection() {
 
         {/* Pricing inquiry */}
         <motion.div
+          ref={formRef}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-12 overflow-hidden rounded-3xl gradient-border"
+          className="mt-12 scroll-mt-24 overflow-hidden rounded-3xl gradient-border"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left info */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-[#FFC300] to-[#ff7a3f] p-8 text-white sm:p-10">
-              <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
-              <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+            <div className="relative overflow-hidden bg-gradient-to-br from-[#003566] to-[#001D3D] p-8 text-white sm:p-10">
+              <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#FFC300]/20 blur-2xl" />
+              <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-[#FFC300]/10 blur-2xl" />
               <div className="relative">
-                <Sparkles className="h-10 w-10" />
+                <Sparkles className="h-10 w-10 text-[#FFC300]" />
                 <h3 className="mt-4 text-2xl font-black sm:text-3xl">
                   {t.services.inquiryTitle}
                 </h3>
-                <p className="mt-3 text-sm text-white/90 sm:text-base">
+                <p className="mt-3 text-sm text-white/80 sm:text-base">
                   {t.services.inquirySubtitle}
                 </p>
                 <div className="mt-8 space-y-3">
                   {t.services.list.slice(0, 4).map((s, i) => (
                     <div key={i} className="flex items-center gap-2 text-sm">
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#FFC300]/20 text-[#FFC300]">
                         ✓
                       </span>
                       {s.title}
@@ -144,6 +164,7 @@ export function ServicesSection() {
                     </label>
                     <input
                       required
+                      name="quote-name"
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       placeholder={t.contact.namePlaceholder}

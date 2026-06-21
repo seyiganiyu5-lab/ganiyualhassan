@@ -559,3 +559,38 @@ Stage Summary:
 - Empty state guides users to create their first project.
 - All legacy "#" placeholder links cleaned from both seed and existing DB rows — no more dead links on the home page.
 - Files: src/components/admin/project-image-uploader.tsx (new), src/components/admin/projects.tsx (rewritten), src/app/api/projects/route.ts (seed + cleanup migration), src/lib/i18n/translations.ts (EN+FR strings).
+
+---
+Task ID: cv-upload-fix
+Agent: Main (Z.ai Code)
+Task: User reported "there is a problem with the cv upload". Investigated and found the root cause + several related bugs.
+
+Work Log:
+- Investigated the CV upload flow end-to-end: admin-cv.tsx, api/cv/route.ts, api/upload/route.ts, cv-section.tsx.
+- ROOT CAUSE FOUND: The entire /api/upload route was MISSING. `ls src/app/api/upload/route.ts` returned "No such file or directory" and the upload/ directory was gone from src/app/api/. Every POST /api/upload was returning HTTP 404 (Next.js not-found HTML page). This broke not just the CV upload but ALSO the Hero Image upload and the Projects image upload (all three call /api/upload).
+- Confirmed via dev.log: "POST /api/upload 404 in 692ms" repeated 3 times during the failed CV upload attempt.
+- Recreated src/app/api/upload/route.ts with full GET/POST/DELETE handlers (base64 data URL upload, 10MB limit, MIME→extension map, slugified filenames, MediaAsset DB record, file-on-disk delete on DELETE). Verified with curl: HTTP 200, file saved.
+- Rewrote src/components/admin/admin-cv.tsx to fix 5 additional bugs in the frontend:
+  1. BROKEN ASYNC: The old code used reader.onload = async () => {...} inside a try/catch, but async errors inside the callback were NOT caught by the outer try (they became unhandled promise rejections). Rewrote with a promisified FileReader (new Promise((resolve,reject) => ...)) so all errors are caught.
+  2. SILENT FAILURES: If /api/upload returned an error (e.g. 404), uploadData.url was undefined, the `if (uploadData.url)` block was skipped, and NO toast was shown — the button just silently reset. Now every failure path throws with a descriptive toast.
+  3. NO VALIDATION: Old code accepted any file (the `accept` attribute is just a browser hint). Added explicit extension + MIME validation (PDF/DOC/DOCX only) with a toast rejection, plus a 10MB size check with a human-readable size message.
+  4. NO READER.ONERROR: If FileReader failed, the old code hung forever in the "uploading" state. Added reader.onerror → reject.
+  5. NO DRAG-DROP / NO PREVIEW: Added a drag-and-drop zone, a file-selected preview (showing filename + size + "ready to upload"), and Cancel/Upload action buttons. Also added a loading spinner state and a proper file-type icon (red FileText for PDF) in the Current CV card.
+- Also improved the Current CV card: shows the filename (derived from URL), a "View / download" link that opens in a new tab, and a proper PDF icon badge.
+- Lint: 0 errors, 0 warnings.
+
+Browser end-to-end verification (Agent Browser):
+- Logged into /admin → CV Management tab → Current CV card showed existing CV with "View / download" link + Delete button. Upload zone showed "Click to select, or drag & drop PDF, DOC, DOCX — up to 10 MB".
+- Uploaded /public/uploads/1781735812445-kbx2u49n.pdf (108 KB): file selected → preview showed "1781735812445-kbx2u49n.pdf 105.7 KB · ready to upload" → clicked "Upload CV" → toast "CV uploaded successfully" → Current CV card updated.
+- DB verified: GET /api/cv returned cvUrl "/uploads/1782059760905-1781735812445-kbx2u49n.pdf" (new file).
+- File on disk verified: 108,275 bytes written to public/uploads/.
+- Validation test: tried uploading profile.jpg to the CV → toast "Please select a PDF, DOC, or DOCX file" → file rejected. Correct.
+- Regression test — Hero Image upload: selected profile.jpg → "Save as Hero Image" button appeared (upload API reachable). Cancelled.
+- Regression test — Projects image upload: opened Edit Project → uploaded profile.jpg via the inline uploader → thumbnail count went 2→3 (upload API reachable). Reverted test data.
+- Home page: CV section renders "Download CV" button. 0 console errors, 0 page errors throughout.
+
+Stage Summary:
+- Root cause was a missing /api/upload route (the entire upload/ directory was gone from src/app/api/). This silently broke ALL three upload features (CV, Hero Image, Projects) — they all depend on /api/upload.
+- Recreated the upload route + rewrote the CV admin UI with proper async/await error handling, validation, drag-drop, and preview.
+- All three upload features verified working end-to-end in the browser.
+- Files: src/app/api/upload/route.ts (recreated), src/components/admin/admin-cv.tsx (rewritten).

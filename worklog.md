@@ -503,3 +503,59 @@ Stage Summary:
 - Reset-to-default button restores the original /uploads/profile.jpg.
 - Settings tab de-duplicated: only text fields (heroName, heroTagline) remain; image is owned by the dedicated tab.
 - Files: src/components/admin/admin-hero-image.tsx (new), src/components/admin/admin-view.tsx (tab added), src/components/admin/admin-settings.tsx (cleaned), src/lib/i18n/translations.ts (EN+FR strings).
+
+---
+Task ID: projects-review
+Agent: Main (Z.ai Code)
+Task: User reported "the project parts need some review". Reviewed the Projects feature end-to-end and fixed 6 issues.
+
+Work Log:
+- Reviewed projects-section.tsx, project-modal.tsx, admin/projects.tsx, api/projects/route.ts, lib/types.ts.
+- Identified 6 issues:
+  1. Image management in admin form was plain-text URL textarea — required leaving form, going to Media Library, uploading, copying URL, coming back, pasting. Same friction as the Hero Image bug.
+  2. No image previews in the form when editing.
+  3. Async save state was broken: onSave(data) was fire-and-forget, so the "saving" spinner flipped true→false instantly and the modal closed before the request finished.
+  4. No empty state when there are 0 projects.
+  5. Seed data used liveDemo:"#"/githubLink:"#" which rendered as real clickable links to nowhere.
+  6. No image count badge on admin cards.
+- Added 20 new i18n strings to EN + FR (projectImagesTitle, projectImagesDrop, projectImagesFormats, projectImagesUpload, projectImagesUploading, projectImagesAddUrl, projectImagesAddUrlPlaceholder, projectImagesAddUrlBtn, projectImagesEmpty, projectImagesFirst, projectImagesMakeCover, projectImagesRemove, projectImagesMoveLeft, projectImagesMoveRight, projectImagesInvalidUrl, projectEmpty, projectViewOnSite, projectSaving).
+- Created src/components/admin/project-image-uploader.tsx — a reusable inline image manager with:
+  * Drag-and-drop zone (multi-file) + click-to-browse
+  * URL paste field with validation (new URL() try/catch)
+  * Live thumbnail grid with per-image hover controls: remove (X), move-left, move-right, make-cover (promotes to position 0)
+  * "First (cover)" gold badge on the first image (used as the project card thumbnail)
+  * Empty state message when no images
+  * AnimatePresence for smooth add/remove transitions
+  * Loading spinner during upload
+- Rewrote src/components/admin/projects.tsx:
+  * Replaced the imagesText textarea with <ProjectImageUploader images={data.images} onChange={...} />
+  * Fixed async save: handleSave now returns Promise<boolean>; the form awaits it and shows a real Loader2 spinner with "Saving…" text until the request completes. Modal no longer closes on failure.
+  * Added empty state: when projects.length === 0, shows a FolderGit2 icon + "No projects yet. Click 'Add Project' to create your first one." + a direct Add Project button.
+  * Added featured-count badge in the top bar ("N featured" with star icon).
+  * Added image-count badge on admin cards ("N images" when >1).
+  * Form fields liveDemo/githubLink changed to type="url" + added minLength validation on title (2) and description (10).
+  * Cleaned up imports (removed unused ExternalLink).
+- Cleaned up seed data in api/projects/route.ts: replaced all 18 instances of liveDemo:"#"/githubLink:"#" with null via sed.
+- Added one-time idempotent migration cleanupLegacyHashLinks() in the GET route that runs updateMany to convert any existing DB rows with liveDemo:"#" or githubLink:"#" to null. Verified all 9 existing projects were cleaned (0 "#" links remaining).
+- Lint: 0 errors, 0 warnings (cleaned up an unused eslint-disable directive too).
+
+Browser end-to-end verification (Agent Browser):
+- Logged into /admin → clicked Projects tab → all 9 projects rendered with Edit/Delete buttons + image-count badges.
+- Clicked "Edit Project" on first project → modal opened with title/description/category/technologies pre-filled, liveDemo & github fields EMPTY (no more #), new "Drag & drop images here" upload zone, "Or paste an image URL" field, and 2 existing image thumbnails visible.
+- Verified 2 existing thumbnails present (Project image 1, Project image 2).
+- Pasted an Unsplash URL into the URL field → clicked "Add URL" → thumbnail count went 2→3. Toast "Image URL added".
+- Uploaded /public/uploads/profile.jpg via the hidden file input → thumbnail count went 3→4. Toast "Image uploaded".
+- Clicked "Save" → "Saving…" spinner showed briefly → toast "Project updated" → modal closed.
+- DB verified: project now has 4 images (2 original + 1 URL + 1 uploaded), liveDemo=null, githubLink=null.
+- Opened home page → scrolled to #projects → 9 project cards rendered, all images loaded (naturalWidth=800, complete=true).
+- Clicked first project card → modal opened → "Live Demo" and "GitHub" buttons correctly ABSENT (because links are null). Gallery image shown.
+- Tested "Add Project" flow → modal opened with empty form → "No images yet" empty state shown.
+- Reverted test project back to original 2 images via API PUT to clean up test data.
+- 0 console errors, 0 page errors throughout.
+
+Stage Summary:
+- Projects admin now has a world-class inline image manager: drag-drop multi-upload, URL paste, live thumbnails, reorder, make-cover, remove — all without leaving the form.
+- Save button now shows a real spinner and waits for the server response.
+- Empty state guides users to create their first project.
+- All legacy "#" placeholder links cleaned from both seed and existing DB rows — no more dead links on the home page.
+- Files: src/components/admin/project-image-uploader.tsx (new), src/components/admin/projects.tsx (rewritten), src/app/api/projects/route.ts (seed + cleanup migration), src/lib/i18n/translations.ts (EN+FR strings).

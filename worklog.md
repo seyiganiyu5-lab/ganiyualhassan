@@ -623,3 +623,32 @@ Stage Summary:
 - VERIFICATION: 9-step API test passed; browser-verified that (a) the public projects section renders all 9 seeded project cards with their Unsplash cover images, (b) a freshly-uploaded local image renders on the public site, and (c) the admin "Add Project" form's image uploader works end-to-end (file picker → upload → preview with cover badge). 0 console/page errors throughout.
 - ARTIFACT: src/app/api/upload/route.ts (new file, ~190 lines, fully typed, lint-clean)
 - NOTE: The project-image-uploader.tsx, admin-hero-image.tsx, admin-cv.tsx, and admin-media.tsx components were NOT modified — they were already correct; only the missing backend route was added. No DB schema change was needed (MediaAsset model already existed).
+
+---
+Task ID: projects-delete-respawn-fix
+Agent: Main (Z.ai Code)
+Task: User reported "anytime I delete all the projects it comes back again" — projects were re-appearing after deletion.
+
+Work Log:
+- Read /home/z/my-project/worklog.md to understand prior context (projects upload route had just been fixed)
+- Inspected src/app/api/projects/route.ts and found the root cause in the `ensureSeed()` function (lines 127-132): it ran on EVERY GET /api/projects and re-created all 9 demo projects whenever `db.project.count() === 0`. So the instant the admin deleted the last project, the very next fetch (admin list refresh or home page load) re-seeded all 9 demo projects — making it impossible to ever have an empty projects list.
+- Fixed `ensureSeed()` to seed ONLY ONCE EVER: it now checks for a `projectsSeeded` Setting row first. If present, it returns immediately and never re-seeds. If absent (first-ever call), it seeds the demo projects and then creates the `projectsSeeded=true` Setting row. This decouples "have we ever seeded" from the current project count, so the user's deletions are respected permanently.
+- Ran a one-off bun script to set `projectsSeeded=true` in the existing DB (which already had projects), so the fix is effective immediately rather than re-seeding on the first call after the code change.
+- Ran `bun run lint` → 0 errors
+- End-to-end API test:
+  * Listed current projects (7 — all demo seed data the user had been trying to delete)
+  * Deleted all 7 via DELETE /api/projects/:id
+  * GET /api/projects → returned 0 projects (previously would have returned 9)
+  * GET /api/projects again → still 0 (confirmed no re-seeding across multiple fetches)
+- Browser verification with agent-browser:
+  * Public home page #projects section: 0 cards, shows the i18n empty state "Projects coming soon. Check back shortly!" — 0 page errors
+  * Admin Projects tab: 0 cards, shows empty state "No projects yet. Click 'Add Project' to create your first one." with the "Add Project" button still available so the user can add their own real projects — 0 page errors
+- Left the database in the empty state (0 projects) since that is exactly what the user has been trying to achieve. The user can now add their own real projects from the admin dashboard and they will persist.
+
+Stage Summary:
+- ROOT CAUSE: `ensureSeed()` in src/app/api/projects/route.ts re-seeded the 9 demo projects on every GET whenever the project table was empty. Deleting all projects triggered an immediate re-seed on the next fetch.
+- FIX: Changed `ensureSeed()` to run only once ever, tracked via a `projectsSeeded` Setting row. After the first seed, the function is a no-op forever — so deleting all (or any) projects now persists.
+- MIGRATION: Set `projectsSeeded=true` in the existing DB via a one-off bun script so the fix takes effect immediately for the existing database.
+- VERIFICATION: API test confirmed 0 projects after delete-all across two fetches; browser confirmed both the public home page and admin Projects tab show their respective empty states with no errors.
+- ARTIFACT: edited src/app/api/projects/route.ts (ensureSeed function rewritten, ~20 lines changed). No schema change needed (used the existing Setting model).
+- NOTE: The database is now intentionally empty (0 projects). The user can add their own real projects from /admin → Projects → Add Project, and they will persist. The 9 demo projects are still defined in the seedProjects array in the route file, but will only ever be inserted into a completely fresh database that has never been seeded.

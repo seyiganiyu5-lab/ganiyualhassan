@@ -124,11 +124,25 @@ const seedProjects = [
   },
 ];
 
+// Seed the demo projects ONLY ONCE — the first time the API is ever called.
+// We track this with a `projectsSeeded` Setting row so that when the admin
+// deliberately deletes all projects, we DON'T re-create them on the next GET.
+// (The previous implementation re-seeded whenever count === 0, which made it
+// impossible to ever have an empty projects list.)
 async function ensureSeed() {
+  const alreadySeeded = await db.setting.findUnique({
+    where: { key: "projectsSeeded" },
+  });
+  if (alreadySeeded) return; // we've seeded before — respect the user's deletions
+
   const count = await db.project.count();
   if (count === 0) {
     await db.project.createMany({ data: seedProjects });
   }
+  // Mark seeding as done so it never runs again, even if the list is emptied.
+  await db.setting.create({
+    data: { key: "projectsSeeded", value: "true" },
+  });
 }
 
 // One-time cleanup: convert any legacy "#" placeholder links to null so they

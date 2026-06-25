@@ -236,7 +236,8 @@ function PortraitCard({
             <img
               src={src}
               alt={name}
-              className="h-full w-full object-cover object-top"
+              className="h-full w-full object-cover"
+              style={{ objectPosition: "50% 22%" }}
               loading="eager"
             />
           </div>

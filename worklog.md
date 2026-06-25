@@ -725,3 +725,19 @@ Work Log:
 Stage Summary:
 - Portrait is now a clean circle with a thin gold gradient ring, status badge on the bottom edge, and name/role text centered below
 - Verified: container border-radius 33554432px (rounded-full), square 288x288, lint 0 errors, 0 page/console errors
+
+---
+Task ID: circle-portrait-fix-1
+Agent: Main (Z.ai Code)
+Task: Fix the portrait image placement inside the circle (user: "this image is not placed very well in the circle").
+
+Work Log:
+- Diagnosed: source profile.jpg is 720x1280 (tall 9:16 portrait). With object-cover + object-top forced into a square circle, the face (at ~35% from top of source) landed at ~62% down the circle — too low
+- Used VLM to confirm face center is at ~35% from top of source photo with minimal space above head
+- Computed correct object-position: for a 9:16 image cover-cropped to a square, shifting the crop window so the face sits in the upper-center reads best
+- Updated src/components/portfolio/hero-section.tsx PortraitCard img: replaced object-top with style={{ objectPosition: "50% 22%" }}
+- Verified via VLM on fresh screenshot: face well-centered and fully visible, top of head not cut off
+- Verified: object-position computed style = "50% 22%", lint 0 errors
+
+Stage Summary:
+- Portrait face now sits properly centered in the circle with headroom; no awkward cropping

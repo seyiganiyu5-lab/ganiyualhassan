@@ -776,3 +776,28 @@ Verification:
 
 Stage Summary:
 - Download CV now always works: if a real CV file is configured AND exists, it downloads that file; otherwise it generates a clean professional PDF on the fly. Stale/missing files silently fall back instead of 404'ing. Downloads trigger properly (not open-in-tab). Button shows loading state and a success/error toast.
+
+---
+Task ID: graphic-preview-fix-1
+Agent: Main (Z.ai Code)
+Task: Show full flyer/graphic design in the preview instead of cropping (user: "when i upload graphics design on the preview i want it to show the full flyer or something").
+
+Diagnosis:
+- Project card (projects-section.tsx): aspect-[4/3] + object-cover -> portrait flyer cropped to landscape thumbnail, hiding most of the design
+- Project modal preview (project-modal.tsx): aspect-[16/9] + object-cover -> even worse 16:9 crop of portrait flyers in the detail view
+
+Work Log:
+- Added isArtwork() helper in projects-section.tsx: categories graphic/branding/drawing are "artwork" (show in full); website/uiux stay cover (landscape screenshots crop fine)
+- ProjectCard image: object-contain + p-3 + bg-muted/40 for artwork categories; object-cover for screen categories. Hover scale reduced 110->105 to avoid overflow with contain
+- Project modal gallery: replaced fixed aspect-[16/9] + object-cover with a flexible flex container (items-center justify-center, bg-muted/40, p-4 sm:p-8) and motion.img with max-h-[70vh] w-auto max-w-full object-contain. Now the FULL image displays at its natural aspect ratio — portrait flyers show completely, no crop
+- Kept prev/next arrows and dot indicators working (absolutely positioned within the new flex container)
+
+Verification (created a temp graphic project with portrait 720x1280 image, then deleted it):
+- Card: object-fit=contain, rendered 393x294 (full portrait contained in 4/3 box, not cropped)
+- Modal: object-fit=contain, max-h=403.9px (70vh), rendered 227x404 — aspect 227/404=0.562 == source 720/1280=0.5625, proving the ENTIRE flyer displays uncropped at natural ratio
+- VLM: "no part is cut off"
+- 0 page/console errors; lint 0 errors
+- Cleaned up temp test project (deleted via DELETE /api/projects/[id])
+
+Stage Summary:
+- Graphic design / branding / drawing projects now show the FULL artwork in both the card thumbnail and the modal preview. Portrait flyers display completely at their natural aspect ratio instead of being cropped into landscape boxes. Website/UI screenshots still use object-cover (they're landscape, look fine cropped).

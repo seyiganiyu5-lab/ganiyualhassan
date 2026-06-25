@@ -11,6 +11,15 @@ import type { Project, ProjectCategory } from "@/lib/types";
 
 const categoryOrder: ProjectCategory[] = ["website", "graphic", "branding", "uiux", "drawing"];
 
+/**
+ * Artwork categories (flyers, posters, logos, illustrations) should be shown
+ * IN FULL rather than cropped, because cropping a portrait flyer into a
+ * landscape thumbnail hides most of the design. Screen-based categories
+ * (website screenshots, UI mockups) are typically landscape and crop fine.
+ */
+const ARTWORK_CATEGORIES: ProjectCategory[] = ["graphic", "branding", "drawing"];
+const isArtwork = (cat: ProjectCategory) => ARTWORK_CATEGORIES.includes(cat);
+
 export function ProjectsSection() {
   const t = useT();
   const [projects, setProjects] = useState<Project[]>([]);
@@ -172,12 +181,17 @@ function ProjectCard({
       className="group relative cursor-pointer overflow-hidden rounded-2xl glass border border-border transition-all hover:border-[#FFC300]/40 hover:shadow-xl"
     >
       {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted/40">
         {project.images[0] ? (
           <img
             src={project.images[0]}
             alt={project.title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className={cn(
+              "h-full w-full transition-transform duration-500 group-hover:scale-105",
+              isArtwork(project.category)
+                ? "object-contain p-3" // show full flyer/poster/illustration
+                : "object-cover" // crop website/UI screenshots
+            )}
             loading="lazy"
           />
         ) : (

@@ -90,15 +90,17 @@ function ModalContent({
 
   return (
     <div className="max-h-[90vh] overflow-y-auto">
-      {/* Gallery */}
+      {/* Gallery — shows the FULL image (no crop) so flyers/posters/artwork
+          display completely. Uses a flexible max-height with object-contain
+          instead of a fixed aspect-ratio crop. */}
       {project.images.length > 0 && (
-        <div className="relative aspect-[16/9] w-full bg-muted">
+        <div className="relative flex w-full items-center justify-center bg-muted/40 p-4 sm:p-8">
           <AnimatePresence mode="wait">
             <motion.img
               key={activeImage}
               src={project.images[activeImage]}
               alt={project.title}
-              className="h-full w-full object-cover"
+              className="max-h-[70vh] w-auto max-w-full object-contain"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

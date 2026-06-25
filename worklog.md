@@ -709,3 +709,19 @@ Stage Summary:
 - Site is now calm and simple: content shows immediately (no loading screen), system cursor, no scroll-progress bar, no particles, no decorative orbs/grids, hero uses a single subtle fade-up entrance, portrait is a clean framed photo
 - Kept meaningful content features: typing role rotator, simple count-up stats, all section content intact
 - All animations now use a consistent gentle fade-up (opacity + small y, ~0.5s)
+
+---
+Task ID: circle-portrait-1
+Agent: Main (Z.ai Code)
+Task: Make the hero portrait image circular (user: "the image should be in circle form").
+
+Work Log:
+- Rewrote PortraitCard in src/components/portfolio/hero-section.tsx: replaced rectangular aspect-[4/5] rounded-[1.5rem] frame with a circular layout
+- New structure: gradient accent ring (rounded-full, bg-gradient from #FFC300 to #FFD60A, p-1.5) wrapping a square h-64 w-64 / sm:h-72 w-72 container with rounded-full + overflow-hidden holding the img
+- Status badge moved from top-left corner to sit centered on the bottom edge of the circle (bg-background, ring-1, shadow)
+- Name plate moved from overlay-on-image to a clean text block centered below the circle (role overline + name)
+- Removed the bottom gradient scrim (no longer needed since name is below the circle)
+
+Stage Summary:
+- Portrait is now a clean circle with a thin gold gradient ring, status badge on the bottom edge, and name/role text centered below
+- Verified: container border-radius 33554432px (rounded-full), square 288x288, lint 0 errors, 0 page/console errors

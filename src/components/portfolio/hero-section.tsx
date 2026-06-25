@@ -214,7 +214,7 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
   );
 }
 
-/* Clean, framed portrait — no sheens, rings, or floating badges. */
+/* Clean circular portrait — simple ring, status badge on the edge, name below. */
 function PortraitCard({
   src,
   name,
@@ -227,34 +227,37 @@ function PortraitCard({
   available: string;
 }) {
   return (
-    <div className="relative w-full max-w-[340px] sm:max-w-[380px]">
-      <div className="relative overflow-hidden rounded-[1.5rem] border border-border shadow-2xl">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]">
-          <img
-            src={src}
-            alt={name}
-            className="h-full w-full object-cover object-top"
-            loading="eager"
-          />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-
-          <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            {available}
-          </div>
-
-          <div className="absolute inset-x-0 bottom-0 p-5">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFC300]">
-              {role}
-            </p>
-            <h3 className="mt-1 text-lg font-black leading-tight text-white drop-shadow-md">
-              {name}
-            </h3>
+    <div className="flex w-full max-w-[320px] flex-col items-center">
+      {/* Circular photo */}
+      <div className="relative">
+        {/* Accent ring */}
+        <div className="rounded-full bg-gradient-to-tr from-[#FFC300] to-[#FFD60A] p-1.5 shadow-2xl">
+          <div className="relative h-64 w-64 overflow-hidden rounded-full bg-muted sm:h-72 sm:w-72">
+            <img
+              src={src}
+              alt={name}
+              className="h-full w-full object-cover object-top"
+              loading="eager"
+            />
           </div>
         </div>
+
+        {/* Status badge on the bottom edge */}
+        <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-background px-3 py-1.5 text-xs font-semibold shadow-md ring-1 ring-border">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+          </span>
+          <span className="whitespace-nowrap text-muted-foreground">{available}</span>
+        </div>
+      </div>
+
+      {/* Name + role below the circle */}
+      <div className="mt-6 text-center">
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFC300]">
+          {role}
+        </p>
+        <h3 className="mt-1 text-lg font-black leading-tight">{name}</h3>
       </div>
     </div>
   );

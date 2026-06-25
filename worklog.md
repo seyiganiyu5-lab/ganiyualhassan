@@ -594,3 +594,32 @@ Stage Summary:
 - Recreated the upload route + rewrote the CV admin UI with proper async/await error handling, validation, drag-drop, and preview.
 - All three upload features verified working end-to-end in the browser.
 - Files: src/app/api/upload/route.ts (recreated), src/components/admin/admin-cv.tsx (rewritten).
+
+---
+Task ID: projects-upload-fix
+Agent: Main (Z.ai Code)
+Task: User reported "there is also a problem with the projects" — investigate and fix issues with the projects feature.
+
+Work Log:
+- Read previous worklog to understand context (hero image upload feature had just been built)
+- Inspected the projects pipeline: src/components/portfolio/projects-section.tsx, src/components/admin/projects.tsx, src/components/admin/project-image-uploader.tsx, src/components/portfolio/project-modal.tsx, src/app/api/projects/route.ts, src/app/api/projects/[id]/route.ts
+- Discovered the ROOT CAUSE: the admin ProjectImageUploader calls `fetch("/api/upload", ...)` to upload project images, but NO `/api/upload` route existed in src/app/api/. The same missing route is referenced by 4 admin components: project-image-uploader.tsx, admin-hero-image.tsx, admin-cv.tsx, and admin-media.tsx (media library GET/POST/DELETE). This single missing route was silently breaking ALL admin uploads (project images, hero image, CV, and the media library).
+- Created src/app/api/upload/route.ts implementing the full contract the 4 callers expect:
+  * GET  /api/upload          → MediaAsset[] (newest first); returns [] on error so the media library degrades gracefully
+  * POST /api/upload          → accepts { dataUrl, name, type:"image"|"file" }, validates the data-URL format, enforces a 10 MB limit, maps MIME → extension, sanitizes the filename to `<timestamp>-<safe-base>.<ext>`, writes to public/uploads/, creates a MediaAsset DB row, returns { id, url, name, type, createdAt }
+  * DELETE /api/upload?id=xxx → removes the file from disk (path-traversal-safe via path.basename) and deletes the MediaAsset row; idempotent
+- Ran `bun run lint` → 0 errors
+- End-to-end API test (9 steps): GET list, POST upload a 1x1 PNG, confirmed file on disk, confirmed Next.js serves it (HTTP 200), GET list now includes it, created a project using the uploaded URL, GET /api/projects returns the project with the image, DELETE project, DELETE upload — ALL PASSED
+- Browser verification with agent-browser:
+  * Home page projects section: 9 seeded cards render, all 9 Unsplash cover images load (naturalWidth 800) after scrolling into view (they use loading="lazy")
+  * Uploaded a locally-uploaded image via the API and confirmed it renders on the public projects section (complete:true, naturalWidth:2, ok:true)
+  * Logged into /admin (admin / ganiyu2024), navigated to Projects tab, opened "Add Project" form — confirmed the ProjectImageUploader renders (drop zone, file input accept="image/*" multiple, URL paste field)
+  * Uploaded a real 16x16 PNG through the form's file input via agent-browser upload — the preview grid showed the uploaded image with the "First (cover)" badge, dev.log confirmed `POST /api/upload 200`
+- Cleaned up all test artifacts: deleted the test project via API, deleted the 3 uploaded test images from both disk and the MediaAsset DB table, closed the browser. Project count back to 9 seeded projects, no test files left on disk.
+
+Stage Summary:
+- ROOT CAUSE: The `/api/upload` route was missing entirely, breaking uploads across the entire admin dashboard (projects, hero image, CV, media library). The previous "hero image upload" work referenced this route but it was never created.
+- FIX: Created src/app/api/upload/route.ts (GET/POST/DELETE) that saves files to public/uploads/ and manages MediaAsset DB rows. This single route unblocks all 4 admin upload features.
+- VERIFICATION: 9-step API test passed; browser-verified that (a) the public projects section renders all 9 seeded project cards with their Unsplash cover images, (b) a freshly-uploaded local image renders on the public site, and (c) the admin "Add Project" form's image uploader works end-to-end (file picker → upload → preview with cover badge). 0 console/page errors throughout.
+- ARTIFACT: src/app/api/upload/route.ts (new file, ~190 lines, fully typed, lint-clean)
+- NOTE: The project-image-uploader.tsx, admin-hero-image.tsx, admin-cv.tsx, and admin-media.tsx components were NOT modified — they were already correct; only the missing backend route was added. No DB schema change was needed (MediaAsset model already existed).

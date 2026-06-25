@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useT } from "@/lib/i18n/context";
 import { SectionHeading } from "./section-heading";
@@ -12,10 +13,12 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { generateCvPdf } from "@/lib/cv-pdf";
 
 export function CvSection({ cvUrl }: { cvUrl?: string | null }) {
   const t = useT();
+  const [downloading, setDownloading] = useState(false);
 
   const sections = [
     {
@@ -35,41 +38,71 @@ export function CvSection({ cvUrl }: { cvUrl?: string | null }) {
     },
   ] as const;
 
-  const handleDownload = () => {
-    if (cvUrl) {
-      window.open(cvUrl, "_blank");
-    } else {
-      // Generate a simple text-based CV as fallback
-      const cvText = `Ganiyu Al-Hassan Oluwaseyi
-Software Engineering Student & Creative Digital Professional
+  /** Build the structured data the PDF generator expects, from i18n. */
+  const buildCvData = () => ({
+    name: t.hero.name,
+    role: t.hero.roleValue,
+    phone: "(+225) 05 03 67 14 80",
+    email: "seyiganiyu5@gmail.com",
+    linkedin: "linkedin.com/in/al-hassan-ganiyu-9910b3410",
+    location: t.contact.locationBased,
+    educationLabel: t.cv.education,
+    experienceLabel: t.cv.experience,
+    certificationsLabel: t.cv.certifications,
+    skillsLabel: t.cv.skills,
+    education: t.cv.educationData,
+    experience: t.cv.experienceData,
+    certifications: t.cv.certificationsData,
+    skills: [
+      { category: t.about.skills.development, items: t.about.skillsData.development.map((s) => s.name) },
+      { category: t.about.skills.design, items: t.about.skillsData.design.map((s) => s.name) },
+      { category: t.about.skills.technology, items: t.about.skillsData.technology.map((s) => s.name) },
+      { category: t.about.skills.creative, items: t.about.skillsData.creative.map((s) => s.name) },
+    ],
+  });
 
-CONTACT
-Phone: (+225) 05 03 67 14 80
-Email: seyiganiyu5@gmail.com
-LinkedIn: linkedin.com/in/al-hassan-ganiyu-9910b3410
+  /** Trigger a real file download from a Blob (instead of opening in a tab). */
+  const triggerBlobDownload = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    // Revoke after a short delay so the download has time to start.
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  };
 
-EDUCATION
-${t.cv.educationData.map((e) => `- ${e.title} | ${e.org} | ${e.period}\n  ${e.desc}`).join("\n\n")}
-
-EXPERIENCE
-${t.cv.experienceData.map((e) => `- ${e.title} | ${e.org} | ${e.period}\n  ${e.desc}`).join("\n\n")}
-
-CERTIFICATIONS
-${t.cv.certificationsData.map((e) => `- ${e.title} | ${e.org} | ${e.period}\n  ${e.desc}`).join("\n\n")}
-
-SKILLS
-Development: HTML, CSS, JavaScript, GitHub, Website Development
-Design: Adobe Photoshop, Adobe Illustrator, Graphic Design, Branding, UI Design, UX Design
-Technology: Cloud Computing, AI Tools, Software Engineering
-Creative: Drawing, Digital Illustration, Creative Thinking
-`;
-      const blob = new Blob([cvText], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "Ganiyu_Al-Hassan_Oluwaseyi_CV.txt";
-      a.click();
-      URL.revokeObjectURL(url);
+  const handleDownload = async () => {
+    if (downloading) return;
+    setDownloading(true);
+    try {
+      // If a real CV file is configured, verify it actually exists before
+      // trying to hand it to the user. A stale DB pointer to a deleted file
+      // should silently fall back to a generated PDF instead of 404'ing.
+      if (cvUrl) {
+        try {
+          const res = await fetch(cvUrl);
+          if (res.ok) {
+            const blob = await res.blob();
+            const filename = cvUrl.split("/").pop() || "CV.pdf";
+            triggerBlobDownload(blob, filename);
+            toast.success(t.cv.download);
+            return;
+          }
+        } catch {
+          // network/parse error — fall through to generated PDF below
+        }
+      }
+      // Fallback: generate a clean, professional PDF CV on the fly.
+      generateCvPdf(buildCvData());
+      toast.success(t.cv.download);
+    } catch (e) {
+      console.error("CV download error:", e);
+      toast.error(t.contact.error);
+    } finally {
+      setDownloading(false);
     }
   };
 
@@ -87,10 +120,11 @@ Creative: Drawing, Digital Illustration, Creative Thinking
         >
           <button
             onClick={handleDownload}
-            className="inline-flex h-12 items-center gap-2 rounded-full bg-[#FFC300] px-6 text-sm font-semibold text-[#000814] shadow-lg glow-orange-sm transition-all hover:scale-105 hover:glow-orange"
+            disabled={downloading}
+            className="inline-flex h-12 items-center gap-2 rounded-full bg-[#FFC300] px-6 text-sm font-semibold text-[#000814] shadow-lg transition-transform hover:scale-105 disabled:cursor-wait disabled:opacity-70"
           >
-            <Download className="h-4 w-4" />
-            {t.cv.download}
+            <Download className={downloading ? "h-4 w-4 animate-pulse" : "h-4 w-4"} />
+            {downloading ? t.contact.sending : t.cv.download}
           </button>
         </motion.div>
 

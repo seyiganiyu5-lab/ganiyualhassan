@@ -652,3 +652,44 @@ Stage Summary:
 - VERIFICATION: API test confirmed 0 projects after delete-all across two fetches; browser confirmed both the public home page and admin Projects tab show their respective empty states with no errors.
 - ARTIFACT: edited src/app/api/projects/route.ts (ensureSeed function rewritten, ~20 lines changed). No schema change needed (used the existing Setting model).
 - NOTE: The database is now intentionally empty (0 projects). The user can add their own real projects from /admin → Projects → Add Project, and they will persist. The 9 demo projects are still defined in the seedProjects array in the route file, but will only ever be inserted into a completely fresh database that has never been seeded.
+
+---
+Task ID: home-animations-redesign
+Agent: Main (Z.ai Code)
+Task: User requested "change the animation of the home" — redesign the home page animations for a fresh feel.
+
+Work Log:
+- Read /home/z/my-project/worklog.md to understand prior context (projects delete-respawn + upload route had just been fixed)
+- Audited the current home animation system across 4 files:
+  * src/app/page.tsx — composes LoadingScreen, AnimatedCursor, ScrollProgress, Navbar, FloatingSocial, all sections, Footer, BackToTop
+  * src/components/portfolio/loading-screen.tsx — ring spinner + "G" letter, fades out over 1.8s
+  * src/components/portfolio/particle-background.tsx — canvas with connected-dot particle network (tech-y)
+  * src/components/portfolio/hero-section.tsx — uniform { opacity:0, y:20 } fade-up with staggered delays; geometric floating shapes (square/circle/diamond); scale-in portrait card; cubic count-up; mouse-shape scroll indicator
+- Reviewed existing keyframes in src/app/globals.css (float, float-rotate, float-circle, float-diamond, float-orb, spin-slow, blink, loader-ring, marquee, etc.) and the useTypingEffect hook (kept as-is)
+- Designed a cohesive new "Kinetic Reveal" animation scheme with 7 changes, all using the existing brand palette (orange #FFC300 / golden #FFD60A):
+  1. Loading screen: ring spinner → thin progress bar fills 0→100% + live percentage counter + brand "G" letter with scale/glow pulse; exit changed from fade-out to a curtain-up slide (translateY -100%)
+  2. Background: connected-dot particle network → floating bokeh orbs (soft radial-gradient circles that rise upward and fade, additive blending, warm-orange↔golden color variation per orb)
+  3. Hero name (h1): uniform fade-up → clip-path wipe reveal (inset 100%→0%, curtain-lifting effect) with cubic-bezier easing
+  4. Hero supporting text (chips, greeting, typing title, tagline, CTAs, stats): uniform fade-up → blur-to-focus entrance (opacity + y:30 + filter blur(12px)→0), custom-staggered via a shared blurUp variant
+  5. Portrait card: scale-in from 0.92 → slide-in from the right (x:80→0) with a slight rotate (3deg→0); ambient glow changed from static float-orb to a breathing scale+opacity (glow-breathe); added a periodic scanning light sheen that sweeps across the photo (scan-sheen keyframe)
+  6. Floating shapes: outlined square/circle/diamond → 3 organic morphing blobs (border-radius morphs continuously via morph-blob keyframe, with translate + rotate)
+  7. Count-up stats: cubic ease-out → elastic-out overshoot bounce (overshoots ~13% then settles, satisfying "pop" finish)
+  8. Scroll indicator: mouse shape floating up/down → pulsing vertical line (scaleY + opacity, pulse-line keyframe) + two sequential chevrons that fade downward (chevron-drop keyframe)
+- Added 8 new @keyframes to src/app/globals.css: curtain-up, progress-fill, letter-pulse, reveal-name (+ .reveal-name utility class), morph-blob, scan-sheen, pulse-line, chevron-drop, glow-breathe. Did NOT remove or rename any existing keyframes (other components like navbar, floating-social, back-to-top still use them).
+- Rewrote src/components/portfolio/loading-screen.tsx entirely (progress bar + percentage via requestAnimationFrame + curtain-up exit via framer-motion exit prop)
+- Rewrote src/components/portfolio/particle-background.tsx entirely (Orb interface with x/y/size/speed/drift/alpha/hueShift; orbs rise upward, sine-drift horizontally, twinkle alpha, recycle at top; additive 'lighter' composite for glow; radial gradient warm-orange↔golden)
+- Rewrote src/components/portfolio/hero-section.tsx: added blurUp motion variant; applied custom index + variants to each supporting element; name uses .reveal-name CSS class with animationDelay; portrait container animates x/rotate; floating shapes use morph-blob; scroll indicator rebuilt with pulse-line + 2 chevrons; CountUp rewritten with elastic-out easing; PortraitCard gains scan-sheen overlay + glow-breathe ambient
+- Ran `bun run lint` → 0 errors
+- Browser verification with agent-browser:
+  * Loading screen: confirmed progress bar at scaleX(0) / 0% early in load, animates to 100% (captured mid-flight)
+  * Hero: confirmed all new elements present — reveal-name class on name (clip-path reveal), 3 morphing blobs, bokeh canvas (1440x900), scan sheen on portrait, pulse line, 2 chevrons
+  * Bokeh canvas pixel sampling: 100/12960 sampled pixels non-transparent, drawing:true (canvas genuinely rendering orbs, not blank)
+  * 0 console errors, 0 page errors throughout
+  * dev.log shows clean GET/POST 200s; only non-animation-related 404 is the pre-existing missing hero image file (/uploads/1781999843674-gu-ladou-ivorycoast-2026.jpg) — unrelated to this animation work
+
+Stage Summary:
+- DELIVERABLE: Completely redesigned home page animation system ("Kinetic Reveal" scheme) across 4 files.
+- CHANGES: (1) loading-screen.tsx — rewritten, progress bar + curtain exit; (2) particle-background.tsx — rewritten, bokeh orbs; (3) hero-section.tsx — rewritten entrances + morphing blobs + scan sheen + new scroll indicator + elastic count-up; (4) globals.css — +8 new @keyframes, no existing keyframes removed
+- PRESERVED: brand palette (orange/golden), all content/layout/typography, useTypingEffect hook, reduced-motion support, all other sections (about, projects, cv, services, contact) untouched, all existing keyframes retained for other components
+- VERIFICATION: lint 0 errors; browser-confirmed loading bar animates, bokeh canvas draws real pixels, all hero animation elements present, 0 console/page errors
+- NOTE: The portrait image shows a 404 because the avatarUrl setting still points to a previously-uploaded file that no longer exists on disk (/uploads/1781999843674-gu-ladou-ivorycoast-2026.jpg). This is a pre-existing data issue unrelated to animations — the user can fix it by re-uploading a hero image at /admin → Hero Image tab. The portrait card frame, scan sheen, and all animations still render correctly around the missing image.

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDown, Download, FolderGit2, MapPin, Send, Sparkles } from "lucide-react";
+import { ArrowDown, Download, FolderGit2, MapPin, Send, Sparkles, ChevronDown } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { useTypingEffect } from "@/hooks/use-typing-effect";
 import { ParticleBackground } from "./particle-background";
@@ -13,18 +13,28 @@ const stats = [
   { value: 5, suffix: "+", key: "awards" },
 ] as const;
 
+/**
+ * Count-up with an elastic overshoot bounce.
+ * Replaces the old cubic ease-out — now the number briefly overshoots the
+ * target then settles back, giving a satisfying "pop" finish.
+ */
 function CountUp({ to, suffix }: { to: number; suffix: string }) {
   const [count, setCount] = useState(0);
   useEffect(() => {
     let frame: number;
-    const duration = 1500;
+    const duration = 1300;
     const start = performance.now();
     const tick = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(eased * to));
+      // Elastic-out: overshoots ~13% then settles
+      const p = progress;
+      const eased =
+        p === 0 || p === 1
+          ? p
+          : Math.pow(2, -10 * p) * Math.sin(((p * 10 - 0.75) * (2 * Math.PI)) / 3) + 1;
+      setCount(Math.round(eased * to));
       if (progress < 1) frame = requestAnimationFrame(tick);
-      else setCount(to);
+      else setCount(to); // clamp to exact target on finish
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
@@ -36,6 +46,22 @@ function CountUp({ to, suffix }: { to: number; suffix: string }) {
     </span>
   );
 }
+
+/**
+ * Shared "blur-to-focus" entrance variant.
+ * Replaces the old uniform { opacity:0, y:20 } → { opacity:1, y:0 }.
+ * Now each element also blurs in from 12px → 0 and slides up 30px → 0,
+ * which reads as more cinematic / "focusing into view".
+ */
+const blurUp = {
+  hidden: { opacity: 0, y: 30, filter: "blur(12px)" },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, delay: 0.15 + i * 0.1, ease: [0.25, 0.1, 0.25, 1] as const },
+  }),
+};
 
 export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
   const t = useT();
@@ -55,26 +81,26 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
       id="home"
       className="relative flex min-h-screen items-center overflow-hidden pt-28 pb-16"
     >
-      {/* Particle background */}
+      {/* Bokeh-orb background */}
       <div className="absolute inset-0">
-        <ParticleBackground density={26} />
+        <ParticleBackground density={24} />
       </div>
 
       {/* Editorial grid backdrop */}
       <div className="grid-bg pointer-events-none absolute inset-0 opacity-60" />
 
-      {/* Floating geometric shapes (CSS-driven for performance) */}
+      {/* Floating morphing blobs (organic, replaces geometric shapes) */}
       <div
-        className="absolute left-[6%] top-[18%] h-16 w-16 rounded-2xl border border-[#FFC300]/30"
-        style={{ animation: "float-rotate 14s ease-in-out infinite" }}
+        className="pointer-events-none absolute left-[6%] top-[16%] h-20 w-20 border border-[#FFC300]/30"
+        style={{ animation: "morph-blob 16s ease-in-out infinite" }}
       />
       <div
-        className="absolute right-[8%] top-[12%] h-12 w-12 rounded-full border-2 border-[#FFC300]/20"
-        style={{ animation: "float-circle 10s ease-in-out infinite" }}
+        className="pointer-events-none absolute right-[9%] top-[14%] h-14 w-14 border-2 border-[#FFD60A]/25"
+        style={{ animation: "morph-blob 13s ease-in-out infinite reverse" }}
       />
       <div
-        className="absolute bottom-[14%] left-[10%] h-8 w-8 bg-[#FFC300]/10"
-        style={{ animation: "float-diamond 11s ease-in-out infinite" }}
+        className="pointer-events-none absolute bottom-[16%] left-[11%] h-10 w-10 bg-[#FFC300]/10"
+        style={{ animation: "morph-blob 11s ease-in-out infinite" }}
       />
 
       {/* Gradient orbs */}
@@ -91,10 +117,12 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
       <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:gap-8">
         {/* Left content — editorial text column */}
         <div className="order-2 lg:order-1 lg:col-span-7">
+          {/* Status chips — slide in from the left */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            custom={0}
+            variants={blurUp}
+            initial="hidden"
+            animate="show"
             className="flex flex-wrap items-center gap-3"
           >
             <span className="inline-flex items-center gap-2 rounded-full glass border border-border px-4 py-1.5 text-sm">
@@ -111,28 +139,36 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
           </motion.div>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.05 }}
+            custom={1}
+            variants={blurUp}
+            initial="hidden"
+            animate="show"
             className="mt-6 text-xs font-bold uppercase tracking-[0.35em] text-[#FFC300]"
           >
             {t.hero.greeting}
           </motion.p>
 
+          {/* NAME — clip-path wipe reveal (the headline effect) */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
             className="mt-3 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl"
           >
-            <span className="brand-gradient-text">{t.hero.name}</span>
+            <span
+              className="brand-gradient-text reveal-name inline-block"
+              style={{ animationDelay: "0.35s", animationFillMode: "both" }}
+            >
+              {t.hero.name}
+            </span>
           </motion.h1>
 
           {/* Typing title — highlighted pill */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
+            custom={2}
+            variants={blurUp}
+            initial="hidden"
+            animate="show"
             className="mt-6 flex min-h-[2.75rem] items-center gap-2.5"
           >
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#FFC300]/10 text-[#FFC300]">
@@ -143,9 +179,10 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
           </motion.div>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
+            custom={3}
+            variants={blurUp}
+            initial="hidden"
+            animate="show"
             className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground"
           >
             {t.hero.tagline}
@@ -153,9 +190,10 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
 
           {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.45 }}
+            custom={4}
+            variants={blurUp}
+            initial="hidden"
+            animate="show"
             className="mt-8 flex flex-wrap items-center gap-3"
           >
             <button
@@ -183,9 +221,10 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
 
           {/* Stats — editorial divider strip */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.55 }}
+            custom={5}
+            variants={blurUp}
+            initial="hidden"
+            animate="show"
             className="mt-10 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-border pt-6 sm:grid-cols-3"
           >
             {stats.map((stat, i) => (
@@ -204,36 +243,46 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
           </motion.div>
         </div>
 
-        {/* Right — editorial portrait card */}
+        {/* Right — portrait card, slides in from the right with slight rotate */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.92, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+          initial={{ opacity: 0, x: 80, rotate: 3 }}
+          animate={{ opacity: 1, x: 0, rotate: 0 }}
+          transition={{ duration: 0.9, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
           className="order-1 flex justify-center lg:order-2 lg:col-span-5"
         >
           <PortraitCard src={profileSrc} name={t.hero.name} role={t.hero.roleValue} available={t.hero.available} />
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — pulsing vertical line + sequential chevrons */}
       <motion.button
         onClick={() => scrollTo("about")}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
+        transition={{ delay: 1.3 }}
         className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground transition-colors hover:text-[#FFC300] sm:flex"
         aria-label="Scroll down"
       >
         <span className="text-xs font-medium uppercase tracking-widest">
           {t.hero.scrollDown}
         </span>
-        <div
-          className="flex h-9 w-5 items-start justify-center rounded-full border-2 border-current p-1"
-          style={{ animation: "float-badge-up 1.5s ease-in-out infinite" }}
-        >
-          <span className="h-2 w-1 rounded-full bg-current" />
+        <div className="relative flex h-10 w-5 flex-col items-center">
+          {/* Pulsing vertical line */}
+          <span
+            className="absolute bottom-0 h-full w-[2px] origin-bottom rounded-full bg-[#FFC300]"
+            style={{ animation: "pulse-line 1.6s ease-in-out infinite" }}
+          />
+          {/* Two sequential chevrons */}
+          <ChevronDown
+            className="absolute top-0 h-3.5 w-3.5 text-[#FFC300]"
+            style={{ animation: "chevron-drop 1.6s ease-in-out infinite", animationDelay: "0s" }}
+          />
+          <ChevronDown
+            className="absolute top-2 h-3.5 w-3.5 text-[#FFC300]/60"
+            style={{ animation: "chevron-drop 1.6s ease-in-out infinite", animationDelay: "0.2s" }}
+          />
         </div>
-        <ArrowDown className="h-4 w-4" />
+        <ArrowDown className="h-3 w-3 opacity-0" />
       </motion.button>
     </section>
   );
@@ -241,6 +290,7 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
 
 /* ──────────────────────────────────────────────────────────
    Editorial portrait card — magazine-style framed photo
+   with a periodic scanning light sheen across the image
    ────────────────────────────────────────────────────────── */
 function PortraitCard({
   src,
@@ -255,10 +305,10 @@ function PortraitCard({
 }) {
   return (
     <div className="relative w-full max-w-[340px] sm:max-w-[380px]">
-      {/* Ambient glow behind card */}
+      {/* Ambient glow — now breathes (scale + opacity) instead of static blur */}
       <div
         className="absolute -inset-6 rounded-[2rem] bg-gradient-to-tr from-[#FFC300]/30 via-[#FFD60A]/20 to-[#003566]/30 blur-3xl"
-        style={{ animation: "float-orb 8s ease-in-out infinite" }}
+        style={{ animation: "glow-breathe 7s ease-in-out infinite" }}
       />
 
       {/* Rotating dashed ring accent (decorative, top-right) */}
@@ -282,6 +332,17 @@ function PortraitCard({
           <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/30 to-transparent" />
           {/* Bottom gradient for legibility of name plate */}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
+
+          {/* Scanning light sheen — sweeps across periodically */}
+          <div
+            className="pointer-events-none absolute inset-0 overflow-hidden"
+            aria-hidden="true"
+          >
+            <div
+              className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+              style={{ animation: "scan-sheen 5s ease-in-out infinite", animationDelay: "1.2s" }}
+            />
+          </div>
 
           {/* Top-left status chip on photo */}
           <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md">

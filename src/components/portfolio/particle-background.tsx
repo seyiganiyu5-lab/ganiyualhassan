@@ -2,17 +2,30 @@
 
 import { useEffect, useRef } from "react";
 
-interface Particle {
+interface Orb {
   x: number;
   y: number;
-  vx: number;
-  vy: number;
   size: number;
+  speed: number;     // upward drift speed (px/frame)
+  drift: number;     // horizontal sine drift amplitude
+  driftPhase: number;
   alpha: number;
   alphaSpeed: number;
+  hueShift: number;  // 0 = warm orange, 1 = golden yellow
 }
 
-export function ParticleBackground({ density = 35 }: { density?: number }) {
+/**
+ * Floating bokeh-orb background.
+ *
+ * Replaces the old connected-dot particle network with soft glowing orbs
+ * that rise slowly upward and gently fade — like dust motes in sunlight or
+ * floating fireflies. Feels more premium/editorial than a tech-y mesh.
+ *
+ * Each orb is drawn as a radial gradient (bright center → transparent edge)
+ * so the glow is soft, with a slight color variation between warm orange
+ * and golden yellow to match the brand palette.
+ */
+export function ParticleBackground({ density = 26 }: { density?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -21,17 +34,14 @@ export function ParticleBackground({ density = 35 }: { density?: number }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Respect reduced-motion preference — skip animation entirely
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
     let animationId = 0;
-    let particles: Particle[] = [];
+    let orbs: Orb[] = [];
     let width = 0;
     let height = 0;
-    const connectionDist = 110;
-    const connectionDistSq = connectionDist * connectionDist;
 
     const resize = () => {
       const parent = canvas.parentElement;
@@ -44,70 +54,82 @@ export function ParticleBackground({ density = 35 }: { density?: number }) {
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      initParticles();
+      initOrbs();
     };
 
-    const initParticles = () => {
-      particles = [];
-      // Fewer particles = less memory + faster O(n²) connection loop
-      const count = Math.min(density, Math.floor((width * height) / 22000));
+    const initOrbs = () => {
+      orbs = [];
+      const count = Math.min(density, Math.floor((width * height) / 24000));
       for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.25,
-          vy: (Math.random() - 0.5) * 0.25,
-          size: Math.random() * 1.8 + 0.5,
-          alpha: Math.random() * 0.5 + 0.1,
-          alphaSpeed: (Math.random() - 0.5) * 0.008,
-        });
+        orbs.push(makeOrb(true));
       }
+    };
+
+    // Create a new orb. seeded=true scatters it anywhere on screen (initial
+    // population); seeded=false spawns it at the bottom (ongoing drift-up).
+    const makeOrb = (seeded: boolean): Orb => {
+      const size = Math.random() * 18 + 6; // 6–24px radius
+      return {
+        x: Math.random() * width,
+        y: seeded ? Math.random() * height : height + size + Math.random() * 40,
+        size,
+        speed: Math.random() * 0.35 + 0.12, // slow rise
+        drift: Math.random() * 18 + 4,
+        driftPhase: Math.random() * Math.PI * 2,
+        alpha: Math.random() * 0.35 + 0.12,
+        alphaSpeed: (Math.random() - 0.5) * 0.006,
+        hueShift: Math.random(),
+      };
     };
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
+      ctx.globalCompositeOperation = "lighter"; // additive glow
 
-      const n = particles.length;
+      for (let i = 0; i < orbs.length; i++) {
+        const o = orbs[i];
 
-      // Draw connections — use squared distance to avoid sqrt
-      for (let i = 0; i < n; i++) {
-        const pi = particles[i];
-        for (let j = i + 1; j < n; j++) {
-          const pj = particles[j];
-          const dx = pi.x - pj.x;
-          const dy = pi.y - pj.y;
-          const distSq = dx * dx + dy * dy;
-          if (distSq < connectionDistSq) {
-            const opacity = (1 - distSq / connectionDistSq) * 0.12;
-            ctx.strokeStyle = `rgba(255, 195, 0, ${opacity})`;
-            ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(pi.x, pi.y);
-            ctx.lineTo(pj.x, pj.y);
-            ctx.stroke();
-          }
+        // Rise upward
+        o.y -= o.speed;
+        // Gentle horizontal sine drift
+        o.driftPhase += 0.008;
+        const drawX = o.x + Math.sin(o.driftPhase) * o.drift;
+        // Twinkle alpha
+        o.alpha += o.alphaSpeed;
+        if (o.alpha < 0.08 || o.alpha > 0.45) o.alphaSpeed *= -1;
+
+        // Recycle when fully above the top edge
+        if (o.y < -o.size * 2) {
+          orbs[i] = makeOrb(false);
+          continue;
         }
-      }
 
-      // Draw + update particles
-      for (let i = 0; i < n; i++) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha += p.alphaSpeed;
-        if (p.alpha < 0.1 || p.alpha > 0.6) p.alphaSpeed *= -1;
+        // Radial gradient orb — warm orange → golden yellow
+        const grad = ctx.createRadialGradient(
+          drawX,
+          o.y,
+          0,
+          drawX,
+          o.y,
+          o.size
+        );
+        // Blend between brand orange (#FF5A1F-ish, here #FF8A3D for warmth)
+        // and golden yellow (#FFD60A) per-orb.
+        const inner =
+          o.hueShift < 0.5
+            ? `rgba(255, 170, 70, ${o.alpha})`     // warm
+            : `rgba(255, 214, 10, ${o.alpha})`;    // golden
+        grad.addColorStop(0, inner);
+        grad.addColorStop(0.4, `rgba(255, 195, 0, ${o.alpha * 0.4})`);
+        grad.addColorStop(1, "rgba(255, 195, 0, 0)");
 
-        if (p.x < 0) p.x = width;
-        else if (p.x > width) p.x = 0;
-        if (p.y < 0) p.y = height;
-        else if (p.y > height) p.y = 0;
-
+        ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 120, 60, ${p.alpha})`;
+        ctx.arc(drawX, o.y, o.size, 0, Math.PI * 2);
         ctx.fill();
       }
 
+      ctx.globalCompositeOperation = "source-over";
       animationId = requestAnimationFrame(draw);
     };
 
@@ -116,8 +138,7 @@ export function ParticleBackground({ density = 35 }: { density?: number }) {
     if (!prefersReduced) {
       draw();
     } else {
-      // Render a single static frame
-      draw();
+      draw(); // render one static frame
       cancelAnimationFrame(animationId);
     }
 

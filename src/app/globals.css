@@ -364,6 +364,69 @@
   animation: loader-ring 1s linear infinite;
 }
 
+/* ─── Kinetic Reveal animation system ─── */
+
+/* Loading screen: curtain slides up and away on exit */
+@keyframes curtain-up {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+
+/* Loading screen: progress bar fills 0→100% */
+@keyframes progress-fill {
+  0%   { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+/* Loading screen: brand letter subtle scale + glow pulse */
+@keyframes letter-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(255, 195, 0, 0.4)); }
+  50%      { transform: scale(1.08); filter: drop-shadow(0 0 18px rgba(255, 195, 0, 0.8)); }
+}
+
+/* Hero name: clip-path wipe reveal (text appears like a curtain lifting) */
+@keyframes reveal-name {
+  0%   { clip-path: inset(0 0 100% 0); }
+  100% { clip-path: inset(0 0 0% 0); }
+}
+.reveal-name {
+  animation: reveal-name 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+/* Floating shapes: organic morphing blob (border-radius shifts) */
+@keyframes morph-blob {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translate(0, 0) rotate(0deg); }
+  33%      { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; transform: translate(12px, -18px) rotate(120deg); }
+  66%      { border-radius: 50% 50% 40% 60% / 40% 60% 50% 50%; transform: translate(-10px, 14px) rotate(240deg); }
+}
+
+/* Portrait card: periodic scanning light sheen sweeps across */
+@keyframes scan-sheen {
+  0%   { transform: translateX(-150%) skewX(-20deg); opacity: 0; }
+  20%  { opacity: 0.5; }
+  60%  { opacity: 0.5; }
+  100% { transform: translateX(250%) skewX(-20deg); opacity: 0; }
+}
+
+/* Scroll indicator: vertical line pulses (grows + glows) */
+@keyframes pulse-line {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
+  50%      { transform: scaleY(1);   opacity: 1; }
+}
+
+/* Scroll indicator: chevrons fade downward in sequence */
+@keyframes chevron-drop {
+  0%   { transform: translateY(-6px); opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: translateY(8px); opacity: 0; }
+}
+
+/* Portrait card: ambient glow now breathes (scale + opacity) */
+@keyframes glow-breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.25; }
+  50%      { transform: scale(1.15); opacity: 0.5; }
+}
+
 /* Marquee */
 @keyframes marquee {
   from { transform: translateX(0); }

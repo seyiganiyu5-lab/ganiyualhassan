@@ -55,9 +55,6 @@ export function AboutSection() {
 
   return (
     <section id="about" className="relative py-24 sm:py-32">
-      <div className="absolute inset-0 grid-bg opacity-30" />
-      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFC300]/40 to-transparent" />
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading subtitle={t.about.subtitle} title={t.about.title} />
 
@@ -70,7 +67,6 @@ export function AboutSection() {
             transition={{ duration: 0.6 }}
             className="relative overflow-hidden rounded-3xl gradient-border p-6 sm:p-8"
           >
-            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#FFC300]/10 blur-3xl" />
             <div className="relative">
               <h3 className="mb-4 flex items-center gap-2 text-xl font-bold">
                 <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFC300]/10 text-[#FFC300]">

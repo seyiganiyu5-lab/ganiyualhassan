@@ -1,9 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LoadingScreen } from "@/components/portfolio/loading-screen";
-import { ScrollProgress } from "@/components/portfolio/scroll-progress";
-import { AnimatedCursor } from "@/components/portfolio/animated-cursor";
 import { BackToTop } from "@/components/portfolio/back-to-top";
 import { FloatingSocial } from "@/components/portfolio/floating-social";
 import { Navbar } from "@/components/portfolio/navbar";
@@ -26,28 +23,22 @@ export default function Home() {
   }, []);
 
   return (
-    <>
-      <LoadingScreen />
-      <AnimatedCursor />
-      <ScrollProgress />
+    <div className="relative flex min-h-screen flex-col">
+      <Navbar />
+      <FloatingSocial />
 
-      <div className="relative flex min-h-screen flex-col">
-        <Navbar />
-        <FloatingSocial />
+      <main className="flex-1">
+        <HeroSection avatarUrl={settings.avatarUrl || null} />
+        <AboutSection />
+        <ProjectsSection />
+        <CvSection cvUrl={settings.cvUrl || null} />
+        <ServicesSection />
+        <ContactSection />
+      </main>
 
-        <main className="flex-1">
-          <HeroSection avatarUrl={settings.avatarUrl || null} />
-          <AboutSection />
-          <ProjectsSection />
-          <CvSection cvUrl={settings.cvUrl || null} />
-          <ServicesSection />
-          <ContactSection />
-        </main>
-
-        <Footer />
-      </div>
+      <Footer />
 
       <BackToTop />
-    </>
+    </div>
   );
 }

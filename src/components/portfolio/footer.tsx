@@ -69,9 +69,6 @@ export function Footer() {
 
   return (
     <footer className="relative mt-auto overflow-hidden border-t border-border bg-card/50">
-      <div className="absolute inset-0 grid-bg opacity-20" />
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-[#FFC300]/10 blur-[100px]" />
-
       <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}

@@ -693,3 +693,19 @@ Stage Summary:
 - PRESERVED: brand palette (orange/golden), all content/layout/typography, useTypingEffect hook, reduced-motion support, all other sections (about, projects, cv, services, contact) untouched, all existing keyframes retained for other components
 - VERIFICATION: lint 0 errors; browser-confirmed loading bar animates, bokeh canvas draws real pixels, all hero animation elements present, 0 console/page errors
 - NOTE: The portrait image shows a 404 because the avatarUrl setting still points to a previously-uploaded file that no longer exists on disk (/uploads/1781999843674-gu-ladou-ivorycoast-2026.jpg). This is a pre-existing data issue unrelated to animations — the user can fix it by re-uploading a hero image at /admin → Hero Image tab. The portrait card frame, scan sheen, and all animations still render correctly around the missing image.
+
+---
+Task ID: simplify-1
+Agent: Main (Z.ai Code)
+Task: Simplify the home page — user said "i want something simple" after the previous elaborate animation rebuild.
+
+Work Log:
+- Removed page-level chrome from src/app/page.tsx: LoadingScreen, AnimatedCursor, ScrollProgress no longer mounted
+- Rewrote src/components/portfolio/hero-section.tsx: removed ParticleBackground, editorial grid backdrop, 3 morphing blobs, 2 gradient orbs, vertical side label, blur-up entrance variant, clip-path name wipe, elastic-overshoot CountUp, scanning light sheen, rotating dashed ring, floating "Creative" badge, decorative corner ticks, pulsing-line scroll indicator. Replaced with: single gentle fadeUp variant (opacity 0->1, y 16->0, 0.5s easeOut), simple ease-out CountUp, clean rounded portrait frame with just a status chip + name plate, minimal bounce-arrow scroll hint
+- Removed decorative blur orbs and grid-bg backdrops from: projects-section, about-section (grid + top gradient line + bio card orb), services-section (grid + orb + pricing-panel orbs + per-card hover orb), contact-section, cv-section, footer
+- Verified: lint 0 errors; browser reload clean; 0 page errors; 0 console errors; grid-bg count 0; blur-orb count 0; hero h1 filter/clipPath/transform all "none" (settled); all 6 sections present; footer pushed to natural bottom (8165px on a content-rich page)
+
+Stage Summary:
+- Site is now calm and simple: content shows immediately (no loading screen), system cursor, no scroll-progress bar, no particles, no decorative orbs/grids, hero uses a single subtle fade-up entrance, portrait is a clean framed photo
+- Kept meaningful content features: typing role rotator, simple count-up stats, all section content intact
+- All animations now use a consistent gentle fade-up (opacity + small y, ~0.5s)

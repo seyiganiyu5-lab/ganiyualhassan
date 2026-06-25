@@ -75,8 +75,6 @@ Creative: Drawing, Digital Illustration, Creative Thinking
 
   return (
     <section id="cv" className="relative py-24 sm:py-32">
-      <div className="pointer-events-none absolute left-0 top-1/3 h-96 w-96 rounded-full bg-[#FFC300]/5 blur-[120px]" />
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading subtitle={t.cv.subtitle} title={t.cv.title} />
 

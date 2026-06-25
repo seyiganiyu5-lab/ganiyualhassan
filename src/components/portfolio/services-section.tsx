@@ -70,9 +70,6 @@ export function ServicesSection() {
 
   return (
     <section id="services" className="relative py-24 sm:py-32">
-      <div className="absolute inset-0 grid-bg opacity-20" />
-      <div className="pointer-events-none absolute right-1/4 top-0 h-96 w-96 rounded-full bg-[#FFC300]/5 blur-[120px]" />
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading subtitle={t.services.subtitle} title={t.services.title} />
 
@@ -99,7 +96,6 @@ export function ServicesSection() {
                 }}
                 className="group relative cursor-pointer overflow-hidden rounded-2xl glass border border-border p-6 transition-all hover:border-[#FFC300]/40 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC300]/50"
               >
-                <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#FFC300]/5 blur-2xl transition-opacity group-hover:opacity-100 opacity-0" />
                 <div className="relative">
                   <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FFC300] to-[#FFD60A] text-[#000814] shadow-lg transition-transform group-hover:scale-110 group-hover:rotate-6">
                     <Icon className="h-6 w-6" />
@@ -131,8 +127,6 @@ export function ServicesSection() {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left info */}
             <div className="relative overflow-hidden bg-gradient-to-br from-[#003566] to-[#001D3D] p-8 text-white sm:p-10">
-              <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#FFC300]/20 blur-2xl" />
-              <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-[#FFC300]/10 blur-2xl" />
               <div className="relative">
                 <Sparkles className="h-10 w-10 text-[#FFC300]" />
                 <h3 className="mt-4 text-2xl font-black sm:text-3xl">

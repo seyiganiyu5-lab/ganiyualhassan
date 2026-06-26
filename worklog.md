@@ -1054,3 +1054,25 @@ Stage Summary:
 - Fixed by (1) creating the missing `/api/upload` route so admin uploads actually work going forward, (2) pointing `cvUrl` to the existing real CV file, and (3) cleaning up the displayed filename.
 - Now the admin and the public site are consistent: the admin shows the real CV with a friendly name, and the public "Download CV" button serves the actual uploaded `ganiyu-al-hassan.pdf` (108 KB).
 - Artifacts changed: `src/app/api/upload/route.ts` (new), `src/components/admin/admin-cv.tsx` (prettyFileName helper + use in useEffect), DB `Setting.cvUrl` value.
+
+---
+Task ID: add-admin-link-footer
+Agent: Main (Z.ai Code)
+Task: User couldn't find the admin route. Add a discoverable link to /admin.
+
+Work Log:
+- Root cause: the `/admin` route existed and returned 200, but there was ZERO navigation to it from the public site (grepped navbar/footer/page — no link). The user had no way to discover it by browsing.
+- Added a discreet "Admin" link to the footer bottom bar, next to the copyright text. Uses a Lock icon (lucide) to signal it's a protected area, muted color (`text-muted-foreground/70`) so it doesn't clutter the design, hover turns it gold (`hover:text-[#FFC300]`).
+- Responsive: on mobile the Admin link stacks below the copyright (flex-col → sm:flex-row); on desktop they sit side by side.
+- Lint clean.
+
+Verification (Agent Browser + VLM):
+- Reloaded / → scrolled to footer → snapshot shows `link "Admin" [ref=e23]`.
+- VLM: confirmed the Admin link is visible bottom-left of the footer, right of the copyright text, with a small lock icon.
+- Clicked the link → navigated to `http://localhost:3000/admin`, title "Admin Dashboard — Ganiyu Al-Hassan Oluwaseyi". Login page renders.
+- 0 errors.
+
+Stage Summary:
+- The admin route is now discoverable: a discreet lock-icon "Admin" link sits in the footer next to the copyright.
+- Direct URL still works: `/admin` (credentials: admin / ganiyu2024).
+- Artifact changed: `src/components/portfolio/footer.tsx` (added Lock import + Admin link in bottom bar).

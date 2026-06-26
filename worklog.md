@@ -1138,3 +1138,52 @@ Stage Summary:
 - Eye show/hide toggle added to the password field — toggles input type between `password` (masked) and `text` (visible), with accessible aria-label and Eye/EyeOff icon swap.
 - Old credentials (admin / ganiyu2024) no longer work (401).
 - Artifacts changed: `src/app/api/auth/route.ts`, `.env`, `src/components/admin/admin-view.tsx`.
+
+---
+Task ID: seo-ranking-optimization
+Agent: Main (Z.ai Code)
+Task: User wants their site to rank #1 on Google when someone searches for them. Implement strong on-page SEO.
+
+Work Log:
+- Audited current SEO: layout.tsx had STATIC metadata (ignored admin-edited metaTitle/metaDescription/keywords), no JSON-LD structured data, no sitemap, basic robots.txt with no sitemap reference, no canonical/metadataBase, no Google Search Console verification support. The admin SEO panel was editing values that never reached the actual <head>.
+- Converted `src/app/layout.tsx` to a server component with async `generateMetadata()`:
+  * Reads ALL settings from DB (metaTitle, metaDescription, keywords, heroName, phone, email, linkedin, whatsapp, avatarUrl, siteUrl, googleVerification, ogImage).
+  * Builds a Metadata object with title, description, keywords (split+trimmed), authors, creator, applicationName.
+  * `metadataBase` = siteUrl origin (so OG/Twitter image URLs resolve to absolute).
+  * `alternates.canonical` = `${siteUrl}/` (tells Google the preferred URL; prevents duplicate-content penalties).
+  * `alternates.languages` en+fr hreflang tags.
+  * openGraph: title, description, type=website, url, siteName, locale=en_US, images (1200×630 from ogImage || avatarUrl).
+  * twitter: summary_large_image card, title, description, images, creator.
+  * `robots`: index:true, follow:true, googleBot with max-image-preview:large, max-snippet:-1.
+  * `verification.google` = googleVerification (outputs `<meta name="google-site-verification">` for Search Console ownership proof).
+  * `category: "portfolio"`.
+- Added JSON-LD structured data (2 `<script type="application/ld+json">` in <head>):
+  * **Person schema**: name, url, image, email (mailto:), telephone, jobTitle, description, knowsAbout (from keywords), sameAs (LinkedIn + WhatsApp), PostalAddress (CI, Abidjan). This is what lets Google build a Knowledge Panel for the person.
+  * **WebSite schema**: name, url, author (Person), description, inLanguage [en, fr].
+- Created `src/app/sitemap.ts` (Next.js metadata route → served at /sitemap.xml):
+  * Reads siteUrl from DB, normalizes to origin, outputs a single homepage entry with lastModified=now, changeFrequency=monthly, priority=1. Single-page portfolio — anchor sections are NOT separate URLs.
+- Created `src/app/robots.ts` (Next.js metadata route → served at /robots.txt):
+  * Allow: /, Disallow: /admin and /api/ (keep admin + API out of the index). Includes Host + Sitemap directives pointing at ${siteUrl}/sitemap.xml.
+  * Removed the old static `public/robots.txt` to avoid conflict with the dynamic one.
+- Added two new settings to `src/app/api/settings/route.ts` defaults: `siteUrl`, `googleVerification`, `ogImage` (ogImage key already existed in admin but wasn't in defaults).
+- Extended `src/components/admin/admin-seo.tsx` with a new "Site URL & Google Verification" section:
+  * Site URL input (with helper text explaining it's used for canonical/sitemap/robots/OG).
+  * Google verification token input (with step-by-step instructions: Search Console → Settings → Ownership verification → HTML tag → paste the content value).
+  * Search Engine Preview now shows the configured siteUrl (was hardcoded).
+- Tested the dynamic flow end-to-end: PUT /api/settings {siteUrl, googleVerification} → reloaded / → canonical became absolute (https://ganiyu-alhassan.com), og:url became absolute, google-site-verification meta appeared with the token. /sitemap.xml and /robots.txt both switched to the new origin. Reset the test verification token afterward.
+- Lint clean. No browser/console errors.
+
+Verification (Agent Browser + curl):
+- Head inspection via eval: title, description, keywords, canonical (absolute), og:title/type/siteName/url, twitter:card/title, robots="index, follow", manifest, hreflang en, 2 JSON-LD scripts (types Person + WebSite), h1="Ganiyu Al-Hassan Oluwaseyi". ✓
+- JSON-LD content dump: Person has name, url, image, email, telephone, jobTitle, description, knowsAbout[7], sameAs[LinkedIn+WhatsApp], address{CI, Abidjan}. WebSite has name, url, author, description, inLanguage[en,fr]. Valid JSON. ✓
+- /sitemap.xml → valid XML, single <url> with the configured origin, priority 1, monthly, lastmod today. ✓
+- /robots.txt → User-Agent:*, Allow:/, Disallow:/admin + /api/, Host, Sitemap directives. ✓
+- Admin SEO panel → new "Site URL & Google Verification" section renders, Site URL field pre-filled from DB, Save works. ✓
+- 0 page errors, 0 console errors, lint clean, dev log clean.
+
+Stage Summary:
+- Implemented production-grade on-page SEO: dynamic metadata (driven by admin panel), JSON-LD Person + WebSite structured data, dynamic sitemap.xml, dynamic robots.txt with sitemap reference, canonical URLs, metadataBase, Open Graph + Twitter cards, hreflang, robots index directives, and Google Search Console verification support.
+- The admin SEO panel now actually controls the rendered <head> (previously it edited DB values that the static layout ignored).
+- Two new admin fields: "Site URL" and "Google Search Console verification token".
+- IMPORTANT caveat communicated to the user: on-page SEO is now best-in-class, but Google #1 ranking also requires (1) the site to be publicly deployed and crawlable, (2) Google Search Console ownership verification + sitemap submission, (3) time for indexing, and (4) ideally some backlinks. For a unique name like "Ganiyu Al-Hassan Oluwaseyi", ranking #1 on a branded search is very achievable once deployed + submitted.
+- Artifacts changed: `src/app/layout.tsx` (generateMetadata + JSON-LD), `src/app/sitemap.ts` (new), `src/app/robots.ts` (new), `src/app/api/settings/route.ts` (new defaults), `src/components/admin/admin-seo.tsx` (new section), deleted `public/robots.txt`.

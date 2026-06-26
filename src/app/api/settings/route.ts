@@ -14,6 +14,10 @@ const defaultSettings: Record<string, string> = {
   keywords: "Ganiyu Al-Hassan, Software Engineer, Web Developer, UI/UX Designer, Graphic Designer, Branding, Portfolio",
   avatarUrl: "",
   cvUrl: "",
+  // SEO
+  siteUrl: "", // e.g. https://ganiyu-alhassan.com — used for canonical, sitemap, OG absolute URLs
+  googleVerification: "", // Google Search Console verification token (content of <meta name="google-site-verification">)
+  ogImage: "", // absolute or root-relative URL to the Open Graph share image
 };
 
 export async function GET() {

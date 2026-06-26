@@ -92,9 +92,53 @@ export function AdminSeo() {
             <input
               value={settings.ogImage || ""}
               onChange={(e) => update("ogImage", e.target.value)}
-              placeholder="https://..."
+              placeholder="/uploads/... or https://..."
               className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
             />
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              Share image shown on WhatsApp, LinkedIn, Twitter (1200×630 recommended).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Indexing & ownership */}
+      <section className="rounded-2xl glass border border-border p-5">
+        <h3 className="mb-4 flex items-center gap-2 font-bold">
+          <Search className="h-4 w-4 text-[#FFC300]" />
+          Site URL &amp; Google Verification
+        </h3>
+        <div className="space-y-4">
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-muted-foreground">
+              Site URL (public domain)
+            </label>
+            <input
+              value={settings.siteUrl || ""}
+              onChange={(e) => update("siteUrl", e.target.value)}
+              placeholder="https://ganiyu-alhassan.com"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+            />
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              Your live public URL. Used for canonical tags, the sitemap, robots.txt, and absolute
+              Open Graph links. Leave blank only while developing.
+            </p>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-muted-foreground">
+              Google Search Console verification token
+            </label>
+            <input
+              value={settings.googleVerification || ""}
+              onChange={(e) => update("googleVerification", e.target.value)}
+              placeholder="e.g. abc123def456..."
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+            />
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              In Google Search Console → Settings → Ownership verification → HTML tag, copy just the
+              <span className="font-mono"> content</span> value and paste it here. This outputs the
+              <span className="font-mono"> &lt;meta name=&quot;google-site-verification&quot;&gt;</span> tag.
+            </p>
           </div>
         </div>
       </section>
@@ -106,7 +150,7 @@ export function AdminSeo() {
         </h3>
         <div className="rounded-lg border border-border p-3">
           <div className="text-xs text-emerald-600">
-            https://ganiyu-portfolio.com
+            {settings.siteUrl || "https://ganiyu-portfolio.com"}
           </div>
           <div className="mt-0.5 text-lg font-medium text-[#1a0dab]">
             {settings.metaTitle || "Ganiyu Al-Hassan Oluwaseyi — Portfolio"}

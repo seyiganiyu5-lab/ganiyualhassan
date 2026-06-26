@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-const DEFAULT_HERO = "/uploads/profile.jpg";
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 
 export function AdminHeroImage() {
@@ -229,11 +228,25 @@ export function AdminHeroImage() {
               {/* Frame */}
               <div className="gradient-border relative overflow-hidden rounded-2xl shadow-xl">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-muted">
-                  <img
-                    src={pendingPreview || savedUrl || DEFAULT_HERO}
-                    alt="Hero image preview"
-                    className="h-full w-full object-cover object-top"
-                  />
+                  {(pendingPreview || savedUrl) ? (
+                    <img
+                      src={pendingPreview || savedUrl}
+                      alt="Hero image preview"
+                      className="h-full w-full object-cover object-top"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-[#FFC300]/15 to-[#FFD60A]/5 p-6 text-center">
+                      <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#FFC300]/10 text-[#FFC300]">
+                        <ImageIcon className="h-8 w-8" />
+                      </span>
+                      <p className="text-sm font-semibold text-foreground">
+                        {t.admin.heroImageNoImage}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {t.admin.heroImageNoImageHint}
+                      </p>
+                    </div>
+                  )}
                   {isBusy && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/50 backdrop-blur-sm">
                       <Loader2 className="h-7 w-7 animate-spin text-[#FFC300]" />
@@ -264,7 +277,7 @@ export function AdminHeroImage() {
                     ) : (
                       <>
                         <ImageIcon className="h-3 w-3" />
-                        {t.admin.heroImageDefault}
+                        {t.admin.heroImageNoImage}
                       </>
                     )}
                   </span>

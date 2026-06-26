@@ -981,3 +981,41 @@ Stage Summary:
 - Dev server restarted via a double-fork daemon (PPID=1) so the config change took effect and the server persists across shell sessions.
 - Verified with Agent Browser + VLM: no Next.js logo anywhere on the page, no errors, lint clean.
 - Artifact changed: `next.config.ts` (added `devIndicators: false`).
+
+---
+Task ID: remove-default-image
+Agent: Main (Z.ai Code)
+Task: Remove the default image (the default hero/profile photo fallback at /uploads/profile.jpg).
+
+Work Log:
+- Investigated "default image": grepped src for default/placeholder/avatar/heroImage references. Found the default image is `/uploads/profile.jpg` (124 KB), used as a fallback in exactly 2 places:
+  1. `src/components/portfolio/hero-section.tsx:53` — `const profileSrc = avatarUrl || "/uploads/profile.jpg";` (public homepage hero portrait)
+  2. `src/components/admin/admin-hero-image.tsx:19` — `const DEFAULT_HERO = "/uploads/profile.jpg";` (admin preview)
+- `page.tsx` already passes `settings.avatarUrl || null`, so the intent was always "custom image or default". Removed the default so the site shows a clean placeholder until the admin uploads a custom photo.
+- Hero section (`hero-section.tsx`):
+  * Changed `profileSrc = avatarUrl || ""` (no more default fallback).
+  * Rewrote `PortraitCard` to conditionally render: when `src` is set, render the `<img>` as before; when empty, render a branded monogram placeholder — a large yellow "G" (first initial of the name) centered on a subtle gold-tinted gradient, inside the SAME circular accent-ring frame so the layout/status badge/name below are unchanged.
+- Admin hero image panel (`admin-hero-image.tsx`):
+  * Removed the `DEFAULT_HERO` constant.
+  * Preview area now shows a placeholder card (ImageIcon + "No image" + hint) when neither a pending file nor a saved URL exists, instead of `<img src=DEFAULT_HERO>`.
+  * Status badge: the "Default Photo" branch now reads "No image" (uses the new `heroImageNoImage` key).
+  * The reset/"Remove Image" button still only appears when a custom image is saved (nothing to remove when empty) — kept that gating, just reworded.
+- Translations (`src/lib/i18n/translations.ts`, EN + FR):
+  * Removed `heroImageDefault` ("Default Photo" / "Photo par Défaut") — no longer used.
+  * Added `heroImageNoImage` ("No image" / "Aucune image") and `heroImageNoImageHint` ("Upload a photo to see it here." / "Téléchargez une photo pour la voir ici.").
+  * Reworded `heroImageReset` ("Reset to Default Photo" → "Remove Image" / "Supprimer l'Image") and `heroImageResetDone` ("Reverted to the default photo." → "Image removed." / "Image supprimée.").
+- Deleted the file `public/uploads/profile.jpg`. Grep-verified 0 remaining references to `profile.jpg`, `DEFAULT_HERO`, or `heroImageDefault` in src.
+- Dev server was already running (PPID=1 daemon from the previous task); component changes hot-reloaded fine. The next.config.ts `devIndicators:false` from the previous task is still in effect.
+
+Verification (end-to-end with Agent Browser + VLM):
+- Homepage WITH custom image (avatarUrl = /uploads/1782431177676-...jpg): hero `<img>` loads, naturalWidth=1135, no broken image. VLM: "a photograph of a person... circular frame has a yellow border." ✓
+- Temporarily cleared avatarUrl → homepage shows NO `<img>`, monogram letter "G" rendered. VLM: "a large yellow letter 'G' (a monogram) centered within the dark circular background" — clean placeholder, no broken image. ✓
+- Admin → Hero Image tab (with avatar cleared): no preview `<img>`, "No image" text present, "Default Photo" text gone, "Remove Image" button correctly hidden (nothing to remove). ✓
+- Restored the original avatarUrl; homepage `<img>` loads again (naturalWidth=1135). ✓
+- 0 page errors, 0 console errors throughout; `bun run lint` passes clean; no errors in dev.log.
+
+Stage Summary:
+- The default image is fully removed: the `public/uploads/profile.jpg` file is deleted, and no code falls back to it.
+- When no custom hero photo is uploaded, the homepage shows a clean branded "G" monogram placeholder inside the same circular frame (layout intact); the admin preview shows a matching "No image" placeholder card.
+- When a custom photo IS uploaded, it renders exactly as before.
+- Artifacts changed: `src/components/portfolio/hero-section.tsx`, `src/components/admin/admin-hero-image.tsx`, `src/lib/i18n/translations.ts` (EN+FR); deleted `public/uploads/profile.jpg`.

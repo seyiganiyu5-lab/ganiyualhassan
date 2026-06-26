@@ -50,7 +50,7 @@ const fadeUp = {
 export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
   const t = useT();
   const { text } = useTypingEffect([...t.hero.titles]);
-  const profileSrc = avatarUrl || "/uploads/profile.jpg";
+  const profileSrc = avatarUrl || "";
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -192,7 +192,12 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
           transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
           className="order-1 flex justify-center lg:order-2 lg:col-span-5"
         >
-          <PortraitCard src={profileSrc} name={t.hero.name} role={t.hero.roleValue} available={t.hero.available} />
+          <PortraitCard
+            src={profileSrc}
+            name={t.hero.name}
+            role={t.hero.roleValue}
+            available={t.hero.available}
+          />
         </motion.div>
       </div>
 
@@ -214,7 +219,9 @@ export function HeroSection({ avatarUrl }: { avatarUrl?: string | null }) {
   );
 }
 
-/* Clean circular portrait — simple ring, status badge on the edge, name below. */
+/* Clean circular portrait — simple ring, status badge on the edge, name below.
+   When no photo is set, a branded monogram placeholder is shown instead of a
+   default stock image. */
 function PortraitCard({
   src,
   name,
@@ -226,6 +233,8 @@ function PortraitCard({
   role: string;
   available: string;
 }) {
+  // First letter of the first name, for the monogram placeholder.
+  const initial = name.trim().charAt(0).toUpperCase() || "G";
   return (
     <div className="flex w-full max-w-[320px] flex-col items-center">
       {/* Circular photo */}
@@ -233,13 +242,21 @@ function PortraitCard({
         {/* Accent ring */}
         <div className="rounded-full bg-gradient-to-tr from-[#FFC300] to-[#FFD60A] p-1.5 shadow-2xl">
           <div className="relative h-64 w-64 overflow-hidden rounded-full bg-muted sm:h-72 sm:w-72">
-            <img
-              src={src}
-              alt={name}
-              className="h-full w-full object-cover"
-              style={{ objectPosition: "50% 22%" }}
-              loading="eager"
-            />
+            {src ? (
+              <img
+                src={src}
+                alt={name}
+                className="h-full w-full object-cover"
+                style={{ objectPosition: "50% 22%" }}
+                loading="eager"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FFC300]/15 to-[#FFD60A]/5">
+                <span className="text-[120px] font-black leading-none text-[#FFC300] sm:text-[140px]">
+                  {initial}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

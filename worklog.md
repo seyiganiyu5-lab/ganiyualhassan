@@ -837,3 +837,31 @@ Verification (end-to-end):
 
 Stage Summary:
 - Branding (and any) projects now support folder upload: click "Upload Folder" to select a whole folder, all images + PDFs inside upload recursively. In the public preview modal, every file is viewable — images display in full, PDFs render in an embedded viewer with a download button. Card thumbnails show a clean PDF icon when the cover is a PDF.
+
+---
+Task ID: folder-upload-modal-fix
+Agent: Main (Z.ai Code)
+Task: Fix the visual abnormality when scrolling through folder files in a brand project modal on the main page (NEXAPAY brand kit, 33 files).
+
+Work Log:
+- Investigated the project modal gallery (`src/components/portfolio/project-modal.tsx`) and the folder-upload flow (`src/components/admin/project-image-uploader.tsx`, `/api/upload`).
+- Queried the DB: the NEXAPAY branding project contains 33 uploaded files from a folder upload.
+- Measured all 33 image natural dimensions via the browser: indices 0-23 are 1080x1080 (square), index 24 & 26 are 1024x1536 (portrait), index 25 & 27 are 1536x1024 (landscape), index 31 is nexa-pay.jpg 1080x1350 (portrait).
+- Root cause of the abnormality: the gallery image used `max-h-[70vh] w-auto object-contain` inside a flex column with NO fixed height. Navigating prev/next between files of different aspect ratios made the image (and therefore the whole gallery, the prev/next arrows, the filename/download bar, and a 33-dot indicator row) jump vertically. Additionally, 33 dots crammed in a single non-wrapping row made it impossible to tell which file was active.
+- Fix applied in `src/components/portfolio/project-modal.tsx`:
+  * Replaced the auto-sizing image area with a FIXED-HEIGHT stage (`h-[58vh] min-h-[300px]`) so the layout never jumps regardless of file aspect ratio (square/portrait/landscape).
+  * Anchored the prev/next arrow buttons to the stage (absolute, top-1/2) so they no longer drift.
+  * Added a clean info bar: yellow "X / 33" counter, centered filename, and a Download button.
+  * Replaced the 33-dot row with a horizontally SCROLLABLE thumbnail strip (h-14 w-14 thumbs, object-cover). The active thumbnail is highlighted with a yellow border + ring, and auto-scrolls into view (scrollIntoView inline:center) whenever the active index changes — so the user always knows their position in a large folder upload.
+  * PDF thumbnails render a "PDF" badge inside the strip; PDFs still open in an embedded iframe in the fixed stage.
+- Verification with Agent Browser (desktop + iPhone 14):
+  * Stage height stayed identical (334.66px desktop / 489.5px mobile) across square, portrait (1024x1536, 1080x1350) and landscape (1536x1024) files — no jumping.
+  * Next button advances correctly (verified idx 31 -> 32).
+  * Thumbnail click jumps to the right file and the active thumb highlights.
+  * VLM (glm-4.6v) confirmed clean layout on both desktop and mobile: centered image, aligned info bar, scrollable thumbnail strip with active highlight, no overlap/clipping/overflow.
+- `bun run lint` passes clean.
+
+Stage Summary:
+- Abnormality fixed: the brand modal no longer jumps/resizes while scrolling through folder files of mixed aspect ratios, and the unusable 33-dot row is replaced with a scrollable thumbnail strip + "X / 33" counter.
+- Artifact changed: `src/components/portfolio/project-modal.tsx` (ModalContent gallery section redesigned).
+- No schema, API, or uploader changes were needed — this was a pure presentation fix.

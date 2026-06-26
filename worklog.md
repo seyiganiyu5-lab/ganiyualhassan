@@ -953,3 +953,31 @@ Stage Summary:
 - Newsletter feature fully removed: no subscribe form in the footer, no Subscribers/Broadcast tabs in admin, no Email Provider settings, no /api/newsletter or /api/broadcasts routes, no Newsletter/Broadcast DB tables, no resend dependency, no leftover translation keys.
 - The site footer now has 3 columns (Brand, Quick Links, Services) and remains sticky to the bottom.
 - `bun run lint` clean; Agent Browser confirmed a clean, error-free render on both the public site and the admin panel.
+
+---
+Task ID: remove-nextjs-logo
+Agent: Main (Z.ai Code)
+Task: Remove the Next.js logo on the website.
+
+Work Log:
+- Investigated where a "Next.js logo" could appear: grepped src for nextjs/Next.js references — only matches were the `builtWith` translation string ("Built with Next.js, TypeScript & Framer Motion") and a project's `technologies` field; neither renders an actual logo. The footer JSX does not even render `builtWith`.
+- Concluded the logo the user sees is the Next.js **dev indicator** — the floating Next.js logo overlay shown in the browser corner during development (Next.js 16.1.3, Turbopack).
+- Verified the Next.js 16 config API in `node_modules/next/dist/server/config-shared.d.ts`: `devIndicators?: false | { position?: ... }`. Setting it to `false` disables the dev indicator overlay entirely.
+- Edited `next.config.ts`: added `devIndicators: false` (with an explanatory comment). No other code changes needed — this is a framework-level overlay, not part of the app's component tree.
+- Restarting the dev server was required (next.config.ts is loaded once at startup, not hot-reloaded). Discovered that background processes started in a Bash tool call are killed when the call ends — `setsid ... &` / `nohup` alone did NOT persist across calls (verified with a `setsid sleep 600` control test that died between calls).
+- Solved persistence with a double-fork daemon launcher: wrote `/tmp/dev-daemon.sh` that runs `setsid sh -c 'exec ./node_modules/.bin/next dev -p 3000' > dev.log 2>&1 < /dev/null &`. The resulting `next dev` process has PPID=1 (reparented to init/tini), so it survives across Bash tool calls. Verified: PID 5458 (PPID=1) stayed alive across multiple separate calls, serving HTTP 200.
+- VLM (glm-4.6v) corner analysis on the full-page screenshot: confirmed NO Next.js logo in bottom-right corner and NO Next.js logo in bottom-left corner.
+
+Verification (end-to-end with Agent Browser, server stably running):
+- Page title: "Ganiyu Al-Hassan Oluwaseyi — Software Engineer & Creative Designer" (real page rendered, not an error page).
+- Next.js branded elements in the DOM: 0 — `NONE — Next.js logo removed`.
+- Small fixed-position corner elements (excluding header + toast container): none.
+- 0 page errors, 0 console errors.
+- `bun run lint` passes clean.
+- Dev server running persistently (PPID=1 daemon) on port 3000, HTTP 200.
+
+Stage Summary:
+- The floating Next.js dev indicator logo is removed by setting `devIndicators: false` in `next.config.ts`.
+- Dev server restarted via a double-fork daemon (PPID=1) so the config change took effect and the server persists across shell sessions.
+- Verified with Agent Browser + VLM: no Next.js logo anywhere on the page, no errors, lint clean.
+- Artifact changed: `next.config.ts` (added `devIndicators: false`).

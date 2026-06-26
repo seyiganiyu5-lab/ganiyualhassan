@@ -9,7 +9,6 @@ export const translations = {
       cv: "Resume",
       services: "Services",
       contact: "Contact",
-      download: "Download",
       admin: "Admin",
     },
     hero: {
@@ -295,7 +294,6 @@ export const translations = {
       cv: "CV",
       services: "Services",
       contact: "Contact",
-      download: "Télécharger",
       admin: "Admin",
     },
     hero: {

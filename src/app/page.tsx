@@ -11,7 +11,6 @@ import { ProjectsSection } from "@/components/portfolio/projects-section";
 import { CvSection } from "@/components/portfolio/cv-section";
 import { ServicesSection } from "@/components/portfolio/services-section";
 import { ContactSection } from "@/components/portfolio/contact-section";
-import { DownloadSection } from "@/components/portfolio/download-section";
 
 export default function Home() {
   const [settings, setSettings] = useState<Record<string, string>>({});
@@ -35,7 +34,6 @@ export default function Home() {
         <CvSection cvUrl={settings.cvUrl || null} />
         <ServicesSection />
         <ContactSection />
-        <DownloadSection />
       </main>
 
       <Footer />

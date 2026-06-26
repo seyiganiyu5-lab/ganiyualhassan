@@ -1306,3 +1306,30 @@ Stage Summary:
 - The 282 KB source-only zip is the reliable primary download — it will succeed through any gateway/preview environment.
 - The 9.8 MB uploads zip + 39 MB full zip are available for users who want media assets too.
 - Artifacts: public/ganiyu-portfolio-source.zip (282 KB), public/ganiyu-portfolio-uploads.zip (9.8 MB), public/ganiyu-portfolio.zip (39 MB, pre-existing), src/components/portfolio/download-section.tsx (new).
+
+---
+Task ID: remove-download-and-footer-admin
+Agent: Main (Z.ai Code)
+Task: User said "no remove it i dont want and also remove the admin thing in the footer" — remove the download section entirely AND remove the Admin link from the footer.
+
+Work Log:
+- Removed DownloadSection import + usage from src/app/page.tsx (page back to 6 sections: Hero, About, Projects, CV, Services, Contact).
+- Removed "download" entry from the navbar sections array in src/components/portfolio/navbar.tsx (back to 6 nav links).
+- Removed "download" translations (EN "Download" / FR "Télécharger") from src/lib/i18n/translations.ts for both locales.
+- Deleted src/components/portfolio/download-section.tsx component file.
+- Deleted the 3 zip artifacts: public/ganiyu-portfolio-source.zip, public/ganiyu-portfolio-uploads.zip, public/ganiyu-portfolio.zip.
+- Removed the Admin link from src/components/portfolio/footer.tsx bottom bar (removed the <a href="/admin"> block + the Lock icon import since it's no longer used).
+- Lint: clean (0 errors).
+- Verified with Agent Browser:
+  * Page loads, 0 console/page errors.
+  * document.getElementById('download') → REMOVED.
+  * Admin links in footer → 0 (was 1).
+  * Nav items → ["Home","About","Projects","Resume","Services","Contact"] (6, no Download).
+  * Footer bottom bar text → "© 2026 Ganiyu Al-Hassan Oluwaseyi. All rights reserved." (Admin link gone).
+- Note: The /admin route itself still works (user can still access it by typing /admin in the URL). Only the footer link was removed, per the user's request.
+
+Stage Summary:
+- Download section + all 3 zip files + nav link + translations fully removed.
+- Admin link removed from footer (Lock icon import cleaned up).
+- Site is back to the clean 6-section layout. /admin route still accessible directly via URL.
+- Lint clean, 0 browser errors.

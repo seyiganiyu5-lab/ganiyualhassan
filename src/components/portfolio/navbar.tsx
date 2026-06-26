@@ -15,7 +15,6 @@ const sections = [
   { id: "cv", key: "cv" },
   { id: "services", key: "services" },
   { id: "contact", key: "contact" },
-  { id: "download", key: "download" },
 ] as const;
 
 export function Navbar() {

@@ -7,7 +7,6 @@ import {
   Linkedin,
   MessageCircle,
   ArrowUp,
-  Lock,
 } from "lucide-react";
 
 export function Footer() {
@@ -115,13 +114,6 @@ export function Footer() {
             <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
               © {new Date().getFullYear()} Ganiyu Al-Hassan Oluwaseyi. {t.footer.rights}
             </p>
-            <a
-              href="/admin"
-              className="flex items-center gap-1 text-xs text-muted-foreground/70 transition-colors hover:text-[#FFC300]"
-            >
-              <Lock className="h-3 w-3" />
-              Admin
-            </a>
           </div>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

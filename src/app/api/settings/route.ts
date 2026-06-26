@@ -14,8 +14,6 @@ const defaultSettings: Record<string, string> = {
   keywords: "Ganiyu Al-Hassan, Software Engineer, Web Developer, UI/UX Designer, Graphic Designer, Branding, Portfolio",
   avatarUrl: "",
   cvUrl: "",
-  fromEmail: "",
-  resendApiKey: "",
 };
 
 export async function GET() {

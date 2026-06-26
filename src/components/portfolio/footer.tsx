@@ -6,45 +6,17 @@ import {
   Phone,
   Linkedin,
   MessageCircle,
-  Send,
   ArrowUp,
 } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 
 export function Footer() {
   const t = useT();
-  const [email, setEmail] = useState("");
-  const [subscribing, setSubscribing] = useState(false);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
       const top = el.getBoundingClientRect().top + window.scrollY - 70;
       window.scrollTo({ top, behavior: "smooth" });
-    }
-  };
-
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubscribing(true);
-    try {
-      const res = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
-        toast.success("Subscribed successfully!");
-        setEmail("");
-      } else {
-        const data = await res.json();
-        toast.error(data.error || "Subscription failed");
-      }
-    } catch {
-      toast.error("Subscription failed");
-    } finally {
-      setSubscribing(false);
     }
   };
 
@@ -60,7 +32,7 @@ export function Footer() {
   return (
     <footer className="relative mt-auto overflow-hidden border-t border-border bg-card/50">
       <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2.5">
@@ -133,34 +105,6 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h4 className="text-sm font-bold uppercase tracking-wider">
-              {t.footer.newsletter}
-            </h4>
-            <p className="mt-4 text-sm text-muted-foreground">
-              {t.footer.newsletterDesc}
-            </p>
-            <form onSubmit={handleSubscribe} className="mt-4 flex gap-2">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t.footer.emailPlaceholder}
-                className="h-10 flex-1 rounded-lg border border-border bg-background px-3 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
-              />
-              <button
-                type="submit"
-                disabled={subscribing}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#FFC300] text-[#000814] transition-transform hover:scale-105 disabled:opacity-60"
-                aria-label={t.footer.subscribe}
-              >
-                <Send className="h-4 w-4" />
-              </button>
-            </form>
           </div>
         </div>
 

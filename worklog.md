@@ -923,3 +923,33 @@ Stage Summary:
   - Broadcast with a fake Resend key → reaches Resend API, returns "API key is invalid" (proves the wiring; a real key delivers for real) ✓
   - Settings Email Provider section shows amber warning when unconfigured ✓
 - `bun run lint` passes clean.
+
+---
+Task ID: remove-newsletter
+Agent: Main (Z.ai Code)
+Task: Remove the entire newsletter feature (footer subscribe form + admin Subscribers/Broadcast panels + email provider settings + all related APIs and DB models). User said "remove it nevermind".
+
+Work Log:
+- Read the worklog and confirmed the newsletter had been made fully functional in a previous session (Task ID: functional-newsletter): footer subscribe form, AdminSubscribers + AdminBroadcast components, /api/newsletter (+ [id] + export) + /api/broadcasts routes, src/lib/newsletter.ts (Resend provider), Email Provider section in AdminSettings, fromEmail/resendApiKey settings defaults, Newsletter + Broadcast Prisma models, and EN/FR translation keys.
+- Prisma schema: removed both `Newsletter` and `Broadcast` models. Ran `prisma db push --accept-data-loss` (dropped the Newsletter table which held 1 row) + `prisma generate`.
+- Footer (`src/components/portfolio/footer.tsx`): removed the `Send` icon import, the `useState`/`toast` imports, the `email`/`subscribing` state, the `handleSubscribe` POST handler, and the entire 4th "Newsletter" grid column. Changed the footer grid from `lg:grid-cols-4` to `lg:grid-cols-3` so the remaining 3 columns (Brand, Quick Links, Services) fill cleanly. Fixed an accidental duplicate Services column introduced mid-edit.
+- Admin sidebar (`src/components/admin/admin-view.tsx`): removed `Users` + `Megaphone` icon imports, `AdminSubscribers` + `AdminBroadcast` component imports, the two tab entries (subscribers, broadcast), and their two conditional renders.
+- Deleted files: `src/components/admin/admin-subscribers.tsx`, `src/components/admin/admin-broadcast.tsx`, `src/lib/newsletter.ts`, and the entire `src/app/api/broadcasts/` and `src/app/api/newsletter/` folders (route.ts, [id]/route.ts, export/route.ts).
+- AdminSettings (`src/components/admin/admin-settings.tsx`): removed the `Mail` icon import and the entire "Email Provider" section (fromEmail, resendApiKey fields + the amber "not configured" warning).
+- Settings API (`src/app/api/settings/route.ts`): removed the `fromEmail` and `resendApiKey` entries from `defaultSettings`.
+- Translations (`src/lib/i18n/translations.ts`): removed the footer keys (newsletter, newsletterDesc, subscribe, emailPlaceholder) and all admin keys (subscribers, subscriber, broadcast(s), composeBroadcast, broadcastHistory, noBroadcasts, sendBroadcast, sending, broadcastSentTo, broadcastSavedDraft, broadcastFailed, subject, subjectPlaceholder, message, messagePlaceholder, characters, audience, recipients, statusSent/Draft/Failed, searchSubscribers, email, subscribedOn, noSubscribers(Found), deleteSubscriber, deleteSelected, selected, emailProvider, emailProviderDesc, fromEmail(Placeholder), resendApiKey(Placeholder), emailProviderNotConfigured) from BOTH English and French blocks.
+- Uninstalled the now-unused `resend` package (`bun remove resend`).
+- Grep-verified zero remaining references to newsletter/broadcast/fromEmail/resendApiKey/emailProvider/subscribers anywhere in src.
+
+Verification (end-to-end with Agent Browser):
+- Main page footer: only 2 column headings ("Quick Links", "Services") + the brand column; `hasNewsletterText=false`, `hasEmailInput=false`. Footer still sits at the bottom of the page content (natural push on long page).
+- Admin login (admin / ganiyu2024) → sidebar tabs now: Dashboard | Hero Image | Projects | Messages | CV Management | Media Library | Settings | SEO (Subscribers + Broadcast gone).
+- Admin Settings: exactly 3 sections (Homepage, Social Links, Contact Information); `hasEmailProvider=false`, `hasResend=false`, `hasFromEmail=false`.
+- 0 page errors, 0 console errors, 0 API calls to /api/newsletter or /api/broadcasts during the visit.
+- `bun run lint` passes clean.
+- Dev log shows no errors after the removal.
+
+Stage Summary:
+- Newsletter feature fully removed: no subscribe form in the footer, no Subscribers/Broadcast tabs in admin, no Email Provider settings, no /api/newsletter or /api/broadcasts routes, no Newsletter/Broadcast DB tables, no resend dependency, no leftover translation keys.
+- The site footer now has 3 columns (Brand, Quick Links, Services) and remains sticky to the bottom.
+- `bun run lint` clean; Agent Browser confirmed a clean, error-free render on both the public site and the admin panel.

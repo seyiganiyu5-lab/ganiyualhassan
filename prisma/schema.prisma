@@ -50,18 +50,3 @@ model MediaAsset {
   type      String   @default("image") // image | logo | drawing | file
   createdAt DateTime @default(now())
 }
-
-model Newsletter {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  createdAt DateTime @default(now())
-}
-
-model Broadcast {
-  id            String   @id @default(cuid())
-  subject       String
-  body          String
-  status        String   @default("sent") // sent | draft | failed
-  recipientCount Int     @default(0)
-  sentAt        DateTime @default(now())
-}

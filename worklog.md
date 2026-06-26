@@ -1249,3 +1249,27 @@ Stage Summary:
 - Everything works. Every feature, every API, every admin panel, every interactive element verified functional.
 - 0 bugs found. 0 errors. Lint clean.
 - The site is fully operational and ready for the Vercel + Neon + Blob migration discussed in the previous turn.
+
+---
+Task ID: download-project-to-local
+Agent: Main (Z.ai Code)
+Task: Package the project so the user can download it to their local computer.
+
+Work Log:
+- Audited project size: src/ 776K, public/ 40M, prisma/ 8K, db/ 88K, mini-services/ 4K, examples/ 20K, skills/ 61M, node_modules/ 1.4G, .next/ 345M. Also ~50 debug PNG screenshots at root (~5MB) and tool-results/ + upload/ temp dirs.
+- Created a README.md with: local run instructions (bun install → bun run dev), admin credentials, what's included/excluded, tech stack, and Vercel deployment steps (Neon Postgres + Vercel Blob migration notes).
+- Built the zip with an EXPLICIT include list (not excludes) to guarantee no junk sneaks in:
+  * Includes: README.md, src/, public/, prisma/, db/, mini-services/, examples/, .env, .gitignore, package.json, bun.lock, tsconfig.json, next.config.ts, postcss.config.mjs, tailwind.config.ts, eslint.config.mjs, components.json, Caddyfile, start-dev.sh
+  * Excludes: node_modules/ (1.4G, regenerable), .next/ (345M, build cache), skills/ (61M, not needed to run), tool-results/, upload/ (temp), dev.log, 50 root PNGs (debug screenshots), vlm-*.json, .zscripts
+- Result: public/ganiyu-portfolio.zip — 39 MB, 293 files.
+- Verified contents: all key files present (src/app/page.tsx, src/app/layout.tsx, prisma/schema.prisma, db/custom.db, .env, README.md, package.json, public/uploads/ with the CV PDF + hero photo + all 139 media assets). The 2 "upload/" pattern matches were the legitimate src/app/api/upload/route.ts (not the temp upload/ dir).
+- Integrity: `unzip -t` reports "No errors detected in compressed data".
+- HTTP download: `curl -r 0-1000` → 206 Partial Content, Content-Type: application/zip. Server supports range requests (resumable downloads).
+- The zip is served as a static file at /ganiyu-portfolio.zip via the public/ directory — accessible through the Preview Panel.
+
+Stage Summary:
+- Project packaged as a 39 MB zip at public/ganiyu-portfolio.zip (293 files).
+- Includes ALL source code, the SQLite database with current data (projects, settings, messages, media records), all uploaded files (hero photo, CV, 139 media assets), config files, and a README with run + deploy instructions.
+- Excludes regenerable/junk: node_modules, .next, debug screenshots, skills definitions.
+- Download via Preview Panel: Open in New Tab → navigate to /ganiyu-portfolio.zip → browser downloads the zip.
+- Artifact: public/ganiyu-portfolio.zip (39 MB), README.md (new).

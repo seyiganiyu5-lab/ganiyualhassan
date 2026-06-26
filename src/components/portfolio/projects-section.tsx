@@ -5,9 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useT } from "@/lib/i18n/context";
 import { SectionHeading } from "./section-heading";
 import { ProjectModal } from "./project-modal";
-import { Search, ExternalLink, Github, X, FolderGit2 } from "lucide-react";
+import { Search, ExternalLink, Github, X, FolderGit2, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Project, ProjectCategory } from "@/lib/types";
+import { isPdfUrl } from "@/components/admin/project-image-uploader";
 
 const categoryOrder: ProjectCategory[] = ["website", "graphic", "branding", "uiux", "drawing"];
 
@@ -183,17 +184,27 @@ function ProjectCard({
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden bg-muted/40">
         {project.images[0] ? (
-          <img
-            src={project.images[0]}
-            alt={project.title}
-            className={cn(
-              "h-full w-full transition-transform duration-500 group-hover:scale-105",
-              isArtwork(project.category)
-                ? "object-contain p-3" // show full flyer/poster/illustration
-                : "object-cover" // crop website/UI screenshots
-            )}
-            loading="lazy"
-          />
+          isPdfUrl(project.images[0]) ? (
+            // PDF cover — show a clean icon placeholder (no broken <img>)
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-red-500/10 to-muted">
+              <FileText className="h-12 w-12 text-red-500" />
+              <span className="rounded bg-red-500/90 px-2 py-0.5 text-[10px] font-bold text-white">
+                PDF
+              </span>
+            </div>
+          ) : (
+            <img
+              src={project.images[0]}
+              alt={project.title}
+              className={cn(
+                "h-full w-full transition-transform duration-500 group-hover:scale-105",
+                isArtwork(project.category)
+                  ? "object-contain p-3" // show full flyer/poster/illustration
+                  : "object-cover" // crop website/UI screenshots
+              )}
+              loading="lazy"
+            />
+          )
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FFC300]/20 to-muted">
             <FolderGit2 className="h-12 w-12 text-[#FFC300]/40" />

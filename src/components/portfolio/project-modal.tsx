@@ -2,9 +2,10 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useT } from "@/lib/i18n/context";
-import { X, ExternalLink, Github, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ExternalLink, Github, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import type { Project } from "@/lib/types";
+import { isPdfUrl } from "@/components/admin/project-image-uploader";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -91,22 +92,52 @@ function ModalContent({
   return (
     <div className="max-h-[90vh] overflow-y-auto">
       {/* Gallery — shows the FULL image (no crop) so flyers/posters/artwork
-          display completely. Uses a flexible max-height with object-contain
-          instead of a fixed aspect-ratio crop. */}
+          display completely. PDFs render in an embedded viewer so all files
+          from an uploaded folder (brand kit) can be viewed. */}
       {project.images.length > 0 && (
-        <div className="relative flex w-full items-center justify-center bg-muted/40 p-4 sm:p-8">
+        <div className="relative flex w-full flex-col items-center justify-center bg-muted/40 p-4 sm:p-8">
           <AnimatePresence mode="wait">
-            <motion.img
-              key={activeImage}
-              src={project.images[activeImage]}
-              alt={project.title}
-              className="max-h-[70vh] w-auto max-w-full object-contain"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            />
+            {isPdfUrl(project.images[activeImage]) ? (
+              <motion.iframe
+                key={activeImage}
+                src={project.images[activeImage]}
+                title={project.title}
+                className="h-[70vh] w-full max-w-3xl rounded-lg border border-border bg-white"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+            ) : (
+              <motion.img
+                key={activeImage}
+                src={project.images[activeImage]}
+                alt={project.title}
+                className="max-h-[70vh] w-auto max-w-full object-contain"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
           </AnimatePresence>
+
+          {/* Filename + download bar */}
+          <div className="mt-3 flex w-full max-w-3xl items-center justify-center gap-3">
+            <span className="max-w-[60%] truncate text-xs font-medium text-muted-foreground">
+              {project.images[activeImage].split("/").pop()}
+            </span>
+            <a
+              href={project.images[activeImage]}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-3 py-1 text-[11px] font-semibold text-foreground transition-colors hover:border-[#FFC300]/40 hover:text-[#FFC300]"
+            >
+              <Download className="h-3 w-3" />
+              Download
+            </a>
+          </div>
 
           {project.images.length > 1 && (
             <>

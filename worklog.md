@@ -801,3 +801,39 @@ Verification (created a temp graphic project with portrait 720x1280 image, then 
 
 Stage Summary:
 - Graphic design / branding / drawing projects now show the FULL artwork in both the card thumbnail and the modal preview. Portrait flyers display completely at their natural aspect ratio instead of being cropped into landscape boxes. Website/UI screenshots still use object-cover (they're landscape, look fine cropped).
+
+---
+Task ID: branding-folder-upload-1
+Agent: Main (Z.ai Code)
+Task: Support folder upload for branding projects so all brand files can be uploaded + viewed (user: "for the branding because i have multiple files for a brand so for that i should upload a folder whereby the folder will contain all the files i will view all").
+
+Work Log:
+- Added translation keys (en+fr): projectImagesUploadFolder, projectImagesFolderHint, projectImagesFilesUploaded, projectImagesNoValidFiles, projectImagesPdf, projectImagesFile
+- Upgraded src/components/admin/project-image-uploader.tsx:
+  * Exported isPdfUrl() helper (regex /\.pdf(\?.*)?$/i)
+  * Added isAcceptedFile() — accepts images + application/pdf
+  * Added second hidden <input> with webkitdirectory/directory/mozdirectory attrs for folder upload
+  * Added "Upload Folder" button (bordered gold) below the drop zone with hint text
+  * uploadFiles() now filters to images+PDFs; PDFs sent to API with type:"file"
+  * Preview grid: PDFs render as a FileText icon + red "PDF" badge + filename thumbnail (not a broken img)
+- Upgraded src/components/portfolio/project-modal.tsx:
+  * Imported isPdfUrl from the uploader
+  * Gallery now conditionally renders: <iframe> for PDFs (h-[70vh] w-full max-w-3xl, white bg) OR <img> for images — so ALL files from an uploaded folder are viewable
+  * Added filename + Download button bar below the viewer (updates per active file)
+  * Kept prev/next arrows + dot indicators for multi-file navigation
+- Upgraded src/components/portfolio/projects-section.tsx:
+  * Imported isPdfUrl + FileText icon
+  * Card cover: if first file is a PDF, shows a FileText icon + "PDF" badge placeholder (no broken <img>); images render as before
+
+Verification (end-to-end):
+- Created a real 2-page PDF (brand-guidelines.pdf, 4117 bytes) via jsPDF, uploaded via /api/upload -> /uploads/...brand-guidelines.pdf (served 200 application/pdf)
+- Created a branding project via API with [profile.jpg (image), brand-guidelines.pdf]
+- Admin form (logged in): "Upload Folder" button present, hint text present, webkitdirectory input present (2 total file inputs)
+- Public site, branding filter: card cover shows the image correctly (393x294, not broken)
+- Modal: first file renders as <img> (profile.jpg); clicked Next -> second file renders as <iframe src=...brand-guidelines.pdf> at 768x404; filename updates to brand-guidelines.pdf; Download link present; 2 dot indicators
+- VLM confirmed: "PDF document visible inside the modal (rendered in an embedded viewer), filename displayed, Download button present"
+- 0 console errors, 0 page errors; lint 0 errors
+- Cleaned up: deleted test branding project + test PDF
+
+Stage Summary:
+- Branding (and any) projects now support folder upload: click "Upload Folder" to select a whole folder, all images + PDFs inside upload recursively. In the public preview modal, every file is viewable — images display in full, PDFs render in an embedded viewer with a download button. Card thumbnails show a clean PDF icon when the cover is a PDF.

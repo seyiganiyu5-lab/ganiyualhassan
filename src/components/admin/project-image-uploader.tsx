@@ -12,20 +12,37 @@ import {
   ChevronLeft,
   ChevronRight,
   Star,
+  FolderUp,
+  FileText,
 } from "lucide-react";
 import { toast } from "sonner";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 
+/** Files we accept inside a project / folder upload. */
+const ACCEPTED_TYPES = ["image/"];
+const isAcceptedFile = (f: File) =>
+  f.type.startsWith("image/") || f.type === "application/pdf";
+
+export const isPdfUrl = (url: string) => /\.pdf(\?.*)?$/i.test(url);
+
+/** Folder-upload inputs need non-standard `webkitdirectory` / `directory` attrs. */
+const folderInputProps = {
+  webkitdirectory: "",
+  directory: "",
+  mozdirectory: "",
+} as React.InputHTMLAttributes<HTMLInputElement>;
+
 /**
- * Inline project image manager.
+ * Inline project image/file manager.
  *
- * - Drag-and-drop OR click-to-browse (multi-file)
+ * - Drag-and-drop OR click-to-browse (multi-file: images + PDFs)
+ * - OR upload a whole FOLDER (recursive) — ideal for branding kits
  * - OR paste an external image URL
  * - Live thumbnail grid with: make-cover, move-left/right, remove
  * - First image is treated as the cover (used as the project card thumbnail)
  *
- * Calls `onChange` with the new full list of image URLs whenever it changes.
+ * Calls `onChange` with the new full list of file URLs whenever it changes.
  */
 export function ProjectImageUploader({
   images,
@@ -36,15 +53,16 @@ export function ProjectImageUploader({
 }) {
   const t = useT();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const folderInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [urlInput, setUrlInput] = useState("");
 
-  // ---------- Upload files (multi) ----------
+  // ---------- Upload files (multi: images + PDFs) ----------
   const uploadFiles = async (files: FileList | File[]) => {
-    const list = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    const list = Array.from(files).filter(isAcceptedFile);
     if (list.length === 0) {
-      toast.error("Please select image files");
+      toast.error(t.admin.projectImagesNoValidFiles);
       return;
     }
     const tooBig = list.find((f) => f.size > MAX_BYTES);
@@ -69,7 +87,7 @@ export function ProjectImageUploader({
           body: JSON.stringify({
             dataUrl,
             name: file.name,
-            type: "image",
+            type: file.type === "application/pdf" ? "file" : "image",
           }),
         });
         if (!res.ok) {
@@ -82,14 +100,15 @@ export function ProjectImageUploader({
       onChange([...images, ...uploadedUrls]);
       toast.success(
         uploadedUrls.length === 1
-          ? "Image uploaded"
-          : `${uploadedUrls.length} images uploaded`
+          ? "File uploaded"
+          : t.admin.projectImagesFilesUploaded.replace("{count}", String(uploadedUrls.length))
       );
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
+      if (folderInputRef.current) folderInputRef.current.value = "";
     }
   };
 
@@ -107,7 +126,6 @@ export function ProjectImageUploader({
   const handleAddUrl = () => {
     const url = urlInput.trim();
     if (!url) return;
-    // Basic URL validation
     try {
       new URL(url);
     } catch {
@@ -197,13 +215,40 @@ export function ProjectImageUploader({
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*"
+          accept="image/*,application/pdf"
           multiple
           className="hidden"
           onChange={handleInputChange}
           disabled={uploading}
         />
+        <input
+          ref={folderInputRef}
+          type="file"
+          multiple
+          className="hidden"
+          onChange={handleInputChange}
+          disabled={uploading}
+          {...folderInputProps}
+        />
       </div>
+
+      {/* Upload-folder secondary action — stop propagation so the drop-zone
+          click handler doesn't fire at the same time. */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          if (!uploading) folderInputRef.current?.click();
+        }}
+        disabled={uploading}
+        className="inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#FFC300]/40 bg-[#FFC300]/5 text-xs font-semibold text-[#FFC300] transition-colors hover:bg-[#FFC300]/10 disabled:opacity-50"
+      >
+        <FolderUp className="h-4 w-4" />
+        {t.admin.projectImagesUploadFolder}
+      </button>
+      <p className="-mt-1.5 text-center text-[10px] text-muted-foreground">
+        {t.admin.projectImagesFolderHint}
+      </p>
 
       {/* URL paste row */}
       <div>
@@ -258,16 +303,28 @@ export function ProjectImageUploader({
                 transition={{ duration: 0.2 }}
                 className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted"
               >
-                <img
-                  src={url}
-                  alt={`Project image ${i + 1}`}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                  onError={(e) => {
-                    // Show a broken-image placeholder
-                    (e.currentTarget as HTMLImageElement).style.opacity = "0.2";
-                  }}
-                />
+                {isPdfUrl(url) ? (
+                  // PDF thumbnail — icon + badge
+                  <div className="flex h-full w-full flex-col items-center justify-center gap-1 bg-gradient-to-br from-red-500/10 to-muted">
+                    <FileText className="h-7 w-7 text-red-500" />
+                    <span className="rounded bg-red-500/90 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                      {t.admin.projectImagesPdf}
+                    </span>
+                    <span className="max-w-[90%] truncate text-[9px] text-muted-foreground">
+                      {url.split("/").pop()}
+                    </span>
+                  </div>
+                ) : (
+                  <img
+                    src={url}
+                    alt={`Project image ${i + 1}`}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.opacity = "0.2";
+                    }}
+                  />
+                )}
 
                 {/* Cover badge */}
                 {i === 0 && (

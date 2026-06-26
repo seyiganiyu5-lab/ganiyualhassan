@@ -1099,3 +1099,42 @@ Stage Summary:
 - The "Back to Website" link is removed from the admin login page; the top-left corner is now clean.
 - Dashboard sidebars still have their "Back to Website" link (useful when logged in).
 - Artifact changed: `src/components/admin/admin-view.tsx` (removed the login-screen Back-to-site Link block).
+
+---
+Task ID: change-creds-and-eye-toggle
+Agent: Main (Z.ai Code)
+Task: Remove the demo credentials hint, change username to ALHASSAN and password to @Hassify1010, and add a show/hide eye toggle on the password field.
+
+Work Log:
+- Updated admin credentials in `src/app/api/auth/route.ts`:
+  * Defaults changed from `admin` / `ganiyu2024` → `ALHASSAN` / `@Hassify1010`.
+  * Added explicit `typeof === "string"` type checks on both fields before comparison (defensive against non-string payloads).
+  * Comment updated to note env override.
+- Added `ADMIN_USERNAME=ALHASSAN` and `ADMIN_PASSWORD=@Hassify1010` to `.env` so the values are explicit and easily overridable.
+- Updated login form in `src/components/admin/admin-view.tsx`:
+  * Imported `Eye` and `EyeOff` from lucide-react.
+  * Added `showPassword` boolean state.
+  * Password input `type` is now dynamic: `showPassword ? "text" : "password"`.
+  * Added an eye toggle button absolutely-positioned inside the password field (right side), 8x8 hit area, `aria-label` swaps between "Show password" / "Hide password", `tabIndex={-1}` so it doesn't interfere with keyboard tab flow into the field. Icon swaps Eye ↔ EyeOff.
+  * Widened password input right padding (`pr-11`) so text doesn't overlap the eye button.
+  * Added `autoComplete="username"` / `autoComplete="current-password"` and `autoCapitalize="none"` on the username field for better browser autofill + mobile behavior.
+  * Username placeholder changed from hardcoded "admin" to `t.admin.username` (localized label) — no more hint of the old username.
+  * Removed the entire "Demo credentials: admin / ganiyu2024" hint block below the form.
+- Restarted the dev server (env vars changed). The setsid single-fork approach didn't persist across bash calls this session; used the existing `start-dev.sh` (Python double-fork → PPID=1) which reliably survives. Verified PPID=1.
+- `bun run lint` passes clean.
+
+Verification (curl API + Agent Browser + VLM):
+- API: `POST /api/auth` with old creds `{admin, ganiyu2024}` → 401 `{"success":false,"error":"Invalid credentials"}`. With new creds `{ALHASSAN, @Hassify1010}` → 200 `{"success":true,"token":"..."}`. ✓
+- Login page snapshot: shows Username textbox, Password textbox, "Show password" button (eye), Sign In button. NO demo credentials text in the tree. ✓
+- Eye toggle ON: clicked the eye → input `type` attribute changed `password` → `text`; VLM confirmed the password "@Hassify1010" is displayed as readable text. Button aria-label became "Hide password". ✓
+- Eye toggle OFF: clicked again → input `type` back to `password`; password masked as dots. ✓
+- Login flow: filled ALHASSAN / @Hassify1010 → clicked Sign In → navigated to admin dashboard (title "Admin Dashboard — Ganiyu Al-Hassan Oluwaseyi", Dashboard heading + CV Management + Logout visible). ✓
+- VLM: confirmed no "Demo credentials" / "admin / ganiyu2024" text anywhere on the page; eye icon present inside the password field (lock on left, eye on right). ✓
+- 0 page errors, 0 console errors.
+
+Stage Summary:
+- Admin credentials changed: username = `ALHASSAN`, password = `@Hassify1010` (stored in .env + route defaults).
+- Demo credentials hint removed from the login page.
+- Eye show/hide toggle added to the password field — toggles input type between `password` (masked) and `text` (visible), with accessible aria-label and Eye/EyeOff icon swap.
+- Old credentials (admin / ganiyu2024) no longer work (401).
+- Artifacts changed: `src/app/api/auth/route.ts`, `.env`, `src/components/admin/admin-view.tsx`.

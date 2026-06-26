@@ -19,6 +19,8 @@ import {
   Menu,
   X,
   UserCircle,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AdminDashboard } from "./dashboard";
@@ -40,6 +42,7 @@ export function AdminView() {
   const [checking, setChecking] = useState(true);
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [loggingIn, setLoggingIn] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -150,7 +153,9 @@ export function AdminView() {
                     onChange={(e) =>
                       setCredentials({ ...credentials, username: e.target.value })
                     }
-                    placeholder="admin"
+                    placeholder={t.admin.username}
+                    autoCapitalize="none"
+                    autoComplete="username"
                     className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
                   />
                 </div>
@@ -167,14 +172,28 @@ export function AdminView() {
                   <input
                     id="admin-password"
                     required
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     value={credentials.password}
                     onChange={(e) =>
                       setCredentials({ ...credentials, password: e.target.value })
                     }
                     placeholder="••••••••"
-                    className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
+                    autoComplete="current-password"
+                    className="h-11 w-full rounded-xl border border-border bg-background pl-10 pr-11 text-sm outline-none transition-colors focus:border-[#FFC300]/50"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-[#FFC300]"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
                 </div>
               </div>
               <button
@@ -190,13 +209,6 @@ export function AdminView() {
                 {t.admin.signIn}
               </button>
             </form>
-
-            <div className="mt-4 rounded-lg bg-muted/50 p-3 text-center text-xs text-muted-foreground">
-              Demo credentials:{" "}
-              <span className="font-mono font-semibold text-[#FFC300]">
-                admin / ganiyu2024
-              </span>
-            </div>
           </div>
         </motion.div>
       </div>

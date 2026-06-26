@@ -1076,3 +1076,26 @@ Stage Summary:
 - The admin route is now discoverable: a discreet lock-icon "Admin" link sits in the footer next to the copyright.
 - Direct URL still works: `/admin` (credentials: admin / ganiyu2024).
 - Artifact changed: `src/components/portfolio/footer.tsx` (added Lock import + Admin link in bottom bar).
+
+---
+Task ID: remove-back-to-website-login
+Agent: Main (Z.ai Code)
+Task: Remove the "Back to Website" link from the admin login (logo) page.
+
+Work Log:
+- Located the "Back to Website" link: `src/components/admin/admin-view.tsx` login screen block (lines 116-123). It was an absolute-positioned `<Link href="/">` with an ArrowLeft icon in the top-left corner of the login page.
+- Removed the entire `{/* Back to site */}` Link block from the login screen. Kept the top-right LanguageSwitcher + ThemeToggle controls intact.
+- Left the "Back to Website" links in the dashboard sidebars (desktop line ~250, mobile line ~321) untouched — those are useful navigation when already logged in, and the user specifically said "logo page" (the login page with the shield logo).
+- Verified `ArrowLeft` import is still used by the sidebar links, so no unused-import lint error.
+- Lint clean.
+
+Verification (Agent Browser + VLM):
+- Logged out of admin → login page renders.
+- Snapshot: no "Back to Website" link in the element tree (only LanguageSwitcher, ThemeToggle, Admin Login heading, username/password fields, Sign In button).
+- VLM: confirmed "There is no 'Back to Website' link/button (especially in the top-left corner). The top-left corner of the page is empty."
+- 0 page errors, 0 console errors.
+
+Stage Summary:
+- The "Back to Website" link is removed from the admin login page; the top-left corner is now clean.
+- Dashboard sidebars still have their "Back to Website" link (useful when logged in).
+- Artifact changed: `src/components/admin/admin-view.tsx` (removed the login-screen Back-to-site Link block).

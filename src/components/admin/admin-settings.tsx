@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useT } from "@/lib/i18n/context";
-import { Save, User, Link2, Phone, ImageIcon } from "lucide-react";
+import { Save, User, Link2, Phone, ImageIcon, Mail } from "lucide-react";
 import { toast } from "sonner";
 
 export function AdminSettings() {
@@ -118,6 +118,34 @@ export function AdminSettings() {
             value={settings.email || ""}
             onChange={(v) => update("email", v)}
           />
+        </div>
+      </section>
+
+      {/* Email provider (for newsletter broadcasts) */}
+      <section className="rounded-2xl glass border border-border p-5">
+        <h3 className="mb-2 flex items-center gap-2 font-bold">
+          <Mail className="h-4 w-4 text-[#FFC300]" />
+          {t.admin.emailProvider}
+        </h3>
+        <p className="mb-4 text-xs text-muted-foreground">{t.admin.emailProviderDesc}</p>
+        <div className="space-y-3">
+          <Field
+            label={t.admin.fromEmail}
+            value={settings.fromEmail || ""}
+            placeholder={t.admin.fromEmailPlaceholder}
+            onChange={(v) => update("fromEmail", v)}
+          />
+          <Field
+            label={t.admin.resendApiKey}
+            value={settings.resendApiKey || ""}
+            placeholder={t.admin.resendApiKeyPlaceholder}
+            onChange={(v) => update("resendApiKey", v)}
+          />
+          {(!settings.resendApiKey || !settings.fromEmail) && (
+            <p className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-[11px] font-medium text-amber-600">
+              {t.admin.emailProviderNotConfigured}
+            </p>
+          )}
         </div>
       </section>
 

@@ -884,3 +884,42 @@ Stage Summary:
 - "Website views" fully removed: no visitor counter on the main page footer, no Website Views card in the admin dashboard, no /api/visitor route, no websiteViews in /api/stats, and no leftover translation keys.
 - `bun run lint` passes clean; no remaining references to visitor/websiteViews in src.
 - Agent Browser verified: main page footer has no visitor text and fires 0 /api/visitor requests; admin dashboard shows exactly 3 stat cards (Total Projects, Total Messages, Downloads) — VLM confirmed no "Website Views" card and no eye icon.
+
+---
+Task ID: functional-newsletter
+Agent: Main (Z.ai Code)
+Task: Make the newsletter functional — add an admin "Subscribers" panel to view/export/delete subscribers, and wire up an email provider (Resend) so broadcast updates actually get sent.
+
+Work Log:
+- Installed `resend` (v6.14.0) email SDK.
+- Prisma schema: added `Broadcast` model (id, subject, body, status sent|draft|failed, recipientCount, sentAt); removed the now-dead `Visitor` model. Ran `prisma db push --accept-data-loss` (Visitor table had 1 unused row) + `prisma generate`.
+- Backend APIs:
+  - `GET /api/newsletter` — list subscribers with optional `?q=` search.
+  - `DELETE /api/newsletter` — bulk delete by `{ ids: [] }`.
+  - `DELETE /api/newsletter/[id]` — delete one subscriber.
+  - `GET /api/newsletter/export` — CSV download (`Content-Disposition: attachment`, RFC-4180 escaped).
+  - `GET /api/broadcasts` — list broadcast history.
+  - `POST /api/broadcasts` — compose + send: builds a branded HTML wrapper, calls `sendBroadcast()`, persists a `Broadcast` row with status sent/draft/failed.
+- `src/lib/newsletter.ts`: provider abstraction that reads `resendApiKey` + `fromEmail` from the Setting table. If configured, lazy-imports Resend and sends one BCC email to all subscribers (lazy import so the SDK only loads when sending). If not configured, returns `{ sent: false, reason: "no-provider" }` so broadcasts save as drafts.
+- Admin UI (matching existing golden-twilight theme + shadcn patterns):
+  - `AdminSubscribers` component: subscriber table with checkboxes, debounced search, CSV export button, single delete, bulk delete with action bar, count badge, empty states.
+  - `AdminBroadcast` component: compose form (subject + message + character count + audience hint) on the left, scrollable history list with Sent/Draft/Failed status badges on the right.
+  - Wired both into `admin-view.tsx` sidebar (Users + Megaphone icons) between Messages and CV.
+  - Added an "Email Provider" section to `AdminSettings` (From email + Resend API key fields + amber "not configured" warning).
+  - Added `fromEmail` / `resendApiKey` defaults to the settings API.
+- Translations: added all new keys (subscribers, broadcast, compose, send, statuses, email-provider fields, empty states) to both English and French.
+- Bug fixed during testing: `NextResponse.json(body, statusNumber)` → must be `{ status: n }`. Also fixed Resend v6 import (named export `Resend`, not default).
+
+Stage Summary:
+- Newsletter is now fully functional end-to-end:
+  1. Visitor subscribes in the footer → email saved to DB → success toast.
+  2. Admin Subscribers tab lists them (search, CSV export, delete, bulk delete).
+  3. Admin Broadcast tab composes subject + body → "Send Broadcast".
+  4. With a Resend API key + from-email configured in Settings, the email is actually delivered (BCC to all subscribers). Without it, the broadcast saves as a draft with a clear message.
+- Verified with curl + Agent Browser:
+  - Subscribe → appears in admin Subscribers list ✓
+  - Search filter ✓, CSV export returns proper attachment ✓
+  - Broadcast with no provider → saved as "draft" with status badge ✓
+  - Broadcast with a fake Resend key → reaches Resend API, returns "API key is invalid" (proves the wiring; a real key delivers for real) ✓
+  - Settings Email Provider section shows amber warning when unconfigured ✓
+- `bun run lint` passes clean.

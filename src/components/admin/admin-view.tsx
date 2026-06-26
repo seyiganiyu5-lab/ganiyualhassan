@@ -19,12 +19,16 @@ import {
   Menu,
   X,
   UserCircle,
+  Users,
+  Megaphone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AdminDashboard } from "./dashboard";
 import { AdminHeroImage } from "./admin-hero-image";
 import { AdminProjects } from "./projects";
 import { AdminMessages } from "./messages";
+import { AdminSubscribers } from "./admin-subscribers";
+import { AdminBroadcast } from "./admin-broadcast";
 import { AdminCv } from "./admin-cv";
 import { AdminMedia } from "./admin-media";
 import { AdminSettings } from "./admin-settings";
@@ -87,6 +91,8 @@ export function AdminView() {
     { id: "hero-image", label: t.admin.heroImage, icon: UserCircle },
     { id: "projects", label: t.admin.projects, icon: FolderGit2 },
     { id: "messages", label: t.admin.messages, icon: Mail },
+    { id: "subscribers", label: t.admin.subscribers, icon: Users },
+    { id: "broadcast", label: t.admin.broadcast, icon: Megaphone },
     { id: "cv", label: t.admin.cv, icon: FileText },
     { id: "media", label: t.admin.media, icon: ImageIcon },
     { id: "settings", label: t.admin.settings, icon: Settings },
@@ -375,6 +381,8 @@ export function AdminView() {
           {activeTab === "hero-image" && <AdminHeroImage />}
           {activeTab === "projects" && <AdminProjects />}
           {activeTab === "messages" && <AdminMessages />}
+          {activeTab === "subscribers" && <AdminSubscribers />}
+          {activeTab === "broadcast" && <AdminBroadcast />}
           {activeTab === "cv" && <AdminCv />}
           {activeTab === "media" && <AdminMedia />}
           {activeTab === "settings" && <AdminSettings />}

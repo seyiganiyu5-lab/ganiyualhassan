@@ -57,8 +57,11 @@ model Newsletter {
   createdAt DateTime @default(now())
 }
 
-model Visitor {
-  id        String   @id @default(cuid())
-  count     Int      @default(0)
-  createdAt DateTime @default(now())
+model Broadcast {
+  id            String   @id @default(cuid())
+  subject       String
+  body          String
+  status        String   @default("sent") // sent | draft | failed
+  recipientCount Int     @default(0)
+  sentAt        DateTime @default(now())
 }

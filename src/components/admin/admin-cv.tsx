@@ -28,6 +28,22 @@ function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
+/**
+ * Turn an uploaded filename like "1782430280759-ganiyu-al-hassan.pdf" or
+ * "1782430280759-a1b2c3-ganiyu-al-hassan.pdf" into a friendly display name
+ * like "ganiyu-al-hassan.pdf".
+ *
+ * The upload API stores files as `<timestamp>-<slug>.<ext>` (legacy) or
+ * `<timestamp>-<rand>-<slug>.<ext>` (current). We strip the leading numeric
+ * timestamp and the optional hex random segment, leaving the original slug +
+ * extension. Anything that doesn't match that pattern is returned unchanged.
+ */
+function prettyFileName(raw: string): string {
+  // Match: digits "-" [optional hex "-"] rest
+  const m = raw.match(/^\d+-(?:[a-f0-9]+-)?(.+)$/i);
+  return m ? m[1] : raw;
+}
+
 export function AdminCv() {
   const t = useT();
   const [cvUrl, setCvUrl] = useState("");
@@ -42,11 +58,16 @@ export function AdminCv() {
     fetch("/api/cv")
       .then((r) => r.json())
       .then((data) => {
-        setCvUrl(data.cvUrl || "");
-        // Derive a friendly name from the URL path
-        if (data.cvUrl) {
-          const parts = String(data.cvUrl).split("/");
-          setCvName(parts[parts.length - 1] || "CV");
+        const url = data.cvUrl || "";
+        setCvUrl(url);
+        // Derive a friendly name from the URL path, stripping the
+        // "<timestamp>-<rand>-" prefix that the upload API adds.
+        if (url) {
+          const parts = String(url).split("/");
+          const raw = parts[parts.length - 1] || "CV";
+          setCvName(prettyFileName(raw));
+        } else {
+          setCvName("");
         }
       })
       .catch(() => {})

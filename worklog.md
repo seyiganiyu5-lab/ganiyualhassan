@@ -1019,3 +1019,38 @@ Stage Summary:
 - When no custom hero photo is uploaded, the homepage shows a clean branded "G" monogram placeholder inside the same circular frame (layout intact); the admin preview shows a matching "No image" placeholder card.
 - When a custom photo IS uploaded, it renders exactly as before.
 - Artifacts changed: `src/components/portfolio/hero-section.tsx`, `src/components/admin/admin-hero-image.tsx`, `src/lib/i18n/translations.ts` (EN+FR); deleted `public/uploads/profile.jpg`.
+
+---
+Task ID: fix-cv-inconsistency
+Agent: Main (Z.ai Code)
+Task: Fix the CV inconsistency — admin showed "No CV uploaded yet" but the public "Download CV" button still downloaded a CV. Verify there's no problem.
+
+Work Log:
+- Investigated the CV flow end-to-end:
+  * `src/app/api/cv/route.ts` (GET) returns `cvUrl` from the `Setting` table.
+  * `src/components/admin/admin-cv.tsx` renders "No CV uploaded yet" when `cvUrl` is falsy, else shows the file + View/download + Delete.
+  * `src/components/portfolio/cv-section.tsx` `handleDownload` tries `fetch(cvUrl)` first; if `cvUrl` is empty or the fetch fails, it falls back to `generateCvPdf(buildCvData())` which auto-generates a PDF from the portfolio i18n data.
+- Queried the DB directly with Prisma: `cvUrl` Setting was `""` (empty string). So the admin was CORRECT — no CV was registered.
+- Found a real CV file on disk: `public/uploads/1782430280759-ganiyu-al-hassan.pdf` (108,275 bytes, valid PDF-1.4, 1 page). It was already tracked in `MediaAsset` (name "Ganiyu Al-hassan.pdf", type "file") but the `cvUrl` Setting never pointed to it. That's why the public download "worked" — via the auto-generated fallback PDF, NOT the uploaded file.
+- Found a SECONDARY bug: `admin-cv.tsx` and `admin-media.tsx` both call `/api/upload`, but **no `/api/upload` route existed** (returned 404). So uploading a new CV via the admin panel would silently fail with "Upload failed".
+- Created the missing route `src/app/api/upload/route.ts`:
+  * `GET` — list all MediaAsset records (newest first).
+  * `POST` — accept `{ dataUrl, name, type }`, decode the base64 payload, write to `public/uploads/<timestamp>-<rand>-<slug>.<ext>`, create a MediaAsset record, return `{ id, url, name, type }`. Includes slugification, MIME→extension fallback, path-traversal protection on delete, and idempotent dir creation.
+  * `DELETE ?id=` — delete the MediaAsset record AND unlink the file from disk (scoped to /uploads).
+- Linked the existing CV to the `cvUrl` Setting via a one-off Prisma script: set `cvUrl = "/uploads/1782430280759-ganiyu-al-hassan.pdf"`. Verified with a re-query.
+- Improved `admin-cv.tsx` filename display: added `prettyFileName()` that strips the upload API's `<timestamp>-` (and optional `<hex>-`) prefix so the admin shows "ganiyu-al-hassan.pdf" instead of "1782430280759-ganiyu-al-hassan.pdf". Regex `/^\d+-(?:[a-f0-9]+-)?(.+)$/i` handles both the legacy single-prefix format and the new timestamp+rand format.
+- Cleaned up temp scripts. `bun run lint` passes clean.
+
+Verification (end-to-end with Agent Browser + VLM + direct API checks):
+- `GET /api/cv` → `{"cvUrl":"/uploads/1782430280759-ganiyu-al-hassan.pdf"}` ✓
+- `GET /api/upload` → 200 (route now exists; previously 404) ✓
+- `HEAD /uploads/1782430280759-ganiyu-al-hassan.pdf` → 200, application/pdf ✓
+- Logged into /admin (admin / ganiyu2024) → CV Management tab: VLM-confirmed the "Current CV" section now shows "ganiyu-al-hassan.pdf" with "View / download" link + Delete button (no more "No CV uploaded yet"). Screenshot: admin-cv-fixed.png.
+- Public site: clicked "Download CV" → `fetch('/uploads/1782430280759-ganiyu-al-hassan.pdf')` returns a 108,275-byte `application/pdf` blob (matches the real file size exactly — proves the real uploaded CV is served, NOT the auto-generated fallback). The `[data-sonner-toast]` DOM poll immediately after the click returned `["Download CV"]` — the success toast fired, which only happens on the `res.ok` branch (early return), confirming `generateCvPdf` fallback was NOT triggered.
+- 0 page errors, 0 console errors; dev.log shows only normal Prisma queries and 200 responses; lint clean.
+
+Stage Summary:
+- Root cause: the `cvUrl` DB Setting was empty even though a real CV file existed on disk (and was tracked in MediaAsset). The admin correctly reported "no CV", but the public download still worked via the `generateCvPdf` fallback — so the user got an auto-generated CV, not their uploaded one.
+- Fixed by (1) creating the missing `/api/upload` route so admin uploads actually work going forward, (2) pointing `cvUrl` to the existing real CV file, and (3) cleaning up the displayed filename.
+- Now the admin and the public site are consistent: the admin shows the real CV with a friendly name, and the public "Download CV" button serves the actual uploaded `ganiyu-al-hassan.pdf` (108 KB).
+- Artifacts changed: `src/app/api/upload/route.ts` (new), `src/components/admin/admin-cv.tsx` (prettyFileName helper + use in useEffect), DB `Setting.cvUrl` value.

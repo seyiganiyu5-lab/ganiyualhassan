@@ -865,3 +865,22 @@ Stage Summary:
 - Abnormality fixed: the brand modal no longer jumps/resizes while scrolling through folder files of mixed aspect ratios, and the unusable 33-dot row is replaced with a scrollable thumbnail strip + "X / 33" counter.
 - Artifact changed: `src/components/portfolio/project-modal.tsx` (ModalContent gallery section redesigned).
 - No schema, API, or uploader changes were needed — this was a pure presentation fix.
+
+---
+Task ID: remove-website-views
+Agent: Main (Z.ai Code)
+Task: Remove the "website views" feature (visitor counter on the main page footer + the matching "Website Views" stat card in the admin dashboard).
+
+Work Log:
+- Located all references to the visitor-tracking feature via grep: `src/components/portfolio/footer.tsx` (visitor counter UI + POST /api/visitor), `src/components/admin/dashboard.tsx` (Website Views stat card), `src/app/api/stats/route.ts` (websiteViews field + db.visitor query), `src/app/api/visitor/route.ts` (the route itself), and translation keys in `src/lib/i18n/translations.ts`.
+- Footer: removed the `visitors` state, the `useEffect` POST to `/api/visitor`, the `Users` icon import, and the visitor counter block. Newsletter column now ends at the subscribe form. Removed the now-unused `useEffect` import.
+- Admin dashboard: removed `websiteViews` from the `Stats` interface and initial state, removed the Website Views card from the `cards` array, removed the `Eye` icon import, and changed the stat grid from `lg:grid-cols-4` to `lg:grid-cols-3` so the 3 remaining cards (Total Projects, Total Messages, Downloads) fill cleanly.
+- Stats API: removed the `db.visitor.findFirst()` query and the `websiteViews` field from both the success and error responses; removed the now-unused `NextRequest` import.
+- Deleted the dead `/api/visitor` route (file + folder).
+- Translations: removed the now-unused `visitor`, `visitors` (common) and `websiteViews` (admin) keys from both English and French.
+- Left the Prisma `Visitor` model in schema.prisma (no longer referenced by any code; removing it would require a db push with no UI benefit).
+
+Stage Summary:
+- "Website views" fully removed: no visitor counter on the main page footer, no Website Views card in the admin dashboard, no /api/visitor route, no websiteViews in /api/stats, and no leftover translation keys.
+- `bun run lint` passes clean; no remaining references to visitor/websiteViews in src.
+- Agent Browser verified: main page footer has no visitor text and fires 0 /api/visitor requests; admin dashboard shows exactly 3 stat cards (Total Projects, Total Messages, Downloads) — VLM confirmed no "Website Views" card and no eye icon.

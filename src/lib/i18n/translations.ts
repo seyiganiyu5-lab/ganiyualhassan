@@ -191,8 +191,6 @@ export const translations = {
     },
     common: {
       backToTop: "Back to top",
-      visitor: "Visitor",
-      visitors: "Visitors",
     },
     admin: {
       title: "Admin Dashboard",
@@ -211,7 +209,6 @@ export const translations = {
       seo: "SEO",
       totalProjects: "Total Projects",
       totalMessages: "Total Messages",
-      websiteViews: "Website Views",
       downloads: "Downloads",
       addProject: "Add Project",
       editProject: "Edit Project",
@@ -482,8 +479,6 @@ export const translations = {
     },
     common: {
       backToTop: "Retour en haut",
-      visitor: "Visiteur",
-      visitors: "Visiteurs",
     },
     admin: {
       title: "Tableau de Bord Admin",
@@ -502,7 +497,6 @@ export const translations = {
       seo: "SEO",
       totalProjects: "Total Projets",
       totalMessages: "Total Messages",
-      websiteViews: "Vues du Site",
       downloads: "Téléchargements",
       addProject: "Ajouter un Projet",
       editProject: "Modifier le Projet",

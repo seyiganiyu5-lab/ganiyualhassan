@@ -8,24 +8,14 @@ import {
   MessageCircle,
   Send,
   ArrowUp,
-  Users,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export function Footer() {
   const t = useT();
   const [email, setEmail] = useState("");
   const [subscribing, setSubscribing] = useState(false);
-  const [visitors, setVisitors] = useState(0);
-
-  useEffect(() => {
-    // Register visitor
-    fetch("/api/visitor", { method: "POST" })
-      .then((r) => r.json())
-      .then((data) => setVisitors(data.count ?? 0))
-      .catch(() => {});
-  }, []);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -145,7 +135,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter + visitor counter */}
+          {/* Newsletter */}
           <div>
             <h4 className="text-sm font-bold uppercase tracking-wider">
               {t.footer.newsletter}
@@ -171,15 +161,6 @@ export function Footer() {
                 <Send className="h-4 w-4" />
               </button>
             </form>
-
-            {/* Visitor counter */}
-            <div className="mt-5 flex items-center gap-2 rounded-lg glass border border-border px-3 py-2.5">
-              <Users className="h-4 w-4 text-[#FFC300]" />
-              <span className="text-sm font-semibold">{visitors.toLocaleString()}</span>
-              <span className="text-xs text-muted-foreground">
-                {visitors === 1 ? t.common.visitor : t.common.visitors}
-              </span>
-            </div>
           </div>
         </div>
 

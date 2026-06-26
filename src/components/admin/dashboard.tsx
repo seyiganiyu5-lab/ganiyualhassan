@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useT } from "@/lib/i18n/context";
-import { FolderGit2, Mail, Eye, Download, TrendingUp } from "lucide-react";
+import { FolderGit2, Mail, Download, TrendingUp } from "lucide-react";
 
 interface Stats {
   totalProjects: number;
   totalMessages: number;
-  websiteViews: number;
   downloads: number;
 }
 
@@ -17,7 +16,6 @@ export function AdminDashboard() {
   const [stats, setStats] = useState<Stats>({
     totalProjects: 0,
     totalMessages: 0,
-    websiteViews: 0,
     downloads: 0,
   });
   const [recentMessages, setRecentMessages] = useState<
@@ -38,14 +36,13 @@ export function AdminDashboard() {
   const cards = [
     { label: t.admin.totalProjects, value: stats.totalProjects, icon: FolderGit2, color: "#FFC300" },
     { label: t.admin.totalMessages, value: stats.totalMessages, icon: Mail, color: "#10b981" },
-    { label: t.admin.websiteViews, value: stats.websiteViews, icon: Eye, color: "#3b82f6" },
     { label: t.admin.downloads, value: stats.downloads, icon: Download, color: "#a855f7" },
   ];
 
   return (
     <div className="space-y-6">
       {/* Stat cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card, i) => (
           <motion.div
             key={card.label}

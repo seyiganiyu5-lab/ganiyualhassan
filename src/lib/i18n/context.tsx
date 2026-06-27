@@ -13,13 +13,9 @@ const localeListeners = new Set<() => void>();
 
 function subscribeLocale(callback: () => void) {
   localeListeners.add(callback);
-  const onStorage = (e: StorageEvent) => {
-    if (e.key === "locale") callback();
-  };
-  window.addEventListener("storage", onStorage);
+  // No cross-tab sync — each tab keeps its own language independently.
   return () => {
     localeListeners.delete(callback);
-    window.removeEventListener("storage", onStorage);
   };
 }
 

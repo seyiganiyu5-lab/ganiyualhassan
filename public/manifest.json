@@ -4,8 +4,8 @@
   "description": "Software Engineering Student & Creative Digital Professional",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#FF5A1F",
+  "background_color": "#000814",
+  "theme_color": "#FFC300",
   "icons": [
     {
       "src": "/icon.svg",

@@ -4,6 +4,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// For local dev this is "sqlite". The build script (scripts/prepare-build.js)
+// automatically swaps it to "postgresql" on Vercel when DATABASE_PROVIDER=postgresql
+// is set — so you never need to edit this file by hand.
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -13,11 +16,11 @@ model Project {
   id          String   @id @default(cuid())
   title       String
   description String
-  category    String // website | graphic | branding | uiux | drawing
+  category    String
   technologies String  @default("")
   liveDemo    String?
   githubLink  String?
-  images      String   @default("[]") // JSON array of image URLs
+  images      String   @default("[]")
   featured    Boolean  @default(false)
   order       Int      @default(0)
   createdAt   DateTime @default(now())
@@ -47,6 +50,6 @@ model MediaAsset {
   id        String   @id @default(cuid())
   name      String
   url       String
-  type      String   @default("image") // image | logo | drawing | file
+  type      String   @default("image")
   createdAt DateTime @default(now())
 }

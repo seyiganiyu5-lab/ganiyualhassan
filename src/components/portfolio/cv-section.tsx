@@ -21,22 +21,24 @@ export function CvSection({ cvUrl }: { cvUrl?: string | null }) {
   const [downloading, setDownloading] = useState(false);
 
   const sections = [
-    {
-      key: "education",
-      icon: GraduationCap,
-      data: t.cv.educationData,
-    },
-    {
-      key: "experience",
-      icon: Briefcase,
-      data: t.cv.experienceData,
-    },
-    {
-      key: "certifications",
-      icon: Award,
-      data: t.cv.certificationsData,
-    },
-  ] as const;
+  {
+    key: "education",
+    icon: GraduationCap,
+    data: t.cv.educationData,
+  },
+  {
+    key: "experience",
+    icon: Briefcase,
+    data: t.cv.experienceData,
+  },
+  ...(t.cv.certificationsData.length > 0
+    ? [{
+        key: "certifications" as const,
+        icon: Award,
+        data: t.cv.certificationsData,
+      }]
+    : []),
+] as const;
 
   /** Build the structured data the PDF generator expects, from i18n. */
   const buildCvData = () => ({

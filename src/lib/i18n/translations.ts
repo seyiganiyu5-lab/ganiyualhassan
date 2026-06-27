@@ -117,17 +117,14 @@ export const translations = {
       download: "Download CV",
       educationData: [
         { title: "Software Engineering", org: "University Program", period: "2024 — Present", desc: "Comprehensive study of software architecture, algorithms, web development, and cloud systems." },
-        { title: "Graphic Design & Branding", org: "Self-Directed & Courses", period: "2021 — 2023", desc: "Mastered Adobe Creative Suite, brand identity design, and visual communication." },
       ],
       experienceData: [
-        { title: "Freelance Web Developer & Designer", org: "Self-Employed", period: "2022 — Present", desc: "Designed and developed websites, brand identities, and digital products for clients across industries." },
-        { title: "UI/UX Designer", org: "Various Projects", period: "2023 — Present", desc: "Created wireframes, prototypes, and design systems for web and mobile applications." },
+        { title: "Software Engineer", org: "Self-Employed", period: "2024 — Present", desc: "Building software solutions with modern technologies, focusing on web applications and scalable systems." },
+        { title: "Web Developer", org: "Freelance", period: "2025 — Present", desc: "Designing and developing responsive, modern websites for clients across industries." },
+        { title: "UI/UX Designer", org: "Freelance", period: "2025 — Present", desc: "Creating intuitive interfaces, wireframes, prototypes, and design systems for web and mobile applications." },
+        { title: "Graphic Designer", org: "Freelance", period: "2025 — Present", desc: "Designing brand identities, logos, marketing materials, and visual content using Adobe Creative Suite." },
       ],
-      certificationsData: [
-        { title: "Cloud Computing Fundamentals", org: "Online Certification", period: "2024", desc: "Foundations of cloud infrastructure, deployment, and scalable architecture." },
-        { title: "UI/UX Design Principles", org: "Design Course", period: "2023", desc: "User-centered design, prototyping, and usability testing methodologies." },
-        { title: "Adobe Creative Suite Mastery", org: "Adobe", period: "2022", desc: "Advanced proficiency in Photoshop, Illustrator, and design workflows." },
-      ],
+      certificationsData: [],
     },
     services: {
       title: "My Services",
@@ -402,17 +399,14 @@ export const translations = {
       download: "Télécharger le CV",
       educationData: [
         { title: "Ingénierie Logicielle", org: "Programme Universitaire", period: "2024 — Présent", desc: "Étude approfondie de l'architecture logicielle, des algorithmes, du développement web et des systèmes cloud." },
-        { title: "Design Graphique & Branding", org: "Auto-formation & Cours", period: "2021 — 2023", desc: "Maîtrise d'Adobe Creative Suite, du design d'identité de marque et de la communication visuelle." },
       ],
       experienceData: [
-        { title: "Développeur Web & Designer Freelance", org: "Indépendant", period: "2022 — Présent", desc: "Conception et développement de sites web, d'identités de marque et de produits numériques pour des clients de divers secteurs." },
-        { title: "Designer UI/UX", org: "Divers Projets", period: "2023 — Présent", desc: "Création de wireframes, de prototypes et de systèmes de design pour des applications web et mobiles." },
+        { title: "Ingénieur Logiciel", org: "Indépendant", period: "2024 — Présent", desc: "Développement de solutions logicielles avec des technologies modernes, axé sur les applications web et les systèmes évolutifs." },
+        { title: "Développeur Web", org: "Freelance", period: "2025 — Présent", desc: "Conception et développement de sites web modernes et réactifs pour des clients de divers secteurs." },
+        { title: "Designer UI/UX", org: "Freelance", period: "2025 — Présent", desc: "Création d'interfaces intuitives, de wireframes, de prototypes et de systèmes de design pour des applications web et mobiles." },
+        { title: "Designer Graphique", org: "Freelance", period: "2025 — Présent", desc: "Conception d'identités de marque, de logos, de supports marketing et de contenu visuel avec Adobe Creative Suite." },
       ],
-      certificationsData: [
-        { title: "Fondamentaux du Cloud Computing", org: "Certification en Ligne", period: "2024", desc: "Bases de l'infrastructure cloud, du déploiement et de l'architecture évolutive." },
-        { title: "Principes du Design UI/UX", org: "Cours de Design", period: "2023", desc: "Conception centrée utilisateur, prototypage et méthodologies de test d'utilisabilité." },
-        { title: "Maîtrise d'Adobe Creative Suite", org: "Adobe", period: "2022", desc: "Proficience avancée dans Photoshop, Illustrator et les flux de travail de design." },
-      ],
+      certificationsData: [],
     },
     services: {
       title: "Mes Services",

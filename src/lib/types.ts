@@ -2,7 +2,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  category: "website" | "graphic" | "branding" | "uiux" | "drawing";
+  category: "website" | "graphic" | "branding" | "drawing";
   technologies: string;
   liveDemo: string | null;
   githubLink: string | null;

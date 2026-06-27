@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import type { Project, ProjectCategory } from "@/lib/types";
 import { ProjectImageUploader } from "./project-image-uploader";
 
-const categories: ProjectCategory[] = ["website", "graphic", "branding", "uiux", "drawing"];
+const categories: ProjectCategory[] = ["website", "graphic", "branding", "drawing"];
 
 interface ProjectForm {
   id?: string;

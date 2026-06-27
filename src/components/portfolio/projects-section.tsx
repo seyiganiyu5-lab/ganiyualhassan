@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import type { Project, ProjectCategory } from "@/lib/types";
 import { isPdfUrl } from "@/components/admin/project-image-uploader";
 
-const categoryOrder: ProjectCategory[] = ["website", "graphic", "branding", "uiux", "drawing"];
+const categoryOrder: ProjectCategory[] = ["website", "graphic", "branding", "drawing"];
 
 /**
  * Artwork categories (flyers, posters, logos, illustrations) should be shown

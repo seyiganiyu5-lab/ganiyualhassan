@@ -29,8 +29,8 @@ bun run dev
 ## Admin dashboard
 
 - URL: `http://localhost:3000/admin`
-- Username: `ALHASSAN`
-- Password: `@Hassify1010`
+- Username: ``
+- Password: ``
 
 ## What's included
 
@@ -77,8 +77,8 @@ To deploy publicly so Google can index it:
 
 Set in `.env`:
 ```
-ADMIN_USERNAME=ALHASSAN
-ADMIN_PASSWORD=@Hassify1010
+ADMIN_USERNAME=
+ADMIN_PASSWORD=
 ```
 
 Change them by editing `.env` and restarting the dev server.

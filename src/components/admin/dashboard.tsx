@@ -1,115 +1,230 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { useT } from "@/lib/i18n/context";
-import { FolderGit2, Mail, Download, TrendingUp } from "lucide-react";
+import { animate, motion, useMotionValue, useTransform } from "framer-motion";
+import { ArrowRight, FileText, FolderPlus, Settings, UserCircle } from "lucide-react";
+import { useI18n } from "@/lib/i18n/context";
+import { EASE } from "@/components/site/motion";
+import { coverOf } from "@/lib/media";
+import type { AdminTab } from "./admin-view";
 
-interface Stats {
-  totalProjects: number;
-  totalMessages: number;
-  downloads: number;
+interface Msg {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  createdAt: string;
+  read: boolean;
+}
+interface Proj {
+  id: string;
+  title: string;
+  category: string;
+  featured: boolean;
+  images: string[];
+  createdAt: string;
 }
 
-export function AdminDashboard() {
-  const t = useT();
-  const [stats, setStats] = useState<Stats>({
-    totalProjects: 0,
-    totalMessages: 0,
-    downloads: 0,
-  });
-  const [recentMessages, setRecentMessages] = useState<
-    Array<{ id: string; name: string; email: string; subject: string; createdAt: string; read: boolean }>
-  >([]);
+/** Counts up from 0 once the number arrives. */
+function Count({ to }: { to: number }) {
+  const mv = useMotionValue(0);
+  const rounded = useTransform(mv, (v) => Math.round(v).toString());
+  useEffect(() => {
+    const c = animate(mv, to, { duration: 0.8, ease: EASE });
+    return () => c.stop();
+  }, [to, mv]);
+  return <motion.span>{rounded}</motion.span>;
+}
+
+const item = (i: number) => ({
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5, ease: EASE, delay: i * 0.05 },
+});
+
+export function AdminDashboard({ onNavigate }: { onNavigate: (t: AdminTab) => void }) {
+  const { t, locale } = useI18n();
+  const ui = t.admin.ui;
+  const [messages, setMessages] = useState<Msg[]>([]);
+  const [projects, setProjects] = useState<Proj[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    fetch("/api/stats")
-      .then((r) => r.json())
-      .then(setStats)
-      .catch(() => {});
-    fetch("/api/messages")
-      .then((r) => r.json())
-      .then((data) => setRecentMessages(data.slice(0, 5)))
-      .catch(() => {});
+    Promise.all([
+      fetch("/api/messages").then((r) => r.json()).catch(() => []),
+      fetch("/api/projects").then((r) => r.json()).catch(() => []),
+    ]).then(([m, p]) => {
+      if (Array.isArray(m)) setMessages(m);
+      if (Array.isArray(p)) setProjects(p);
+      setLoaded(true);
+    });
   }, []);
 
-  const cards = [
-    { label: t.admin.totalProjects, value: stats.totalProjects, icon: FolderGit2, color: "#FFC300" },
-    { label: t.admin.totalMessages, value: stats.totalMessages, icon: Mail, color: "#10b981" },
-    { label: t.admin.downloads, value: stats.downloads, icon: Download, color: "#a855f7" },
+  const unread = messages.filter((m) => !m.read).length;
+  const stats: { label: string; value: number; tab: AdminTab }[] = [
+    { label: t.admin.projects, value: projects.length, tab: "projects" },
+    { label: ui.featured, value: projects.filter((p) => p.featured).length, tab: "projects" },
+    { label: t.admin.messages, value: messages.length, tab: "messages" },
+    { label: ui.unread, value: unread, tab: "messages" },
   ];
+  const actions: { label: string; icon: typeof FileText; tab: AdminTab }[] = [
+    { label: ui.addProject, icon: FolderPlus, tab: "projects" },
+    { label: ui.updatePhoto, icon: UserCircle, tab: "hero-image" },
+    { label: ui.uploadCv, icon: FileText, tab: "cv" },
+    { label: ui.editContact, icon: Settings, tab: "settings" },
+  ];
+  const date = (s: string) =>
+    new Date(s).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-GB", { day: "numeric", month: "short" });
+  const recentProjects = [...projects]
+    .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
+    .slice(0, 4);
 
   return (
-    <div className="space-y-6">
-      {/* Stat cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {cards.map((card, i) => (
-          <motion.div
-            key={card.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.08 }}
-            className="relative overflow-hidden rounded-2xl glass border border-border p-5"
+    <div className="space-y-12">
+      <motion.div {...item(0)}>
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{ui.greeting}</h2>
+        <p className="mt-1 text-muted-foreground">{ui.greetingSub}</p>
+      </motion.div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border lg:grid-cols-4">
+        {stats.map((s, i) => (
+          <motion.button
+            key={s.label}
+            {...item(i + 1)}
+            onClick={() => onNavigate(s.tab)}
+            className="group bg-background p-5 text-left transition-colors hover:bg-muted/50"
           >
-            <div
-              className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-10 blur-2xl"
-              style={{ background: card.color }}
-            />
-            <div className="relative">
-              <span
-                className="flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-lg"
-                style={{ background: card.color }}
-              >
-                <card.icon className="h-5 w-5" />
-              </span>
-              <div className="mt-4 text-3xl font-black">{card.value}</div>
-              <div className="text-xs text-muted-foreground">{card.label}</div>
-            </div>
-          </motion.div>
+            <p className="text-sm text-muted-foreground">{s.label}</p>
+            <p className="mt-2 text-3xl font-semibold tracking-tight">
+              {loaded ? <Count to={s.value} /> : <span className="text-muted-foreground/40">–</span>}
+            </p>
+          </motion.button>
         ))}
       </div>
 
-      {/* Recent messages */}
-      <div className="rounded-2xl glass border border-border p-5">
-        <div className="mb-4 flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-[#FFC300]" />
-          <h3 className="font-bold">Recent Messages</h3>
+      {/* Quick actions */}
+      <section>
+        <SectionTitle>{ui.quickActions}</SectionTitle>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {actions.map((a, i) => (
+            <motion.button
+              key={a.label}
+              {...item(i + 5)}
+              onClick={() => onNavigate(a.tab)}
+              className="group flex items-center gap-3 rounded-xl border border-border p-4 text-left text-sm font-medium transition-colors hover:border-foreground/30"
+            >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                <a.icon className="h-4 w-4" />
+              </span>
+              {a.label}
+            </motion.button>
+          ))}
         </div>
-        {recentMessages.length === 0 ? (
-          <p className="py-8 text-center text-sm text-muted-foreground">{t.admin.noMessages}</p>
-        ) : (
-          <div className="space-y-2">
-            {recentMessages.map((msg) => (
-              <div
-                key={msg.id}
-                className="flex items-center gap-3 rounded-xl border border-border p-3 transition-colors hover:bg-muted/50"
-              >
-                <span
-                  className={`h-2 w-2 rounded-full ${msg.read ? "bg-muted-foreground" : "bg-[#FFC300]"}`}
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-semibold">{msg.subject || msg.name}</div>
-                  <div className="truncate text-xs text-muted-foreground">
-                    {msg.name} · {msg.email}
-                  </div>
-                </div>
-                <span className="text-xs text-muted-foreground">
-                  {new Date(msg.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      </section>
 
-      {/* Quick info */}
-      <div className="rounded-2xl gradient-border p-5">
-        <h3 className="mb-2 font-bold">Welcome to your dashboard</h3>
-        <p className="text-sm text-muted-foreground">
-          Manage your projects, messages, media, and site settings from this panel. Use the
-          sidebar to navigate between sections. Changes are saved to your database instantly.
-        </p>
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
+        {/* Recent messages */}
+        <section>
+          <SectionTitle action={() => onNavigate("messages")} actionLabel={ui.viewAll}>
+            {ui.recentMessages}
+          </SectionTitle>
+          {loaded && messages.length === 0 ? (
+            <Empty>{t.admin.noMessages}</Empty>
+          ) : (
+            <ul className="divide-y divide-border border-y border-border">
+              {messages.slice(0, 5).map((m, i) => (
+                <motion.li key={m.id} {...item(i + 9)}>
+                  <button
+                    onClick={() => onNavigate("messages")}
+                    className="flex w-full items-center gap-3 py-3 text-left transition-colors hover:bg-muted/40"
+                  >
+                    <span
+                      className={`h-2 w-2 shrink-0 rounded-full ${m.read ? "bg-transparent" : "bg-primary"}`}
+                      aria-label={m.read ? undefined : ui.unread}
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className={`block truncate text-sm ${m.read ? "" : "font-semibold"}`}>
+                        {m.subject || m.name}
+                      </span>
+                      <span className="block truncate text-xs text-muted-foreground">
+                        {m.name} · {m.email}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-xs text-muted-foreground">{date(m.createdAt)}</span>
+                  </button>
+                </motion.li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        {/* Recent projects */}
+        <section>
+          <SectionTitle action={() => onNavigate("projects")} actionLabel={ui.viewAll}>
+            {ui.recentProjects}
+          </SectionTitle>
+          {loaded && projects.length === 0 ? (
+            <Empty>{ui.noProjects}</Empty>
+          ) : (
+            <ul className="divide-y divide-border border-y border-border">
+              {recentProjects.map((p, i) => {
+                const cover = coverOf(p.images || []);
+                return (
+                  <motion.li key={p.id} {...item(i + 9)}>
+                    <button
+                      onClick={() => onNavigate("projects")}
+                      className="flex w-full items-center gap-3 py-3 text-left transition-colors hover:bg-muted/40"
+                    >
+                      <span className="h-10 w-12 shrink-0 overflow-hidden rounded-md bg-muted">
+                        {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium">{p.title}</span>
+                        <span className="block truncate text-xs text-muted-foreground">
+                          {t.projects.categories[p.category as keyof typeof t.projects.categories] ?? p.category}
+                          {p.featured && ` · ${ui.featured}`}
+                        </span>
+                      </span>
+                      <span className="shrink-0 text-xs text-muted-foreground">{date(p.createdAt)}</span>
+                    </button>
+                  </motion.li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
       </div>
     </div>
+  );
+}
+
+function SectionTitle({
+  children,
+  action,
+  actionLabel,
+}: {
+  children: React.ReactNode;
+  action?: () => void;
+  actionLabel?: string;
+}) {
+  return (
+    <div className="mb-4 flex items-baseline justify-between">
+      <h3 className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">{children}</h3>
+      {action && (
+        <button onClick={action} className="group inline-flex items-center gap-1 text-sm font-medium">
+          {actionLabel}
+          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+        </button>
+      )}
+    </div>
+  );
+}
+
+function Empty({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="rounded-xl border border-dashed border-border py-10 text-center text-sm text-muted-foreground">
+      {children}
+    </p>
   );
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 /**
  * File upload route — DUAL MODE.
@@ -54,7 +55,9 @@ function buildFilename(originalName: string, ext: string): string {
 
 // ─── GET — list all media assets ───────────────────────────────────────────
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
   try {
     const assets = await db.mediaAsset.findMany({
       orderBy: { createdAt: "desc" },
@@ -69,6 +72,8 @@ export async function GET() {
 // ─── POST — upload a file (base64 data URL) ────────────────────────────────
 
 export async function POST(request: NextRequest) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
   try {
     const body = await request.json();
     const dataUrl: string = body.dataUrl;
@@ -129,6 +134,8 @@ export async function POST(request: NextRequest) {
 // ─── DELETE — remove a media asset ─────────────────────────────────────────
 
 export async function DELETE(request: NextRequest) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");

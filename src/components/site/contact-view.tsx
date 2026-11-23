@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 import { useT } from "@/lib/i18n/context";
+import { EASE } from "./motion";
 import { telHref, whatsappHref } from "@/lib/media";
 
 const field =
@@ -69,8 +71,13 @@ export function ContactView({
             {t.site.contact.direct}
           </h2>
           <ul>
-            {channels.map((c) => (
-              <li key={c.label}>
+            {channels.map((c, i) => (
+              <motion.li
+                key={c.label}
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, ease: EASE, delay: 0.1 + i * 0.06 }}
+              >
                 <a
                   href={c.href}
                   target={c.href.startsWith("http") ? "_blank" : undefined}
@@ -83,7 +90,7 @@ export function ContactView({
                     <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground" />
                   </span>
                 </a>
-              </li>
+              </motion.li>
             ))}
             <li className="flex items-center justify-between gap-4 border-y border-border py-4">
               <span className="text-sm text-muted-foreground">{t.site.contact.basedIn}</span>
@@ -92,7 +99,11 @@ export function ContactView({
           </ul>
         </section>
 
-        <section>
+        <motion.section
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
+        >
           <h2 className="mb-4 text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">
             {t.site.contact.form}
           </h2>
@@ -127,7 +138,7 @@ export function ContactView({
               {sending ? t.contact.sending : t.contact.send}
             </button>
           </form>
-        </section>
+        </motion.section>
       </div>
     </div>
   );

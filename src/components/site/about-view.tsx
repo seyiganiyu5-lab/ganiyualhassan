@@ -5,6 +5,8 @@ import { ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import { useT } from "@/lib/i18n/context";
 import { generateCvPdf } from "@/lib/cv-pdf";
+import { motion } from "framer-motion";
+import { EASE, Reveal } from "./motion";
 
 interface Contact {
   name: string;
@@ -96,12 +98,19 @@ export function AboutView({
           </button>
         </div>
         {avatarUrl && (
-          <img
-            src={avatarUrl}
-            alt={contact.name}
-            className="aspect-[4/5] w-full max-w-xs rounded-2xl object-cover lg:order-none"
-            style={{ objectPosition: "50% 22%" }}
-          />
+          <motion.div
+            className="w-full max-w-xs overflow-hidden rounded-2xl"
+            initial={{ opacity: 0, clipPath: "inset(12% 12% 12% 12% round 16px)" }}
+            animate={{ opacity: 1, clipPath: "inset(0% 0% 0% 0% round 16px)" }}
+            transition={{ duration: 1, ease: EASE, delay: 0.15 }}
+          >
+            <img
+              src={avatarUrl}
+              alt={contact.name}
+              className="aspect-[4/5] w-full object-cover"
+              style={{ objectPosition: "50% 22%" }}
+            />
+          </motion.div>
         )}
       </div>
 
@@ -143,8 +152,10 @@ export function AboutView({
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mt-24">
-      <h2 className="mb-6 text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">{title}</h2>
-      {children}
+      <Reveal>
+        <h2 className="mb-6 text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">{title}</h2>
+      </Reveal>
+      <Reveal delay={0.08}>{children}</Reveal>
     </section>
   );
 }

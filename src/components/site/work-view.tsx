@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { EASE } from "./motion";
 import { useT } from "@/lib/i18n/context";
 import { cn } from "@/lib/utils";
 import { CATEGORIES } from "@/lib/media";
@@ -40,27 +42,41 @@ export function WorkView({
                 scroll={false}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-1.5 text-sm transition-colors",
+                  "relative inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-1.5 text-sm transition-colors",
                   isActive
-                    ? "border-foreground bg-foreground text-background"
+                    ? "border-foreground text-background"
                     : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground"
                 )}
               >
-                {c ? t.projects.categories[c] : t.projects.all}
-                <span className="text-xs opacity-60">{count(c)}</span>
+                {isActive && (
+                  <motion.span
+                    layoutId="filter-pill"
+                    className="absolute inset-0 rounded-full bg-foreground"
+                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                  />
+                )}
+                <span className="relative">{c ? t.projects.categories[c] : t.projects.all}</span>
+                <span className="relative text-xs opacity-60">{count(c)}</span>
               </Link>
             );
           })}
         </nav>
       )}
 
-      <div className="mt-10">
+      {/* Keyed by filter so switching category cross-fades the grid. */}
+      <motion.div
+        key={active ?? "all"}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: EASE }}
+        className="mt-10"
+      >
         {shown.length > 0 ? (
           <ProjectGrid projects={shown} />
         ) : (
           <p className="py-20 text-center text-muted-foreground">{t.site.work.empty}</p>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

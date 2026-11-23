@@ -181,7 +181,7 @@ export function AdminHeroImage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <span className="h-8 w-8 loader-ring rounded-full border-2 border-[#FFC300] border-t-transparent" />
+        <span className="h-8 w-8 loader-ring rounded-full border-2 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -196,7 +196,7 @@ export function AdminHeroImage() {
         className="rounded-2xl gradient-border p-5"
       >
         <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300]">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-brand-ink">
             <ImageIcon className="h-5 w-5" />
           </span>
           <div>
@@ -214,19 +214,19 @@ export function AdminHeroImage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.05 }}
-          className="rounded-2xl glass border border-border p-5"
+          className="rounded-2xl bg-card border border-border p-5"
         >
           <h3 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">
-            <Sparkles className="h-4 w-4 text-[#FFC300]" />
+            <Sparkles className="h-4 w-4 text-brand-ink" />
             {t.admin.heroImageCurrent}
           </h3>
 
           <div className="flex justify-center">
             <div className="relative w-full max-w-[280px]">
               {/* Ambient glow */}
-              <div className="absolute -inset-3 rounded-[1.5rem] bg-gradient-to-tr from-[#FFC300]/20 via-[#FFD60A]/15 to-transparent blur-2xl" />
+              
               {/* Frame */}
-              <div className="gradient-border relative overflow-hidden rounded-2xl shadow-xl">
+              <div className="gradient-border relative overflow-hidden rounded-2xl">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-muted">
                   {(pendingPreview || savedUrl) ? (
                     <img
@@ -235,8 +235,8 @@ export function AdminHeroImage() {
                       className="h-full w-full object-cover object-top"
                     />
                   ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-[#FFC300]/15 to-[#FFD60A]/5 p-6 text-center">
-                      <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#FFC300]/10 text-[#FFC300]">
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-primary/15 to-primary/5 p-6 text-center">
+                      <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-brand-ink">
                         <ImageIcon className="h-8 w-8" />
                       </span>
                       <p className="text-sm font-semibold text-foreground">
@@ -249,7 +249,7 @@ export function AdminHeroImage() {
                   )}
                   {isBusy && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/50 backdrop-blur-sm">
-                      <Loader2 className="h-7 w-7 animate-spin text-[#FFC300]" />
+                      <Loader2 className="h-7 w-7 animate-spin text-brand-ink" />
                       <span className="text-xs font-medium text-white">
                         {uploading ? t.admin.heroImageUploading : t.admin.heroImageSaving}
                       </span>
@@ -265,7 +265,7 @@ export function AdminHeroImage() {
                     className={
                       "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-semibold shadow-sm " +
                       (isCustom
-                        ? "border-[#FFC300]/40 bg-[#FFC300]/10 text-[#FFC300]"
+                        ? "border-foreground/30 bg-primary/10 text-brand-ink"
                         : "border-border bg-background text-muted-foreground")
                     }
                   >
@@ -306,7 +306,7 @@ export function AdminHeroImage() {
                 type="button"
                 onClick={handleSave}
                 disabled={isBusy}
-                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#FFC300] text-sm font-semibold text-[#000814] transition-transform hover:scale-[1.01] disabled:opacity-60"
+                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-primary-foreground disabled:opacity-60"
               >
                 {uploading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -335,7 +335,7 @@ export function AdminHeroImage() {
           {/* Helpful hint about seeing it live */}
           {!pendingFile && (
             <div className="mt-6 flex items-start gap-2 rounded-lg bg-muted/50 p-3 text-xs text-muted-foreground">
-              <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#FFC300]" />
+              <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-ink" />
               <span>{t.admin.heroImageLiveHint}</span>
             </div>
           )}
@@ -346,10 +346,10 @@ export function AdminHeroImage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="rounded-2xl glass border border-border p-5"
+          className="rounded-2xl bg-card border border-border p-5"
         >
           <h3 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">
-            <Upload className="h-4 w-4 text-[#FFC300]" />
+            <Upload className="h-4 w-4 text-brand-ink" />
             {t.admin.heroImageUpload}
           </h3>
 
@@ -370,16 +370,16 @@ export function AdminHeroImage() {
             className={
               "flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed p-8 text-center transition-all " +
               (dragOver
-                ? "border-[#FFC300] bg-[#FFC300]/5"
-                : "border-border hover:border-[#FFC300]/50 hover:bg-muted/30")
+                ? "border-primary bg-primary/5"
+                : "border-border hover:border-foreground/30 hover:bg-muted/30")
             }
           >
             <span
               className={
                 "flex h-14 w-14 items-center justify-center rounded-2xl transition-colors " +
                 (dragOver
-                  ? "bg-[#FFC300] text-[#000814]"
-                  : "bg-[#FFC300]/10 text-[#FFC300]")
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-primary/10 text-brand-ink")
               }
             >
               <Upload className="h-6 w-6" />
@@ -405,9 +405,9 @@ export function AdminHeroImage() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="mt-4 flex items-center gap-3 rounded-xl border border-[#FFC300]/30 bg-[#FFC300]/5 p-3"
+              className="mt-4 flex items-center gap-3 rounded-xl border border-foreground/30 bg-primary/5 p-3"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFC300]/10 text-[#FFC300]">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-ink">
                 <ImageIcon className="h-4 w-4" />
               </span>
               <div className="min-w-0 flex-1">
@@ -433,19 +433,19 @@ export function AdminHeroImage() {
             <p className="font-semibold text-foreground">How it works</p>
             <ul className="mt-2 space-y-1.5">
               <li className="flex gap-2">
-                <span className="text-[#FFC300]">1.</span>
+                <span className="text-brand-ink">1.</span>
                 <span>Pick an image above (or drag &amp; drop).</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-[#FFC300]">2.</span>
+                <span className="text-brand-ink">2.</span>
                 <span>Preview it on the left in the exact 4:5 frame used on the homepage.</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-[#FFC300]">3.</span>
+                <span className="text-brand-ink">3.</span>
                 <span>Click “{t.admin.heroImageSave}” — it uploads and applies in one step.</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-[#FFC300]">4.</span>
+                <span className="text-brand-ink">4.</span>
                 <span>Open the homepage and refresh to see your new portrait.</span>
               </li>
             </ul>

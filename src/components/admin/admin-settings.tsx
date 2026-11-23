@@ -46,9 +46,9 @@ export function AdminSettings() {
     <form onSubmit={handleSave} className="mx-auto max-w-3xl space-y-6">
       {/* Hero text — name + tagline. The hero IMAGE is managed in the
           dedicated "Hero Image" tab, so here we just point users there. */}
-      <section className="rounded-2xl glass border border-border p-5">
+      <section className="rounded-2xl bg-card border border-border p-5">
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <User className="h-4 w-4 text-[#FFC300]" />
+          <User className="h-4 w-4 text-brand-ink" />
           Homepage
         </h3>
         <div className="space-y-3">
@@ -65,15 +65,15 @@ export function AdminSettings() {
           />
 
           {/* Pointer card → dedicated Hero Image tab */}
-          <div className="flex items-center gap-3 rounded-xl border border-[#FFC300]/30 bg-[#FFC300]/5 p-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFC300]/10 text-[#FFC300]">
+          <div className="flex items-center gap-3 rounded-xl border border-foreground/30 bg-primary/5 p-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-ink">
               <ImageIcon className="h-4 w-4" />
             </span>
             <div className="min-w-0 flex-1 text-xs text-muted-foreground">
               <p className="font-semibold text-foreground">{t.admin.heroImageTitle}</p>
               <p className="mt-0.5">
                 Upload &amp; preview your hero portrait in the dedicated{" "}
-                <strong className="text-[#FFC300]">{t.admin.heroImage}</strong>{" "}
+                <strong className="text-brand-ink">{t.admin.heroImage}</strong>{" "}
                 tab.
               </p>
             </div>
@@ -82,9 +82,9 @@ export function AdminSettings() {
       </section>
 
       {/* Social links */}
-      <section className="rounded-2xl glass border border-border p-5">
+      <section className="rounded-2xl bg-card border border-border p-5">
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <Link2 className="h-4 w-4 text-[#FFC300]" />
+          <Link2 className="h-4 w-4 text-brand-ink" />
           {t.admin.socialLinks}
         </h3>
         <div className="space-y-3">
@@ -102,9 +102,9 @@ export function AdminSettings() {
       </section>
 
       {/* Contact info */}
-      <section className="rounded-2xl glass border border-border p-5">
+      <section className="rounded-2xl bg-card border border-border p-5">
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <Phone className="h-4 w-4 text-[#FFC300]" />
+          <Phone className="h-4 w-4 text-brand-ink" />
           {t.admin.contactInfo}
         </h3>
         <div className="space-y-3">
@@ -124,10 +124,10 @@ export function AdminSettings() {
       <button
         type="submit"
         disabled={saving}
-        className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FFC300] px-8 text-sm font-semibold text-[#000814] disabled:opacity-60"
+        className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-8 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >
         {saving ? (
-          <span className="h-4 w-4 loader-ring rounded-full border-2 border-[#000814] border-t-transparent" />
+          <span className="h-4 w-4 loader-ring rounded-full border-2 border-primary-foreground border-t-transparent" />
         ) : (
           <Save className="h-4 w-4" />
         )}
@@ -159,14 +159,14 @@ function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FFC300]/50"
+          className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-foreground/30"
         />
       ) : (
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+          className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
         />
       )}
     </div>

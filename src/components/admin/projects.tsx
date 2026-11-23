@@ -133,7 +133,7 @@ export function AdminProjects() {
         <p className="text-sm text-muted-foreground">
           {projects.length} {t.admin.projects.toLowerCase()}
           {projects.filter((p) => p.featured).length > 0 && (
-            <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-[#FFC300]/10 px-2 py-0.5 text-xs font-semibold text-[#FFC300]">
+            <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-brand-ink">
               <Star className="h-3 w-3 fill-current" />
               {projects.filter((p) => p.featured).length} featured
             </span>
@@ -141,7 +141,7 @@ export function AdminProjects() {
         </p>
         <button
           onClick={() => setEditing({ ...emptyForm })}
-          className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#FFC300] px-4 text-sm font-semibold text-[#000814] transition-transform hover:scale-105"
+          className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground"
         >
           <Plus className="h-4 w-4" />
           {t.admin.addProject}
@@ -161,7 +161,7 @@ export function AdminProjects() {
           <p className="text-sm text-muted-foreground">{t.admin.projectEmpty}</p>
           <button
             onClick={() => setEditing({ ...emptyForm })}
-            className="mt-1 inline-flex h-9 items-center gap-2 rounded-lg bg-[#FFC300] px-4 text-sm font-semibold text-[#000814] transition-transform hover:scale-105"
+            className="mt-1 inline-flex h-9 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground"
           >
             <Plus className="h-4 w-4" />
             {t.admin.addProject}
@@ -210,7 +210,7 @@ function ProjectAdminCard({
   const cover = project.images[0];
 
   return (
-    <div className="group overflow-hidden rounded-xl glass border border-border">
+    <div className="group overflow-hidden rounded-xl bg-card border border-border">
       <div className="relative aspect-video bg-muted">
         {cover ? (
           <img
@@ -220,12 +220,12 @@ function ProjectAdminCard({
             loading="lazy"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FFC300]/15 to-muted">
-            <FolderGit2 className="h-8 w-8 text-[#FFC300]/40" />
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/15 to-muted">
+            <FolderGit2 className="h-8 w-8 text-brand-ink/40" />
           </div>
         )}
         {project.featured && (
-          <span className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#FFC300] text-[#000814] shadow">
+          <span className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground shadow">
             <Star className="h-3 w-3 fill-white" />
           </span>
         )}
@@ -238,7 +238,7 @@ function ProjectAdminCard({
       <div className="p-3">
         <div className="flex items-start justify-between gap-2">
           <h4 className="text-sm font-bold leading-tight">{project.title}</h4>
-          <span className="shrink-0 rounded bg-[#FFC300]/10 px-1.5 py-0.5 text-[10px] font-semibold text-[#FFC300]">
+          <span className="shrink-0 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-brand-ink">
             {t.projects.categories[project.category]}
           </span>
         </div>
@@ -306,7 +306,7 @@ function ProjectFormModal({
         initial={{ scale: 0.95, y: 10 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 10 }}
-        className="relative z-10 max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl glass-strong border border-border p-6"
+        className="relative z-10 max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-card border border-border p-6"
       >
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-bold">
@@ -334,7 +334,7 @@ function ProjectFormModal({
               minLength={2}
               value={data.title}
               onChange={(e) => setData({ ...data, title: e.target.value })}
-              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
             />
           </div>
 
@@ -349,7 +349,7 @@ function ProjectFormModal({
               rows={3}
               value={data.description}
               onChange={(e) => setData({ ...data, description: e.target.value })}
-              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FFC300]/50"
+              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-foreground/30"
             />
           </div>
 
@@ -364,7 +364,7 @@ function ProjectFormModal({
                 onChange={(e) =>
                   setData({ ...data, category: e.target.value as ProjectCategory })
                 }
-                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
               >
                 {categories.map((c) => (
                   <option key={c} value={c}>
@@ -381,7 +381,7 @@ function ProjectFormModal({
                 value={data.technologies}
                 onChange={(e) => setData({ ...data, technologies: e.target.value })}
                 placeholder="React, Next.js, ..."
-                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
               />
             </div>
           </div>
@@ -397,7 +397,7 @@ function ProjectFormModal({
                 value={data.liveDemo}
                 onChange={(e) => setData({ ...data, liveDemo: e.target.value })}
                 placeholder="https://..."
-                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
               />
             </div>
             <div>
@@ -409,7 +409,7 @@ function ProjectFormModal({
                 value={data.githubLink}
                 onChange={(e) => setData({ ...data, githubLink: e.target.value })}
                 placeholder="https://github.com/..."
-                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+                className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
               />
             </div>
           </div>
@@ -426,7 +426,7 @@ function ProjectFormModal({
               type="checkbox"
               checked={data.featured}
               onChange={(e) => setData({ ...data, featured: e.target.checked })}
-              className="h-4 w-4 accent-[#FFC300]"
+              className="h-4 w-4 accent-primary"
             />
             <span className="text-sm">{t.admin.projectFeatured}</span>
           </label>
@@ -437,7 +437,7 @@ function ProjectFormModal({
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-lg bg-[#FFC300] text-sm font-semibold text-[#000814] transition-transform hover:scale-[1.01] disabled:opacity-60"
+            className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
             {saving ? (
               <>

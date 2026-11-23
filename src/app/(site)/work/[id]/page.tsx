@@ -10,8 +10,10 @@ async function load(id: string) {
   const all = await getProjects();
   const index = all.findIndex((p) => p.id === id);
   if (index === -1) return null;
-  const next = all.length > 1 ? all[(index + 1) % all.length] : null;
-  return { project: all[index], next };
+  const many = all.length > 1;
+  const next = many ? all[(index + 1) % all.length] : null;
+  const prev = many ? all[(index - 1 + all.length) % all.length] : null;
+  return { project: all[index], next, prev };
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
@@ -31,5 +33,5 @@ export default async function ProjectPage({ params }: Params) {
   const { id } = await params;
   const data = await load(id);
   if (!data) notFound();
-  return <ProjectView project={data.project} next={data.next} />;
+  return <ProjectView project={data.project} next={data.next} prev={data.prev} />;
 }

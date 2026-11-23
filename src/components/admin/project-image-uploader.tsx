@@ -188,20 +188,20 @@ export function ProjectImageUploader({
         className={
           "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-5 text-center transition-all " +
           (dragOver
-            ? "border-[#FFC300] bg-[#FFC300]/5"
-            : "border-border hover:border-[#FFC300]/50 hover:bg-muted/30")
+            ? "border-primary bg-primary/5"
+            : "border-border hover:border-foreground/30 hover:bg-muted/30")
         }
       >
         {uploading ? (
           <>
-            <Loader2 className="h-6 w-6 animate-spin text-[#FFC300]" />
+            <Loader2 className="h-6 w-6 animate-spin text-brand-ink" />
             <span className="text-xs font-medium text-muted-foreground">
               {t.admin.projectImagesUploading}
             </span>
           </>
         ) : (
           <>
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300]">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-brand-ink">
               <Upload className="h-5 w-5" />
             </span>
             <div>
@@ -241,7 +241,7 @@ export function ProjectImageUploader({
           if (!uploading) folderInputRef.current?.click();
         }}
         disabled={uploading}
-        className="inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#FFC300]/40 bg-[#FFC300]/5 text-xs font-semibold text-[#FFC300] transition-colors hover:bg-[#FFC300]/10 disabled:opacity-50"
+        className="inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg border border-foreground/30 bg-primary/5 text-xs font-semibold text-brand-ink transition-colors hover:bg-primary/10 disabled:opacity-50"
       >
         <FolderUp className="h-4 w-4" />
         {t.admin.projectImagesUploadFolder}
@@ -269,7 +269,7 @@ export function ProjectImageUploader({
                 }
               }}
               placeholder={t.admin.projectImagesAddUrlPlaceholder}
-              className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-xs outline-none focus:border-[#FFC300]/50"
+              className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-xs outline-none focus:border-foreground/30"
               disabled={uploading}
             />
           </div>
@@ -328,7 +328,7 @@ export function ProjectImageUploader({
 
                 {/* Cover badge */}
                 {i === 0 && (
-                  <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-[#FFC300] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#000814] shadow">
+                  <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-primary-foreground shadow">
                     <Star className="h-2.5 w-2.5 fill-current" />
                     {t.admin.projectImagesFirst}
                   </span>
@@ -374,7 +374,7 @@ export function ProjectImageUploader({
                       <button
                         type="button"
                         onClick={() => makeCover(i)}
-                        className="inline-flex h-6 items-center gap-1 rounded-md bg-[#FFC300] px-1.5 text-[9px] font-bold uppercase tracking-wide text-[#000814] transition-transform hover:scale-105"
+                        className="inline-flex h-6 items-center gap-1 rounded-md bg-primary px-1.5 text-[9px] font-bold uppercase tracking-wide text-primary-foreground"
                         title={t.admin.projectImagesMakeCover}
                       >
                         <Star className="h-2.5 w-2.5 fill-current" />

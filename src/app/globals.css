@@ -39,6 +39,7 @@
   --color-card: var(--card);
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
+  --color-brand-ink: var(--brand-ink);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -53,6 +54,8 @@
   --radius: 0.625rem;
   --brand: #ffc300;
   --brand-foreground: #111111;
+  /* Gold that stays readable as text on a light background */
+  --brand-ink: #9a6b00;
 
   --background: #fafaf8;
   --foreground: #141414;
@@ -90,6 +93,7 @@
 .dark {
   --brand: #ffc300;
   --brand-foreground: #111111;
+  --brand-ink: #ffc300;
 
   --background: #0c0c0d;
   --foreground: #ededeb;
@@ -157,7 +161,8 @@
   background-repeat: no-repeat;
   transition: background-size 0.25s ease, color 0.2s ease;
 }
-.link-underline:hover {
+.link-underline:hover,
+.group:hover .link-underline {
   background-size: 100% 1.5px;
 }
 
@@ -173,6 +178,56 @@
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
+}
+
+/*
+ * Intro overlay. A tiny inline script sets html[data-intro] before first
+ * paint on a visitor's first page view of the session, so the overlay
+ * never flashes for returning visitors. Failsafe hides it after 6s even
+ * if JavaScript never runs.
+ */
+/* Runs entirely in CSS so it starts on first paint, before any JS loads. */
+.intro-overlay {
+  display: none;
+}
+html[data-intro] .intro-overlay {
+  display: flex;
+  animation: intro-out 0.9s cubic-bezier(0.76, 0, 0.24, 1) 2.1s forwards;
+}
+/* A different animation name restarts the curtain immediately. */
+html[data-intro] .intro-overlay.is-skipping {
+  animation: intro-out-now 0.6s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+@keyframes intro-out-now {
+  from { clip-path: inset(0 0 0 0); }
+  to { clip-path: inset(0 0 100% 0); visibility: hidden; }
+}
+.intro-rise {
+  display: block;
+  transform: translateY(110%);
+  animation: intro-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.intro-line {
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: intro-line 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
+}
+.intro-fade {
+  opacity: 0;
+  animation: intro-fade 0.6s ease 0.75s forwards;
+}
+@keyframes intro-rise {
+  to { transform: translateY(0); }
+}
+@keyframes intro-line {
+  to { transform: scaleX(1); }
+}
+@keyframes intro-fade {
+  to { opacity: 1; }
+}
+@keyframes intro-out {
+  from { clip-path: inset(0 0 0 0); }
+  to { clip-path: inset(0 0 100% 0); visibility: hidden; }
 }
 
 /* ── Utilities still used by the admin panel (kept, but toned down) ── */

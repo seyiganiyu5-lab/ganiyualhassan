@@ -174,9 +174,9 @@ export function AdminCv() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       {/* Current CV */}
-      <div className="rounded-2xl glass border border-border p-6">
+      <div className="rounded-2xl bg-card border border-border p-6">
         <h3 className="mb-3 flex items-center gap-2 font-bold">
-          <FileText className="h-4 w-4 text-[#FFC300]" />
+          <FileText className="h-4 w-4 text-brand-ink" />
           {t.admin.currentCv}
         </h3>
         {loading ? (
@@ -198,7 +198,7 @@ export function AdminCv() {
                 href={cvUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-0.5 inline-flex items-center gap-1 text-xs text-[#FFC300] hover:underline"
+                className="mt-0.5 inline-flex items-center gap-1 text-xs text-brand-ink hover:underline"
               >
                 <ExternalLink className="h-3 w-3" />
                 View / download
@@ -225,7 +225,7 @@ export function AdminCv() {
         className="rounded-2xl gradient-border p-6"
       >
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <Upload className="h-4 w-4 text-[#FFC300]" />
+          <Upload className="h-4 w-4 text-brand-ink" />
           {t.admin.uploadCv}
         </h3>
         <div className="space-y-4">
@@ -252,13 +252,13 @@ export function AdminCv() {
             className={
               "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-8 text-center transition-all " +
               (dragOver
-                ? "border-[#FFC300] bg-[#FFC300]/5"
-                : "border-border hover:border-[#FFC300]/50 hover:bg-muted/30")
+                ? "border-primary bg-primary/5"
+                : "border-border hover:border-foreground/30 hover:bg-muted/30")
             }
           >
             {uploading ? (
               <>
-                <Loader2 className="h-8 w-8 animate-spin text-[#FFC300]" />
+                <Loader2 className="h-8 w-8 animate-spin text-brand-ink" />
                 <span className="text-sm font-medium text-muted-foreground">
                   Uploading…
                 </span>
@@ -277,7 +277,7 @@ export function AdminCv() {
               </>
             ) : (
               <>
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FFC300]/10 text-[#FFC300]">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-brand-ink">
                   <Upload className="h-6 w-6" />
                 </span>
                 <div>
@@ -305,7 +305,7 @@ export function AdminCv() {
             <div className="flex gap-2">
               <button
                 onClick={handleUpload}
-                className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#FFC300] text-sm font-semibold text-[#000814] transition-transform hover:scale-[1.01]"
+                className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground"
               >
                 <Upload className="h-4 w-4" />
                 {t.admin.uploadCv}

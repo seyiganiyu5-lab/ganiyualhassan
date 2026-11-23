@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { MotionConfig } from "framer-motion";
 import { I18nProvider } from "@/lib/i18n/context";
 
 /**
@@ -32,7 +33,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange={false}
     >
       <BlockCrossTabThemeSync />
-      <I18nProvider>{children}</I18nProvider>
+      {/* Honour the visitor's "reduce motion" system setting everywhere. */}
+      <MotionConfig reducedMotion="user">
+        <I18nProvider>{children}</I18nProvider>
+      </MotionConfig>
     </NextThemesProvider>
   );
 }

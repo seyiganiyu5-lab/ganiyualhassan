@@ -41,9 +41,9 @@ export function AdminSeo() {
 
   return (
     <form onSubmit={handleSave} className="mx-auto max-w-3xl space-y-6">
-      <section className="rounded-2xl glass border border-border p-5">
+      <section className="rounded-2xl bg-card border border-border p-5">
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <Search className="h-4 w-4 text-[#FFC300]" />
+          <Search className="h-4 w-4 text-brand-ink" />
           {t.admin.seoSettings}
         </h3>
         <div className="space-y-4">
@@ -54,7 +54,7 @@ export function AdminSeo() {
             <input
               value={settings.metaTitle || ""}
               onChange={(e) => update("metaTitle", e.target.value)}
-              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
               {(settings.metaTitle || "").length}/60 characters (recommended max)
@@ -68,7 +68,7 @@ export function AdminSeo() {
               rows={3}
               value={settings.metaDescription || ""}
               onChange={(e) => update("metaDescription", e.target.value)}
-              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-[#FFC300]/50"
+              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-foreground/30"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
               {(settings.metaDescription || "").length}/160 characters (recommended max)
@@ -82,7 +82,7 @@ export function AdminSeo() {
               value={settings.keywords || ""}
               onChange={(e) => update("keywords", e.target.value)}
               placeholder="Ganiyu, Software Engineer, Designer..."
-              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
             />
           </div>
           <div>
@@ -93,7 +93,7 @@ export function AdminSeo() {
               value={settings.ogImage || ""}
               onChange={(e) => update("ogImage", e.target.value)}
               placeholder="/uploads/... or https://..."
-              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
               Share image shown on WhatsApp, LinkedIn, Twitter (1200×630 recommended).
@@ -103,9 +103,9 @@ export function AdminSeo() {
       </section>
 
       {/* Indexing & ownership */}
-      <section className="rounded-2xl glass border border-border p-5">
+      <section className="rounded-2xl bg-card border border-border p-5">
         <h3 className="mb-4 flex items-center gap-2 font-bold">
-          <Search className="h-4 w-4 text-[#FFC300]" />
+          <Search className="h-4 w-4 text-brand-ink" />
           Site URL &amp; Google Verification
         </h3>
         <div className="space-y-4">
@@ -117,7 +117,7 @@ export function AdminSeo() {
               value={settings.siteUrl || ""}
               onChange={(e) => update("siteUrl", e.target.value)}
               placeholder="https://ganiyu-alhassan.com"
-              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
               Your live public URL. Used for canonical tags, the sitemap, robots.txt, and absolute
@@ -132,7 +132,7 @@ export function AdminSeo() {
               value={settings.googleVerification || ""}
               onChange={(e) => update("googleVerification", e.target.value)}
               placeholder="e.g. abc123def456..."
-              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-[#FFC300]/50"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
               In Google Search Console → Settings → Ownership verification → HTML tag, copy just the
@@ -144,7 +144,7 @@ export function AdminSeo() {
       </section>
 
       {/* Preview */}
-      <section className="rounded-2xl glass border border-border p-5">
+      <section className="rounded-2xl bg-card border border-border p-5">
         <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-muted-foreground">
           Search Engine Preview
         </h3>
@@ -165,7 +165,7 @@ export function AdminSeo() {
       <button
         type="submit"
         disabled={saving}
-        className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FFC300] px-8 text-sm font-semibold text-[#000814] disabled:opacity-60"
+        className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-8 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >
         {saving ? (
           <span className="h-4 w-4 loader-ring rounded-full border-2 border-white border-t-transparent" />

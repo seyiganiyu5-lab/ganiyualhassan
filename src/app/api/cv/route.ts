@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 // GET current CV URL
 export async function GET() {
@@ -14,6 +15,8 @@ export async function GET() {
 
 // POST to set CV URL (admin)
 export async function POST(request: NextRequest) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
   try {
     const body = await request.json();
     const cvUrl = String(body.cvUrl || "");
@@ -32,7 +35,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function DELETE() {
+export async function DELETE(request: NextRequest) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
   try {
     await db.setting.deleteMany({ where: { key: "cvUrl" } });
     return NextResponse.json({ success: true });

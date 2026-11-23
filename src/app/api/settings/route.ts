@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 const defaultSettings: Record<string, string> = {
   heroName: "Ganiyu Al-Hassan Oluwaseyi",
@@ -20,7 +21,9 @@ const defaultSettings: Record<string, string> = {
   ogImage: "", // absolute or root-relative URL to the Open Graph share image
 };
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
   try {
     const settings = await db.setting.findMany();
     const map: Record<string, string> = { ...defaultSettings };
@@ -35,6 +38,8 @@ export async function GET() {
 }
 
 export async function PUT(request: NextRequest) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
   try {
     const body = (await request.json()) as Record<string, string>;
     for (const [key, value] of Object.entries(body)) {

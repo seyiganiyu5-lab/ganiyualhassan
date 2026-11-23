@@ -3,6 +3,9 @@ import { db } from "@/lib/db";
 
 const DEFAULT_SITE_URL = "https://ganiyu-alhassan-portfolio.com";
 
+// Regenerate at most once an hour so projects added in admin appear without a redeploy.
+export const revalidate = 3600;
+
 function normalizeOrigin(url: string): string {
   if (!url) return DEFAULT_SITE_URL;
   try {

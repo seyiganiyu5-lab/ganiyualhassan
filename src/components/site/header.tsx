@@ -19,6 +19,19 @@ const links = [
   { href: "/contact", key: "contact" },
 ] as const;
 
+/** Brand wordmark detail: the hyphen in "Al-Hassan" is gold. */
+function withGoldHyphen(word: string) {
+  const i = word.indexOf("-");
+  if (i < 0) return word;
+  return (
+    <>
+      {word.slice(0, i)}
+      <span className="text-brand-ink">-</span>
+      {word.slice(i + 1)}
+    </>
+  );
+}
+
 /** Hides while scrolling down past the top, reappears on any scroll up. */
 function useHideOnScroll() {
   const [hidden, setHidden] = useState(false);
@@ -81,9 +94,9 @@ export function Header({ name }: { name: string }) {
       <div className="container-site flex h-16 items-center justify-between gap-4">
         <Link href="/" className="group flex items-center gap-2.5 text-sm font-semibold tracking-tight">
           <Logomark className="h-7 w-7 transition-transform duration-300 ease-out group-hover:-translate-y-0.5" />
-          <span>
+          <span className="font-display text-[15px] font-semibold tracking-[-0.03em]">
             {first}
-            <span className="hidden sm:inline"> {rest.slice(0, 1).join(" ")}</span>
+            <span className="hidden sm:inline"> {withGoldHyphen(rest[0] ?? "")}</span>
           </span>
         </Link>
 

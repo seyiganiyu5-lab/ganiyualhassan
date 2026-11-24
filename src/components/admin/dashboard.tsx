@@ -210,7 +210,7 @@ function SectionTitle({
 }) {
   return (
     <div className="mb-4 flex items-baseline justify-between">
-      <h3 className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">{children}</h3>
+      <h3 className="eyebrow !text-[11px]">{children}</h3>
       {action && (
         <button onClick={action} className="group inline-flex items-center gap-1 text-sm font-medium">
           {actionLabel}

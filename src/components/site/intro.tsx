@@ -5,8 +5,8 @@ import { useT } from "@/lib/i18n/context";
 import { Logomark } from "./logo";
 
 const SEEN_KEY = "intro-seen";
-/** Must match the CSS: 2.1s hold + 0.9s curtain (see .intro-overlay in globals.css). */
-export const INTRO_TOTAL_MS = 3000;
+/** Must match the CSS: 2.5s hold + 0.9s curtain (see .intro-overlay in globals.css). */
+export const INTRO_TOTAL_MS = 3400;
 const SKIP_MS = 600;
 
 /**
@@ -25,7 +25,10 @@ function finishIntro() {
   window.dispatchEvent(new Event("intro:done"));
 }
 
-/** First-visit intro: the name rises in, a gold line draws, then the curtain lifts. */
+/**
+ * First-visit intro: the logomark breaks through its bar, the name rises in,
+ * a gold line draws, then the curtain lifts.
+ */
 export function Intro({ name }: { name: string }) {
   const t = useT();
   const ref = useRef<HTMLDivElement>(null);
@@ -62,17 +65,13 @@ export function Intro({ name }: { name: string }) {
       className="intro-overlay fixed inset-0 z-[100] cursor-pointer flex-col items-center justify-center bg-background px-6"
     >
       <div className="text-center">
-        <span className="mb-6 block overflow-hidden">
-          <span className="intro-rise">
-            <Logomark className="mx-auto h-16 w-16 sm:h-20 sm:w-20" />
-          </span>
-        </span>
-        <p className="text-4xl font-semibold tracking-tight sm:text-6xl">
+        <Logomark animated className="mx-auto mb-6 h-24 w-24 sm:h-28 sm:w-28" />
+        <p className="font-display text-4xl font-semibold tracking-tight sm:text-6xl">
           {lines.map((line, i) => (
             <span key={i} className="block overflow-hidden pb-[0.08em]">
               <span
                 className={i === 1 ? "intro-rise text-muted-foreground" : "intro-rise"}
-                style={{ animationDelay: `${0.15 + i * 0.12}s` }}
+                style={{ animationDelay: `${0.85 + i * 0.12}s` }}
               >
                 {line}
               </span>
@@ -80,7 +79,7 @@ export function Intro({ name }: { name: string }) {
           ))}
         </p>
         <div className="intro-line mx-auto mt-6 h-px w-40 bg-primary" />
-        <p className="intro-fade mt-4 text-sm uppercase tracking-[0.2em] text-muted-foreground">{t.site.role}</p>
+        <p className="intro-fade eyebrow mt-4">{t.site.role}</p>
       </div>
       <button
         type="button"

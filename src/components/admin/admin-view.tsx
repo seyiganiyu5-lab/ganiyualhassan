@@ -33,6 +33,7 @@ import { AdminSeo } from "./admin-seo";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { EASE } from "@/components/site/motion";
+import { Logomark, Wordmark } from "@/components/site/logo";
 import { toast } from "sonner";
 
 export type AdminTab =
@@ -177,26 +178,28 @@ export function AdminView() {
     const field =
       "h-11 w-full rounded-lg border border-border bg-background px-3.5 text-sm outline-none transition-colors focus:border-foreground/40";
     return (
-      <div className="relative flex min-h-screen items-center justify-center bg-background p-4">
-        <div className="absolute right-4 top-4 flex items-center">
-          <LanguageSwitcher />
-          <ThemeToggle />
+      <div className="flex min-h-screen flex-col bg-background px-4 py-4">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 text-sm">
+            <Logomark className="h-6 w-6" />
+            <Wordmark name="Ganiyu Al-Hassan" />
+          </Link>
+          <div className="flex items-center">
+            <LanguageSwitcher />
+            <ThemeToggle />
+          </div>
         </div>
-        <Link
-          href="/"
-          className="absolute left-4 top-4 flex items-center gap-2 text-sm font-semibold tracking-tight"
-        >
-          <span className="h-2 w-2 rounded-full bg-primary" />
-          Ganiyu Al-Hassan
-        </Link>
 
+        <div className="flex flex-1 items-center justify-center py-10">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: EASE }}
           className="w-full max-w-sm"
         >
-          <h1 className="text-2xl font-semibold tracking-tight">{t.admin.login}</h1>
+          <Logomark animated className="mb-6 h-16 w-16" />
+          <p className="eyebrow mb-2">Admin</p>
+          <h1 className="text-3xl font-semibold tracking-tight">{t.admin.login}</h1>
           <p className="mt-1.5 text-sm text-muted-foreground">{t.admin.ui.signInHint}</p>
 
           <form onSubmit={handleLogin} className="mt-8 space-y-4">
@@ -242,6 +245,7 @@ export function AdminView() {
             </button>
           </form>
         </motion.div>
+        </div>
       </div>
     );
   }
@@ -252,7 +256,7 @@ export function AdminView() {
       {groups.map((g, gi) => (
         <div key={gi}>
           {g.label && (
-            <p className="mb-1.5 px-3 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+            <p className="eyebrow mb-1.5 px-3 !text-[11px]">
               {g.label}
             </p>
           )}
@@ -296,10 +300,10 @@ export function AdminView() {
   );
 
   const brand = (
-    <Link href="/" className="flex items-center gap-2.5 text-sm font-semibold tracking-tight">
-      <span className="h-2 w-2 rounded-full bg-primary" />
-      Ganiyu Al-Hassan
-      <span className="rounded-full border border-border px-1.5 py-px text-[10px] font-medium text-muted-foreground">
+    <Link href="/" className="flex items-center gap-2.5 text-sm">
+      <Logomark className="h-6 w-6" />
+      <Wordmark name="Ganiyu Al-Hassan" />
+      <span className="rounded-full border border-border px-1.5 py-px font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
         Admin
       </span>
     </Link>

@@ -132,7 +132,7 @@ export function HomeView({
 export function SectionHeader({ title, href, link }: { title: string; href?: string; link?: string }) {
   return (
     <div className="mb-8 flex items-baseline justify-between gap-4">
-      <h2 className="text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">{title}</h2>
+      <h2 className="eyebrow">{title}</h2>
       {href && link && (
         <Link href={href} className="group inline-flex items-center gap-1 text-sm font-medium">
           <span className="link-underline">{link}</span>

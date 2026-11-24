@@ -26,15 +26,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const base = normalizeOrigin(siteUrl);
 
-  // Single-page portfolio — the homepage is the primary (and only) indexable URL.
-  // Sections (#about, #projects, #cv, #services, #contact) are anchors, not pages,
-  // so they should NOT be separate sitemap entries.
+  let projects: { id: string; updatedAt: Date }[] = [];
+  try {
+    projects = await db.project.findMany({ select: { id: true, updatedAt: true } });
+  } catch {
+    // no projects in sitemap if the DB is unavailable
+  }
+
+  const pages: MetadataRoute.Sitemap = [
+    { url: `${base}/`, lastModified, changeFrequency: "monthly", priority: 1 },
+    { url: `${base}/work`, lastModified, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${base}/about`, lastModified, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/contact`, lastModified, changeFrequency: "yearly", priority: 0.5 },
+  ];
+
   return [
-    {
-      url: `${base}/`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 1,
-    },
+    ...pages,
+    ...projects.map((p) => ({
+      url: `${base}/work/${p.id}`,
+      lastModified: p.updatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
   ];
 }

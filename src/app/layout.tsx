@@ -76,7 +76,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase: siteUrl ? new URL(siteUrl) : undefined,
-    title,
+    title: { default: title, template: `%s — ${s.heroName || DEFAULTS.heroName}` },
     description,
     keywords,
     authors: [{ name: s.heroName || DEFAULTS.heroName }],

@@ -31,9 +31,8 @@ import { AdminCv } from "./admin-cv";
 import { AdminMedia } from "./admin-media";
 import { AdminSettings } from "./admin-settings";
 import { AdminSeo } from "./admin-seo";
-import { LanguageSwitcher } from "@/components/portfolio/language-switcher";
-import { ThemeToggle } from "@/components/portfolio/theme-toggle";
-import { ParticleBackground } from "@/components/portfolio/particle-background";
+import { LanguageSwitcher } from "@/components/site/language-switcher";
+import { ThemeToggle } from "@/components/site/theme-toggle";
 import { toast } from "sonner";
 
 export function AdminView() {
@@ -109,7 +108,6 @@ export function AdminView() {
   if (!authed) {
     return (
       <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-4">
-        <ParticleBackground />
         {/* Top-right controls */}
         <div className="absolute right-4 top-4 z-20 flex items-center gap-2">
           <LanguageSwitcher />

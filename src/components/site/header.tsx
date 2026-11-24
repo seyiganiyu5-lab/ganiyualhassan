@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./language-switcher";
 import { EASE } from "./motion";
+import { Search } from "lucide-react";
+import { useOpenCommandMenu } from "./command-menu";
 
 const links = [
   { href: "/work", key: "work" },
@@ -34,6 +36,30 @@ function useHideOnScroll() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return { hidden, scrolled };
+}
+
+function SearchButton() {
+  const t = useT();
+  const open = useOpenCommandMenu();
+  const [mod, setMod] = useState("Ctrl");
+  useEffect(() => {
+    if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) setMod("⌘");
+  }, []);
+  return (
+    <button
+      type="button"
+      onClick={open}
+      aria-label={t.site.palette.open}
+      title={`${t.site.palette.open} (${mod} K)`}
+      className="flex h-8 items-center gap-2 rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground max-sm:w-8 max-sm:justify-center sm:border sm:border-border sm:pl-3 sm:pr-1.5"
+    >
+      <Search className="h-4 w-4" />
+      <span className="hidden text-xs lg:inline">{t.site.palette.open}</span>
+      <kbd className="hidden rounded-full bg-muted px-2 py-0.5 font-mono text-[10px] text-muted-foreground sm:inline">
+        {mod} K
+      </kbd>
+    </button>
+  );
 }
 
 export function Header({ name }: { name: string }) {
@@ -86,6 +112,7 @@ export function Header({ name }: { name: string }) {
               );
             })}
           </nav>
+          <SearchButton />
           <div className="hidden items-center sm:flex">
             <span className="mx-1 h-4 w-px bg-border" />
             <LanguageSwitcher />

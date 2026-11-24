@@ -5,6 +5,7 @@ import { useT } from "@/lib/i18n/context";
 import { whatsappHref } from "@/lib/media";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./language-switcher";
+import { Logomark } from "./logo";
 
 export function Footer({
   name,
@@ -60,8 +61,11 @@ export function Footer({
           </ul>
         </div>
         <div className="mt-8 flex items-center justify-between gap-4 text-muted-foreground">
-          <p>
-            © {year} {name}. {t.site.footer.rights}
+          <p className="flex items-center gap-2.5">
+            <Logomark className="h-6 w-6" />
+            <span>
+              © {year} {name}. {t.site.footer.rights}
+            </span>
           </p>
           <div className="flex items-center sm:hidden">
             <LanguageSwitcher />

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { EASE, Reveal, WordReveal, useIntroDone } from "./motion";
+import { HeroCard } from "./hero-card";
 import type { Project } from "@/lib/types";
 import { ProjectGrid } from "./project-card";
 
@@ -28,18 +29,17 @@ export function HomeView({
   return (
     <>
       {/* Hero */}
-      <section className="container-site pt-16 pb-20 sm:pt-24 sm:pb-28">
-        {avatarUrl && (
-          <motion.img
-            src={avatarUrl}
-            alt={name}
-            className="mb-8 h-16 w-16 rounded-full object-cover"
-            style={{ objectPosition: "50% 22%" }}
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={ready ? { opacity: 1, scale: 1 } : undefined}
-            transition={{ duration: 0.6, ease: EASE }}
-          />
-        )}
+      <section className="container-site grid grid-cols-1 items-center gap-14 pt-12 pb-20 sm:pt-20 sm:pb-28 lg:grid-cols-[1fr_auto] lg:gap-10">
+        {/* 3D card — first on phones, right-hand column on desktop */}
+        <motion.div
+          className="lg:order-2"
+          initial={{ opacity: 0, y: 24, scale: 0.96 }}
+          animate={ready ? { opacity: 1, y: 0, scale: 1 } : undefined}
+          transition={{ duration: 0.9, ease: EASE, delay: 0.2 }}
+        >
+          <HeroCard name={name} avatarUrl={avatarUrl} />
+        </motion.div>
+        <div className="lg:order-1">
         <h1 className="max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
           <WordReveal text={name} play={ready} delay={0.05} className="block" />
           <WordReveal text={`${t.site.role}.`} play={ready} delay={0.25} className="block text-muted-foreground" />
@@ -60,6 +60,7 @@ export function HomeView({
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </motion.div>
+        </div>
       </section>
 
       {/* Selected work */}

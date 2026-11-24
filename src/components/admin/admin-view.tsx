@@ -229,7 +229,7 @@ export function AdminView() {
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   className="absolute right-1.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? t.admin.ui.hidePassword : t.admin.ui.showPassword}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -353,7 +353,7 @@ export function AdminView() {
                 <button
                   onClick={() => setMenuOpen(false)}
                   className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
-                  aria-label="Close menu"
+                  aria-label={t.admin.ui.closeMenu}
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -415,7 +415,17 @@ export function AdminView() {
               className="mx-auto w-full max-w-5xl p-4 sm:p-8"
             >
               {activeTab === "dashboard" && <AdminDashboard onNavigate={setActiveTab} />}
-              {activeTab === "hero-image" && <AdminHeroImage />}
+              {activeTab === "hero-image" && (
+                <div className="space-y-12">
+                  <AdminHeroImage />
+                  <AdminHeroImage
+                    settingKey="aboutImageUrl"
+                    title={t.admin.aboutImageTitle}
+                    subtitle={t.admin.aboutImageSubtitle}
+                    liveHint={t.admin.aboutImageLiveHint}
+                  />
+                </div>
+              )}
               {activeTab === "projects" && <AdminProjects />}
               {activeTab === "messages" && <AdminMessages />}
               {activeTab === "cv" && <AdminCv />}

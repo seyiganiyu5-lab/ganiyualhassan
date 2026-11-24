@@ -114,6 +114,21 @@ export function AboutView({
         )}
       </div>
 
+      <Block title={t.site.about.venture}>
+        <div className="rounded-2xl border border-border p-6 sm:p-8">
+          <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t.site.about.hassifyRole}</h3>
+          <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">{t.site.about.hassifyIntro}</p>
+          <ul className="mt-8 grid grid-cols-1 gap-x-10 sm:grid-cols-2">
+            {t.site.about.hassifyItems.map((s) => (
+              <li key={s.title} className="border-t border-border py-5">
+                <p className="font-medium">{s.title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Block>
+
       <Block title={t.site.about.experience}>
         <Timeline items={t.cv.experienceData} />
       </Block>

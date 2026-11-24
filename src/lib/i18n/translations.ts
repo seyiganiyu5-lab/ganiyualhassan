@@ -185,7 +185,7 @@ export const translations = {
       backToTop: "Back to top",
     },
     site: {
-      nav: { work: "Work", about: "About", contact: "Contact" },
+      nav: { work: "Work", about: "About", contact: "Contact", label: "Main" },
       role: "Software engineer & designer",
       home: {
         intro:
@@ -222,6 +222,16 @@ export const translations = {
         services: "Services",
         downloadCv: "Download CV",
         preparing: "Preparing…",
+        venture: "Founder",
+        hassifyRole: "Founder of Hassify",
+        hassifyIntro:
+          "Hassify is the company I founded to help people work smarter with technology and get hired faster.",
+        hassifyItems: [
+          { title: "AI laptop assistance", desc: "Hands-on help setting up and getting the most from AI tools on your laptop." },
+          { title: "ATS-ready résumés", desc: "A platform that builds résumés and cover letters that pass applicant tracking systems." },
+          { title: "Graphic design", desc: "Brand, social media and print design for clients." },
+          { title: "Software engineering", desc: "Websites and software built to fit each client." },
+        ],
       },
       contact: {
         title: "Contact",
@@ -313,6 +323,9 @@ export const translations = {
       heroImageSelectFirst: "Select an image first",
       heroImagePreview: "Preview",
       heroImageLiveHint: "Tip: open the homepage in a new tab and refresh to see your updated photo.",
+      aboutImageTitle: "About Page Photo",
+      aboutImageSubtitle: "This photo appears on your About page. It is separate from the homepage photo. Reset it to go back to the default portrait.",
+      aboutImageLiveHint: "Tip: open the About page in a new tab and refresh to see your updated photo.",
       projectImagesTitle: "Project Images",
       projectImagesDrop: "Drag & drop images here, or click to browse",
       projectImagesFormats: "JPG, PNG, or WebP — up to 10 MB each",
@@ -374,7 +387,7 @@ export const translations = {
         signInHint: "Sign in to manage your portfolio.",
         tooManyAttempts: "Too many attempts. Please wait a few minutes and try again.",
         notConfigured: "Admin sign-in isn't set up on this server yet.",
-        menu: "Menu",
+        menu: "Menu", closeMenu: "Close menu", showPassword: "Show password", hidePassword: "Hide password",
       },
     },
   },
@@ -562,7 +575,7 @@ export const translations = {
       backToTop: "Retour en haut",
     },
     site: {
-      nav: { work: "Projets", about: "À propos", contact: "Contact" },
+      nav: { work: "Projets", about: "À propos", contact: "Contact", label: "Principal" },
       role: "Ingénieur logiciel & designer",
       home: {
         intro:
@@ -599,6 +612,16 @@ export const translations = {
         services: "Services",
         downloadCv: "Télécharger le CV",
         preparing: "Préparation…",
+        venture: "Fondateur",
+        hassifyRole: "Fondateur de Hassify",
+        hassifyIntro:
+          "Hassify est l’entreprise que j’ai fondée pour aider chacun à mieux travailler avec la technologie et à décrocher un emploi plus vite.",
+        hassifyItems: [
+          { title: "Assistance IA sur ordinateur", desc: "Une aide concrète pour installer et tirer le meilleur des outils d’IA sur votre ordinateur." },
+          { title: "CV compatibles ATS", desc: "Une plateforme qui crée des CV et des lettres de motivation qui passent les logiciels de recrutement (ATS)." },
+          { title: "Design graphique", desc: "Identité de marque, réseaux sociaux et print pour les clients." },
+          { title: "Génie logiciel", desc: "Sites web et logiciels conçus sur mesure pour chaque client." },
+        ],
       },
       contact: {
         title: "Contact",
@@ -690,6 +713,9 @@ export const translations = {
       heroImageSelectFirst: "Sélectionnez d'abord une image",
       heroImagePreview: "Aperçu",
       heroImageLiveHint: "Astuce : ouvrez la page d'accueil dans un nouvel onglet et rafraîchissez pour voir votre photo mise à jour.",
+      aboutImageTitle: "Photo de la page À propos",
+      aboutImageSubtitle: "Cette photo apparaît sur votre page À propos. Elle est indépendante de la photo d’accueil. Réinitialisez-la pour revenir au portrait par défaut.",
+      aboutImageLiveHint: "Astuce : ouvrez la page À propos dans un nouvel onglet et rafraîchissez pour voir votre photo mise à jour.",
       projectImagesTitle: "Images du Projet",
       projectImagesDrop: "Glissez-déposez des images ici, ou cliquez pour parcourir",
       projectImagesFormats: "JPG, PNG ou WebP — jusqu'à 10 Mo chacune",
@@ -751,7 +777,7 @@ export const translations = {
         signInHint: "Connectez-vous pour gérer votre portfolio.",
         tooManyAttempts: "Trop de tentatives. Patientez quelques minutes puis réessayez.",
         notConfigured: "La connexion admin n'est pas encore configurée sur ce serveur.",
-        menu: "Menu",
+        menu: "Menu", closeMenu: "Fermer le menu", showPassword: "Afficher le mot de passe", hidePassword: "Masquer le mot de passe",
       },
     },
   },

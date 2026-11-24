@@ -101,7 +101,7 @@ export function Header({ name }: { name: string }) {
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-3">
-          <nav className="flex items-center gap-0.5 sm:gap-1" aria-label="Main">
+          <nav className="flex items-center gap-0.5 sm:gap-1" aria-label={t.site.nav.label}>
             {links.map((l) => {
               const active = pathname === l.href || pathname.startsWith(`${l.href}/`);
               return (

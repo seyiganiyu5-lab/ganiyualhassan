@@ -11,6 +11,7 @@ import { LanguageSwitcher } from "./language-switcher";
 import { EASE } from "./motion";
 import { Search } from "lucide-react";
 import { useOpenCommandMenu } from "./command-menu";
+import { Logomark } from "./logo";
 
 const links = [
   { href: "/work", key: "work" },
@@ -79,7 +80,7 @@ export function Header({ name }: { name: string }) {
     >
       <div className="container-site flex h-16 items-center justify-between gap-4">
         <Link href="/" className="group flex items-center gap-2.5 text-sm font-semibold tracking-tight">
-          <span className="h-2 w-2 rounded-full bg-primary transition-transform duration-300 group-hover:scale-150" />
+          <Logomark className="h-7 w-7 transition-transform duration-300 ease-out group-hover:-translate-y-0.5" />
           <span>
             {first}
             <span className="hidden sm:inline"> {rest.slice(0, 1).join(" ")}</span>

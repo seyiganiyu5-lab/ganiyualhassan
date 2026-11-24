@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useT } from "@/lib/i18n/context";
+import { Logomark } from "./logo";
 
 const SEEN_KEY = "intro-seen";
 /** Must match the CSS: 2.1s hold + 0.9s curtain (see .intro-overlay in globals.css). */
@@ -61,6 +62,11 @@ export function Intro({ name }: { name: string }) {
       className="intro-overlay fixed inset-0 z-[100] cursor-pointer flex-col items-center justify-center bg-background px-6"
     >
       <div className="text-center">
+        <span className="mb-6 block overflow-hidden">
+          <span className="intro-rise">
+            <Logomark className="mx-auto h-16 w-16 sm:h-20 sm:w-20" />
+          </span>
+        </span>
         <p className="text-4xl font-semibold tracking-tight sm:text-6xl">
           {lines.map((line, i) => (
             <span key={i} className="block overflow-hidden pb-[0.08em]">

@@ -38,6 +38,8 @@ export function CommandMenu({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const router = useRouter();
   const { resolvedTheme, setTheme } = useTheme();
   const { t, locale, setLocale } = useI18n();
@@ -68,6 +70,8 @@ export function CommandMenu({
   return (
     <OpenContext.Provider value={() => setOpen(true)}>
       {children}
+      {/* Client-only: avoids server/client id mismatches in the hidden dialog */}
+      {mounted && (
       <CommandDialog open={open} onOpenChange={setOpen} title={p.open} description={p.placeholder} className="sm:max-w-lg">
         <CommandInput placeholder={p.placeholder} />
         <CommandList className="max-h-[min(60vh,420px)]">
@@ -139,6 +143,7 @@ export function CommandMenu({
           </CommandGroup>
         </CommandList>
       </CommandDialog>
+      )}
     </OpenContext.Provider>
   );
 }

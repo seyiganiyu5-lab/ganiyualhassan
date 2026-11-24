@@ -153,7 +153,7 @@ function Block({ title, children }: { title: string; children: React.ReactNode }
   return (
     <section className="mt-24">
       <Reveal>
-        <h2 className="mb-6 text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">{title}</h2>
+        <h2 className="mb-6 eyebrow">{title}</h2>
       </Reveal>
       <Reveal delay={0.08}>{children}</Reveal>
     </section>

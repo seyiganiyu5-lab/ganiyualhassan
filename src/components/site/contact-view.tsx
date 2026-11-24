@@ -71,7 +71,7 @@ export function ContactView({
 
       <div className="mt-14 grid grid-cols-1 gap-16 lg:grid-cols-2">
         <section>
-          <h2 className="mb-4 text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">
+          <h2 className="mb-4 eyebrow">
             {t.site.contact.direct}
           </h2>
           <ul>
@@ -108,7 +108,7 @@ export function ContactView({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
         >
-          <h2 className="mb-4 text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">
+          <h2 className="mb-4 eyebrow">
             {t.site.contact.form}
           </h2>
           <form onSubmit={submit} className="relative space-y-4">

@@ -72,7 +72,8 @@ export async function generateMetadata(): Promise<Metadata> {
     .split(",")
     .map((k) => k.trim())
     .filter(Boolean);
-  const ogImage = s.ogImage || s.avatarUrl || undefined;
+  // A custom image set in admin wins; otherwise use the branded preview card.
+  const ogImage = s.ogImage || "/og.png";
   const canonical = siteUrl ? `${siteUrl}/` : undefined;
 
   const verification: Record<string, string> = {};

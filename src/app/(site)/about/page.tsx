@@ -11,7 +11,7 @@ export default async function AboutPage() {
   const s = await getSettings();
   return (
     <AboutView
-      avatarUrl={s.avatarUrl}
+      avatarUrl={s.aboutImageUrl || s.avatarUrl}
       cvUrl={s.cvUrl}
       contact={{ name: s.heroName, email: s.email, phone: s.phone, linkedin: s.linkedin }}
     />

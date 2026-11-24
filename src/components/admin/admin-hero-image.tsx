@@ -18,7 +18,21 @@ import { toast } from "sonner";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 
-export function AdminHeroImage() {
+/**
+ * Upload / replace / reset a photo stored in one settings key.
+ * Used for the homepage hero (avatarUrl) and the About page (aboutImageUrl).
+ */
+export function AdminHeroImage({
+  settingKey = "avatarUrl",
+  title,
+  subtitle,
+  liveHint,
+}: {
+  settingKey?: "avatarUrl" | "aboutImageUrl";
+  title?: string;
+  subtitle?: string;
+  liveHint?: string;
+} = {}) {
   const t = useT();
 
   // The hero image URL currently saved in the database (settings.avatarUrl).
@@ -44,7 +58,7 @@ export function AdminHeroImage() {
     fetch("/api/settings")
       .then((r) => r.json())
       .then((s: Record<string, string>) => {
-        setSavedUrl(s.avatarUrl || "");
+        setSavedUrl(s[settingKey] || "");
       })
       .catch(() => {
         /* ignore */
@@ -137,7 +151,7 @@ export function AdminHeroImage() {
       const setRes = await fetch("/api/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ avatarUrl: uploadedUrl }),
+        body: JSON.stringify({ [settingKey]: uploadedUrl }),
       });
       if (!setRes.ok) throw new Error("Failed to save settings");
 
@@ -161,7 +175,7 @@ export function AdminHeroImage() {
       const res = await fetch("/api/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ avatarUrl: "" }),
+        body: JSON.stringify({ [settingKey]: "" }),
       });
       if (!res.ok) throw new Error("Failed to reset");
       setSavedUrl("");
@@ -200,9 +214,9 @@ export function AdminHeroImage() {
             <ImageIcon className="h-5 w-5" />
           </span>
           <div>
-            <h2 className="text-lg font-bold">{t.admin.heroImageTitle}</h2>
+            <h2 className="text-lg font-bold">{title ?? t.admin.heroImageTitle}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t.admin.heroImageSubtitle}
+              {subtitle ?? t.admin.heroImageSubtitle}
             </p>
           </div>
         </div>
@@ -336,7 +350,7 @@ export function AdminHeroImage() {
           {!pendingFile && (
             <div className="mt-6 flex items-start gap-2 rounded-lg bg-muted/50 p-3 text-xs text-muted-foreground">
               <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-ink" />
-              <span>{t.admin.heroImageLiveHint}</span>
+              <span>{liveHint ?? t.admin.heroImageLiveHint}</span>
             </div>
           )}
         </motion.section>

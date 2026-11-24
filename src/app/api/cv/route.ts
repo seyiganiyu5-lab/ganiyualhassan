@@ -19,7 +19,11 @@ export async function POST(request: NextRequest) {
   if (denied) return denied;
   try {
     const body = await request.json();
-    const cvUrl = String(body.cvUrl || "");
+    const cvUrl = String(body.cvUrl || "").trim();
+    // Only our own uploads or an https link — never javascript: or data: URLs.
+    if (cvUrl && !/^(\/uploads\/[\w.\-]+|https:\/\/\S+)$/.test(cvUrl)) {
+      return NextResponse.json({ error: "Invalid CV link" }, { status: 400 });
+    }
 
     const existing = await db.setting.findUnique({ where: { key: "cvUrl" } });
     if (existing) {

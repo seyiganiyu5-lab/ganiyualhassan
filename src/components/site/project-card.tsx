@@ -15,7 +15,7 @@ export function ProjectCard({ project, priority }: { project: Project; priority?
 
   return (
     <Link href={`/work/${project.id}`} className="group block">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-muted">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-muted ring-1 ring-transparent transition-[box-shadow,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 group-hover:shadow-[0_24px_60px_-24px] group-hover:shadow-primary/50 group-hover:ring-primary/40 group-focus-visible:ring-primary">
         {cover ? (
           <img
             src={cover}

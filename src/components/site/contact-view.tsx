@@ -23,7 +23,7 @@ export function ContactView({
   whatsapp: string;
 }) {
   const t = useT();
-  const empty = { name: "", email: "", subject: "", message: "" };
+  const empty = { name: "", email: "", subject: "", message: "", website: "" };
   const [form, setForm] = useState(empty);
   const [sending, setSending] = useState(false);
 
@@ -47,6 +47,10 @@ export function ContactView({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+      if (res.status === 429) {
+        toast.error(t.site.contact.tooMany);
+        return;
+      }
       if (!res.ok) throw new Error(String(res.status));
       toast.success(t.contact.success);
       setForm(empty);
@@ -107,21 +111,23 @@ export function ContactView({
           <h2 className="mb-4 text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">
             {t.site.contact.form}
           </h2>
-          <form onSubmit={submit} className="space-y-4">
+          <form onSubmit={submit} className="relative space-y-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Label text={t.contact.name}>
-                <input required name="name" autoComplete="name" value={form.name} onChange={set("name")} className={field} />
+                <input required maxLength={100} name="name" autoComplete="name" value={form.name} onChange={set("name")} className={field} />
               </Label>
               <Label text={t.contact.emailLabel}>
-                <input required type="email" name="email" autoComplete="email" value={form.email} onChange={set("email")} className={field} />
+                <input required maxLength={200} type="email" name="email" autoComplete="email" value={form.email} onChange={set("email")} className={field} />
               </Label>
             </div>
             <Label text={t.contact.subject}>
-              <input name="subject" value={form.subject} onChange={set("subject")} placeholder={t.contact.subjectPlaceholder} className={field} />
+              <input maxLength={200} name="subject" value={form.subject} onChange={set("subject")} placeholder={t.contact.subjectPlaceholder} className={field} />
             </Label>
             <Label text={t.contact.message}>
               <textarea
                 required
+                minLength={5}
+                maxLength={5000}
                 rows={6}
                 name="message"
                 value={form.message}
@@ -130,6 +136,13 @@ export function ContactView({
                 className={`${field} resize-y`}
               />
             </Label>
+            {/* Honeypot: invisible to people; bots fill it in and get silently ignored */}
+            <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+              <label>
+                Website
+                <input tabIndex={-1} autoComplete="off" name="website" value={form.website} onChange={set("website")} />
+              </label>
+            </div>
             <button
               type="submit"
               disabled={sending}

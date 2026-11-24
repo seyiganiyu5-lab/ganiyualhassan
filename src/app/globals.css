@@ -250,6 +250,45 @@ html[data-intro] .intro-overlay.is-skipping {
   background-size: 20px 20px;
 }
 
+/* ── Home hero backdrop: faint grid + a gold glow that follows the cursor ── */
+.hero-grid-bg {
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center top;
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 35%, #000 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 35%, #000 20%, transparent 75%);
+  opacity: 0.7;
+}
+.hero-spot {
+  background: radial-gradient(
+    520px circle at var(--spot-x, 75%) var(--spot-y, 35%),
+    color-mix(in oklab, var(--brand) 16%, transparent),
+    transparent 65%
+  );
+  transition: background 0.2s ease;
+}
+
+/* ── Toolbox marquee ── */
+.marquee {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to { transform: translateX(-100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .marquee { flex-wrap: wrap; mask-image: none; -webkit-mask-image: none; }
+}
+
 /* ── Utilities still used by the admin panel (kept, but toned down) ── */
 .glass {
   background: color-mix(in oklab, var(--card) 85%, transparent);

@@ -1,5 +1,6 @@
 import "server-only";
 import { NextRequest, NextResponse } from "next/server";
+import { clientIp, isSameOrigin } from "@/lib/security";
 
 /**
  * Admin session: a signed, HttpOnly cookie. The server is the only thing
@@ -70,8 +71,14 @@ export async function isAdmin(request: NextRequest) {
   return verifySessionToken(request.cookies.get(SESSION_COOKIE)?.value);
 }
 
-/** Returns a 401 response to send back, or null if the caller is signed in. */
+/**
+ * Returns a response to send back (401/403), or null if the caller is signed
+ * in. Changes (anything but GET) must also come from this site's own pages.
+ */
 export async function requireAdmin(request: NextRequest) {
+  if (request.method !== "GET" && request.method !== "HEAD" && !isSameOrigin(request)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
   if (await isAdmin(request)) return null;
   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 }
@@ -80,7 +87,7 @@ export function setSessionCookie(res: NextResponse, token: string) {
   res.cookies.set(SESSION_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "strict",
     path: "/",
     maxAge: SESSION_TTL_S,
   });
@@ -96,9 +103,7 @@ const attempts = new Map<string, { fails: number; lockedUntil: number }>();
 const MAX_FAILS = 5;
 const LOCK_MS = 10 * 60 * 1000;
 
-export function clientKey(request: NextRequest) {
-  return request.headers.get("x-forwarded-for")?.split(",")[0].trim() || request.headers.get("x-real-ip") || "local";
-}
+export const clientKey = clientIp;
 
 export function lockedFor(key: string) {
   const a = attempts.get(key);

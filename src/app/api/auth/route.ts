@@ -11,6 +11,7 @@ import {
   recordSuccess,
   setSessionCookie,
 } from "@/lib/auth";
+import { forbidden, isSameOrigin } from "@/lib/security";
 
 // Credentials come only from ADMIN_USERNAME / ADMIN_PASSWORD in the
 // environment. There are deliberately no defaults in code.
@@ -29,6 +30,8 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (!isSameOrigin(request)) return forbidden();
+
   const key = clientKey(request);
   const wait = lockedFor(key);
   if (wait) {
@@ -40,7 +43,13 @@ export async function POST(request: NextRequest) {
 
   try {
     const { username, password } = await request.json();
-    if (typeof username === "string" && typeof password === "string" && checkCredentials(username, password)) {
+    if (
+      typeof username === "string" &&
+      typeof password === "string" &&
+      username.length <= 200 &&
+      password.length <= 200 &&
+      checkCredentials(username, password)
+    ) {
       recordSuccess(key);
       const res = NextResponse.json({ success: true });
       setSessionCookie(res, await createSessionToken());

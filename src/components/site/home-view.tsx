@@ -20,6 +20,7 @@ export function HomeView({
 }) {
   const t = useT();
   const ready = useIntroDone();
+  const tools = [...t.about.skillsData.development, ...t.about.skillsData.design].map((s) => s.name);
   const fadeIn = (delay: number) => ({
     initial: { opacity: 0, y: 12 },
     animate: ready ? { opacity: 1, y: 0 } : undefined,
@@ -29,7 +30,17 @@ export function HomeView({
   return (
     <>
       {/* Hero */}
-      <section className="container-site grid grid-cols-1 items-center gap-14 pt-12 pb-20 sm:pt-20 sm:pb-28 lg:grid-cols-[1fr_auto] lg:gap-10">
+      <section
+        onPointerMove={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          e.currentTarget.style.setProperty("--spot-x", `${e.clientX - r.left}px`);
+          e.currentTarget.style.setProperty("--spot-y", `${e.clientY - r.top}px`);
+        }}
+        className="relative isolate"
+      >
+        <div aria-hidden className="hero-grid-bg pointer-events-none absolute inset-0 -z-10" />
+        <div aria-hidden className="hero-spot pointer-events-none absolute inset-0 -z-10" />
+      <div className="container-site grid grid-cols-1 items-center gap-14 pt-12 pb-20 sm:pt-20 sm:pb-28 lg:grid-cols-[1fr_auto] lg:gap-10">
         {/* 3D card — first on phones, right-hand column on desktop */}
         <motion.div
           className="lg:order-2"
@@ -47,21 +58,31 @@ export function HomeView({
         <motion.p {...fadeIn(0.55)} className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
           {t.site.home.intro}
         </motion.p>
-        <motion.div {...fadeIn(0.7)} className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
-          <span className="inline-flex items-center gap-2 text-muted-foreground">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60 [animation-duration:2.4s]" />
-              <span className="relative h-2 w-2 rounded-full bg-emerald-500" />
-            </span>
-            {t.hero.available}
+        <motion.p {...fadeIn(0.45)} className="mt-6 inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60 [animation-duration:2.4s]" />
+            <span className="relative h-2 w-2 rounded-full bg-emerald-500" />
           </span>
+          {t.hero.available}
+        </motion.p>
+        <motion.div {...fadeIn(0.7)} className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+          <Link
+            href="/work"
+            className="group inline-flex h-11 items-center gap-2 rounded-full bg-primary px-5 font-medium text-primary-foreground shadow-[0_8px_30px_-8px] shadow-primary/60 transition-transform hover:-translate-y-0.5"
+          >
+            {t.site.home.seeWork}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
           <Link href="/contact" className="group inline-flex items-center gap-1.5 font-medium">
             <span className="link-underline">{t.site.home.getInTouch}</span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </Link>
         </motion.div>
         </div>
+      </div>
       </section>
+
+      <Toolbox label={t.site.toolbox} items={tools} />
 
       {/* Selected work */}
       {projects.length > 0 && (
@@ -119,5 +140,24 @@ export function SectionHeader({ title, href, link }: { title: string; href?: str
         </Link>
       )}
     </div>
+  );
+}
+
+/** A slowly scrolling strip of tools; pauses on hover, still for reduced motion. */
+function Toolbox({ label, items }: { label: string; items: string[] }) {
+  if (items.length === 0) return null;
+  const row = items.map((name) => (
+    <li key={name} className="flex shrink-0 items-center gap-3 px-5 text-sm text-muted-foreground">
+      <span className="h-1 w-1 rounded-full bg-primary" />
+      {name}
+    </li>
+  ));
+  return (
+    <section aria-label={label} className="mb-24 border-y border-border/60 py-4">
+      <div className="marquee group flex overflow-hidden">
+        <ul className="marquee-track flex shrink-0">{row}</ul>
+        <ul aria-hidden className="marquee-track flex shrink-0">{row}</ul>
+      </div>
+    </section>
   );
 }

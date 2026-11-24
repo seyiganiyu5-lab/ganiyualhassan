@@ -230,6 +230,26 @@ html[data-intro] .intro-overlay.is-skipping {
   to { clip-path: inset(0 0 100% 0); visibility: hidden; }
 }
 
+/* ── 3D hero card: holographic overlays ── */
+.hero-scanlines {
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px 3px);
+}
+.hero-sweep {
+  top: -35%;
+  background: linear-gradient(to bottom, transparent, rgba(255, 195, 0, 0.16), transparent);
+  animation: hero-sweep 4.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes hero-sweep {
+  from { transform: translateY(0); }
+  to { transform: translateY(400%); }
+}
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(255, 195, 0, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 195, 0, 0.07) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
 /* ── Utilities still used by the admin panel (kept, but toned down) ── */
 .glass {
   background: color-mix(in oklab, var(--card) 85%, transparent);

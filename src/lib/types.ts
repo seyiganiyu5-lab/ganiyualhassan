@@ -9,6 +9,13 @@ export interface Project {
   images: string[];
   featured: boolean;
   order: number;
+  // Case study
+  role: string;
+  client: string;
+  duration: string;
+  challenge: string;
+  approach: string;
+  outcome: string;
   createdAt: string;
 }
 

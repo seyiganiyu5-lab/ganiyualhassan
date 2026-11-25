@@ -28,6 +28,12 @@ interface ProjectForm {
   githubLink: string;
   images: string[];
   featured: boolean;
+  role: string;
+  client: string;
+  duration: string;
+  challenge: string;
+  approach: string;
+  outcome: string;
 }
 
 const emptyForm: ProjectForm = {
@@ -39,6 +45,12 @@ const emptyForm: ProjectForm = {
   githubLink: "",
   images: [],
   featured: false,
+  role: "",
+  client: "",
+  duration: "",
+  challenge: "",
+  approach: "",
+  outcome: "",
 };
 
 export function AdminProjects() {
@@ -72,6 +84,12 @@ export function AdminProjects() {
       githubLink: form.githubLink.trim() || null,
       images: form.images,
       featured: form.featured,
+      role: form.role.trim(),
+      client: form.client.trim(),
+      duration: form.duration.trim(),
+      challenge: form.challenge.trim(),
+      approach: form.approach.trim(),
+      outcome: form.outcome.trim(),
     };
 
     try {
@@ -123,6 +141,12 @@ export function AdminProjects() {
       githubLink: p.githubLink || "",
       images: [...p.images],
       featured: p.featured,
+      role: p.role || "",
+      client: p.client || "",
+      duration: p.duration || "",
+      challenge: p.challenge || "",
+      approach: p.approach || "",
+      outcome: p.outcome || "",
     });
   };
 
@@ -419,6 +443,48 @@ function ProjectFormModal({
             images={data.images}
             onChange={(next) => setData({ ...data, images: next })}
           />
+
+          {/* Case study */}
+          <fieldset className="space-y-4 rounded-xl border border-border p-4">
+            <legend className="eyebrow px-1">{t.admin.caseStudy}</legend>
+            <p className="-mt-1 text-xs text-muted-foreground">{t.admin.caseStudyHint}</p>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {(
+                [
+                  ["role", t.admin.projectRole, "Designer & developer"],
+                  ["client", t.admin.projectClient, "Personal project"],
+                  ["duration", t.admin.projectDuration, "6 weeks"],
+                ] as const
+              ).map(([key, label, placeholder]) => (
+                <div key={key}>
+                  <label className="mb-1 block text-xs font-semibold text-muted-foreground">{label}</label>
+                  <input
+                    value={data[key]}
+                    onChange={(e) => setData({ ...data, [key]: e.target.value })}
+                    placeholder={placeholder}
+                    className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-foreground/30"
+                  />
+                </div>
+              ))}
+            </div>
+            {(
+              [
+                ["challenge", t.admin.projectChallenge],
+                ["approach", t.admin.projectApproach],
+                ["outcome", t.admin.projectOutcome],
+              ] as const
+            ).map(([key, label]) => (
+              <div key={key}>
+                <label className="mb-1 block text-xs font-semibold text-muted-foreground">{label}</label>
+                <textarea
+                  rows={4}
+                  value={data[key]}
+                  onChange={(e) => setData({ ...data, [key]: e.target.value })}
+                  className="w-full resize-y rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-foreground/30"
+                />
+              </div>
+            ))}
+          </fieldset>
 
           {/* Featured checkbox */}
           <label className="flex items-center gap-2">

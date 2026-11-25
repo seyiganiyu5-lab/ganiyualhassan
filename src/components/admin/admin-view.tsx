@@ -323,10 +323,10 @@ export function AdminView() {
   );
 
   const brand = (
-    <Link href="/" className="flex items-center gap-2.5 text-sm">
-      <Logomark className="h-6 w-6" />
+    <Link href="/" className="flex min-w-0 items-center gap-2 whitespace-nowrap text-sm">
+      <Logomark className="h-6 w-6 shrink-0" />
       <Wordmark name="Ganiyu Al-Hassan" />
-      <span className="rounded-full border border-border px-1.5 py-px font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+      <span className="shrink-0 rounded-full border border-border px-1.5 py-px font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
         Admin
       </span>
     </Link>
@@ -347,8 +347,8 @@ export function AdminView() {
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Sidebar — desktop */}
-      <aside className="hidden w-60 shrink-0 flex-col border-r border-border md:flex">
-        <div className="flex h-16 items-center px-6">{brand}</div>
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-border md:flex">
+        <div className="flex h-16 items-center px-5">{brand}</div>
         {nav()}
         {footer}
       </aside>
@@ -415,7 +415,6 @@ export function AdminView() {
           <div className="flex items-center gap-1">
             <Link
               href="/"
-              target="_blank"
               className="hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:inline-flex"
             >
               {t.admin.ui.viewSite}

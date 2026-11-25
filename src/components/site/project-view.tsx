@@ -28,6 +28,13 @@ export function ProjectView({
     .map((s) => s.trim())
     .filter(Boolean);
   const year = new Date(project.createdAt).getFullYear();
+  const story = (
+    [
+      [t.site.project.challenge, project.challenge],
+      [t.site.project.approach, project.approach],
+      [t.site.project.outcome, project.outcome],
+    ] as const
+  ).filter(([, text]) => text?.trim());
 
   // Thin progress line along the top — handy on long galleries.
   const { scrollYProgress } = useScroll();
@@ -114,8 +121,12 @@ export function ProjectView({
           {...intro(0.15)}
           className="grid grid-cols-2 gap-6 text-sm lg:grid-cols-1 lg:content-start lg:border-l lg:border-border lg:pl-8"
         >
+          {project.role && <Meta label={t.site.project.role}>{project.role}</Meta>}
+          {project.client && <Meta label={t.site.project.client}>{project.client}</Meta>}
           <Meta label={t.site.project.category}>{t.projects.categories[project.category]}</Meta>
-          <Meta label={t.site.project.year}>{year}</Meta>
+          <Meta label={project.duration ? t.site.project.duration : t.site.project.year}>
+            {project.duration || year}
+          </Meta>
           {tools.length > 0 && (
             <div className="col-span-2 lg:col-span-1">
               <Meta label={t.site.project.tools}>{tools.join(", ")}</Meta>
@@ -123,6 +134,31 @@ export function ProjectView({
           )}
         </motion.dl>
       </header>
+
+      {/* Case study — challenge, approach, outcome */}
+      {story.length > 0 && (
+        <section aria-labelledby="case-study" className="mt-16 sm:mt-20">
+          <h2 id="case-study" className="eyebrow">
+            {t.site.project.caseStudy}
+          </h2>
+          <div className="mt-6">
+            {story.map(([label, text], i) => (
+              <Reveal
+                key={label}
+                className="grid grid-cols-1 gap-3 border-t border-border py-8 sm:grid-cols-[14rem_1fr] sm:gap-10"
+              >
+                <h3 className="flex items-baseline gap-3 text-lg font-semibold tracking-tight">
+                  <span className="font-mono text-xs font-normal text-brand-ink">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  {label}
+                </h3>
+                <Prose text={text} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Media — shown in full, one after another */}
       {project.images.length > 0 && (
@@ -199,6 +235,36 @@ function Meta({ label, children }: { label: string; children: React.ReactNode })
     <div>
       <dt className="text-muted-foreground">{label}</dt>
       <dd className="mt-1 font-medium">{children}</dd>
+    </div>
+  );
+}
+
+/**
+ * Case study text: blank lines start a new paragraph, and lines that begin
+ * with "-", "*" or "•" become a bullet list.
+ */
+function Prose({ text }: { text: string }) {
+  const blocks = text.trim().split(/\n\s*\n/);
+  return (
+    <div className="max-w-2xl space-y-4 leading-relaxed text-muted-foreground">
+      {blocks.map((block, i) => {
+        const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
+        const isList = lines.length > 0 && lines.every((l) => /^[-*•]\s+/.test(l));
+        return isList ? (
+          <ul key={i} className="space-y-2">
+            {lines.map((l, j) => (
+              <li key={j} className="flex gap-3">
+                <span aria-hidden className="mt-[0.6em] h-1.5 w-1.5 shrink-0 bg-primary" />
+                <span>{l.replace(/^[-*•]\s+/, "")}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p key={i} className="whitespace-pre-line">
+            {block.trim()}
+          </p>
+        );
+      })}
     </div>
   );
 }

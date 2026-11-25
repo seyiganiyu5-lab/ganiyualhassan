@@ -7,7 +7,6 @@ import {
   Upload,
   X,
   Link2,
-  Loader2,
   ImageIcon,
   ChevronLeft,
   ChevronRight,
@@ -16,6 +15,7 @@ import {
   FileText,
 } from "lucide-react";
 import { toast } from "sonner";
+import { BlockLoader } from "@/components/ui/skeleton";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 
@@ -194,7 +194,7 @@ export function ProjectImageUploader({
       >
         {uploading ? (
           <>
-            <Loader2 className="h-6 w-6 animate-spin text-brand-ink" />
+            <BlockLoader className="text-3xl text-brand-ink" />
             <span className="text-xs font-medium text-muted-foreground">
               {t.admin.projectImagesUploading}
             </span>

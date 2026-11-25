@@ -10,11 +10,11 @@ import {
   X,
   Star,
   FolderGit2,
-  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { Project, ProjectCategory } from "@/lib/types";
 import { ProjectImageUploader } from "./project-image-uploader";
+import { BlockLoader } from "@/components/ui/skeleton";
 
 const categories: ProjectCategory[] = ["website", "graphic", "branding", "drawing"];
 
@@ -152,7 +152,7 @@ export function AdminProjects() {
       {loading ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-48 animate-pulse rounded-xl bg-muted" />
+            <div key={i} className="h-48 skeleton rounded-xl" />
           ))}
         </div>
       ) : projects.length === 0 ? (
@@ -441,7 +441,7 @@ function ProjectFormModal({
           >
             {saving ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <BlockLoader className="text-base" />
                 {t.admin.projectSaving}
               </>
             ) : (

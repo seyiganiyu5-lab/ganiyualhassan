@@ -12,7 +12,6 @@ import {
   FolderGit2,
   Image as ImageIcon,
   LayoutDashboard,
-  Loader2,
   LogOut,
   Mail,
   Menu,
@@ -35,6 +34,7 @@ import { ThemeToggle } from "@/components/site/theme-toggle";
 import { EASE } from "@/components/site/motion";
 import { Logomark, Wordmark } from "@/components/site/logo";
 import { toast } from "sonner";
+import { BlockLoader, Skeleton } from "@/components/ui/skeleton";
 
 export type AdminTab =
   | "dashboard"
@@ -167,8 +167,31 @@ export function AdminView() {
   // ---------- Loading ----------
   if (checking) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+      <div role="status" aria-live="polite" className="flex h-screen overflow-hidden bg-background">
+        <span className="sr-only">Loading…</span>
+        {/* Sidebar */}
+        <div className="hidden w-60 shrink-0 flex-col gap-6 border-r border-border p-6 md:flex">
+          <Skeleton className="h-6 w-40" />
+          <div className="space-y-2.5">
+            {Array.from({ length: 8 }, (_, i) => (
+              <Skeleton key={i} className="h-8 w-full rounded-lg" />
+            ))}
+          </div>
+        </div>
+        {/* Main */}
+        <div className="flex flex-1 flex-col">
+          <div className="flex h-16 items-center border-b border-border px-4 sm:px-8">
+            <Skeleton className="h-5 w-32" />
+          </div>
+          <div className="space-y-6 p-4 sm:p-8">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+              {Array.from({ length: 4 }, (_, i) => (
+                <Skeleton key={i} className="h-24 rounded-xl" />
+              ))}
+            </div>
+            <Skeleton className="h-64 w-full rounded-xl" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -240,7 +263,7 @@ export function AdminView() {
               disabled={loggingIn}
               className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-primary text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
             >
-              {loggingIn && <Loader2 className="h-4 w-4 animate-spin" />}
+              {loggingIn && <BlockLoader className="text-base" />}
               {t.admin.signIn}
             </button>
           </form>
@@ -415,17 +438,7 @@ export function AdminView() {
               className="mx-auto w-full max-w-5xl p-4 sm:p-8"
             >
               {activeTab === "dashboard" && <AdminDashboard onNavigate={setActiveTab} />}
-              {activeTab === "hero-image" && (
-                <div className="space-y-12">
-                  <AdminHeroImage />
-                  <AdminHeroImage
-                    settingKey="aboutImageUrl"
-                    title={t.admin.aboutImageTitle}
-                    subtitle={t.admin.aboutImageSubtitle}
-                    liveHint={t.admin.aboutImageLiveHint}
-                  />
-                </div>
-              )}
+              {activeTab === "hero-image" && <AdminHeroImage />}
               {activeTab === "projects" && <AdminProjects />}
               {activeTab === "messages" && <AdminMessages />}
               {activeTab === "cv" && <AdminCv />}

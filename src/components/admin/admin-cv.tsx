@@ -8,11 +8,11 @@ import {
   FileText,
   Trash2,
   CheckCircle,
-  Loader2,
   ExternalLink,
   FileCheck2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { BlockLoader, Skeleton } from "@/components/ui/skeleton";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 const ACCEPTED = [".pdf", ".doc", ".docx"];
@@ -180,9 +180,13 @@ export function AdminCv() {
           {t.admin.currentCv}
         </h3>
         {loading ? (
-          <div className="flex items-center gap-2 py-3 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Loading…
+          <div className="flex items-center gap-3 rounded-xl border border-border p-3" role="status">
+            <span className="sr-only">Loading…</span>
+            <Skeleton className="h-10 w-10 rounded-lg" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-3.5 w-1/2" />
+              <Skeleton className="h-3 w-1/4" />
+            </div>
           </div>
         ) : cvUrl ? (
           <div className="flex items-center gap-3 rounded-xl border border-border bg-card/50 p-3">
@@ -258,7 +262,7 @@ export function AdminCv() {
           >
             {uploading ? (
               <>
-                <Loader2 className="h-8 w-8 animate-spin text-brand-ink" />
+                <BlockLoader className="text-3xl text-brand-ink" />
                 <span className="text-sm font-medium text-muted-foreground">
                   Uploading…
                 </span>

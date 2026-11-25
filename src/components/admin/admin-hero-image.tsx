@@ -7,7 +7,6 @@ import {
   Upload,
   Trash2,
   ImageIcon,
-  Loader2,
   Save,
   RotateCcw,
   CheckCircle2,
@@ -15,24 +14,11 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
+import { BlockLoader, Skeleton } from "@/components/ui/skeleton";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 
-/**
- * Upload / replace / reset a photo stored in one settings key.
- * Used for the homepage hero (avatarUrl) and the About page (aboutImageUrl).
- */
-export function AdminHeroImage({
-  settingKey = "avatarUrl",
-  title,
-  subtitle,
-  liveHint,
-}: {
-  settingKey?: "avatarUrl" | "aboutImageUrl";
-  title?: string;
-  subtitle?: string;
-  liveHint?: string;
-} = {}) {
+export function AdminHeroImage() {
   const t = useT();
 
   // The hero image URL currently saved in the database (settings.avatarUrl).
@@ -58,7 +44,7 @@ export function AdminHeroImage({
     fetch("/api/settings")
       .then((r) => r.json())
       .then((s: Record<string, string>) => {
-        setSavedUrl(s[settingKey] || "");
+        setSavedUrl(s.avatarUrl || "");
       })
       .catch(() => {
         /* ignore */
@@ -151,7 +137,7 @@ export function AdminHeroImage({
       const setRes = await fetch("/api/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ [settingKey]: uploadedUrl }),
+        body: JSON.stringify({ avatarUrl: uploadedUrl }),
       });
       if (!setRes.ok) throw new Error("Failed to save settings");
 
@@ -175,7 +161,7 @@ export function AdminHeroImage({
       const res = await fetch("/api/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ [settingKey]: "" }),
+        body: JSON.stringify({ avatarUrl: "" }),
       });
       if (!res.ok) throw new Error("Failed to reset");
       setSavedUrl("");
@@ -194,8 +180,13 @@ export function AdminHeroImage({
   // ---------- Loading state ----------
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <span className="h-8 w-8 loader-ring rounded-full border-2 border-primary border-t-transparent" />
+      <div className="mx-auto max-w-5xl space-y-6" role="status">
+        <span className="sr-only">Loading…</span>
+        <Skeleton className="h-20 w-full rounded-2xl" />
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Skeleton className="aspect-[4/5] w-full rounded-2xl" />
+          <Skeleton className="aspect-[4/5] w-full rounded-2xl" />
+        </div>
       </div>
     );
   }
@@ -214,9 +205,9 @@ export function AdminHeroImage({
             <ImageIcon className="h-5 w-5" />
           </span>
           <div>
-            <h2 className="text-lg font-bold">{title ?? t.admin.heroImageTitle}</h2>
+            <h2 className="text-lg font-bold">{t.admin.heroImageTitle}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              {subtitle ?? t.admin.heroImageSubtitle}
+              {t.admin.heroImageSubtitle}
             </p>
           </div>
         </div>
@@ -263,7 +254,7 @@ export function AdminHeroImage({
                   )}
                   {isBusy && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/50 backdrop-blur-sm">
-                      <Loader2 className="h-7 w-7 animate-spin text-brand-ink" />
+                      <BlockLoader className="text-3xl text-brand-ink" />
                       <span className="text-xs font-medium text-white">
                         {uploading ? t.admin.heroImageUploading : t.admin.heroImageSaving}
                       </span>
@@ -323,9 +314,9 @@ export function AdminHeroImage({
                 className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-primary-foreground disabled:opacity-60"
               >
                 {uploading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <BlockLoader className="text-base" />
                 ) : saving ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <BlockLoader className="text-base" />
                 ) : (
                   <Save className="h-4 w-4" />
                 )}
@@ -350,7 +341,7 @@ export function AdminHeroImage({
           {!pendingFile && (
             <div className="mt-6 flex items-start gap-2 rounded-lg bg-muted/50 p-3 text-xs text-muted-foreground">
               <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-ink" />
-              <span>{liveHint ?? t.admin.heroImageLiveHint}</span>
+              <span>{t.admin.heroImageLiveHint}</span>
             </div>
           )}
         </motion.section>

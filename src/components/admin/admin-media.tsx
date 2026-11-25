@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useT } from "@/lib/i18n/context";
 import { Upload, Trash2, Copy, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
+import { BlockLoader } from "@/components/ui/skeleton";
 
 interface MediaAsset {
   id: string;
@@ -107,7 +108,7 @@ export function AdminMedia() {
             className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
             {uploading ? (
-              <span className="h-4 w-4 loader-ring rounded-full border-2 border-white border-t-transparent" />
+              <BlockLoader className="text-base" />
             ) : (
               <Upload className="h-4 w-4" />
             )}

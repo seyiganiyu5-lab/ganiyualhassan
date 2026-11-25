@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useT } from "@/lib/i18n/context";
 import { Save, Search } from "lucide-react";
 import { toast } from "sonner";
+import { BlockLoader } from "@/components/ui/skeleton";
 
 export function AdminSeo() {
   const t = useT();
@@ -168,7 +169,7 @@ export function AdminSeo() {
         className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-8 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >
         {saving ? (
-          <span className="h-4 w-4 loader-ring rounded-full border-2 border-white border-t-transparent" />
+          <BlockLoader className="text-base" />
         ) : (
           <Save className="h-4 w-4" />
         )}

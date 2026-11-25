@@ -98,7 +98,7 @@ export function AdminMessages() {
       {loading ? (
         <div className="space-y-2">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-20 animate-pulse rounded-xl bg-muted" />
+            <div key={i} className="h-20 skeleton rounded-xl" />
           ))}
         </div>
       ) : filtered.length === 0 ? (

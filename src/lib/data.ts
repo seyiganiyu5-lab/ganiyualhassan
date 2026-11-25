@@ -21,9 +21,6 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   linkedin: "https://linkedin.com/in/al-hassan-ganiyu-9910b3410",
   whatsapp: "https://wa.me/2250503671480",
   avatarUrl: "",
-  // The About page has its own photo, independent of the homepage hero.
-  // Default: the original suit portrait that ships with the site.
-  aboutImageUrl: "/uploads/1782431177676-whatsapp-image-2026-05-20-at-17.25.43.jpg",
   cvUrl: "",
 };
 

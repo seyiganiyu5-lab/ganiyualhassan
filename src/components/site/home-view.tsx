@@ -6,17 +6,20 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { EASE, Reveal, WordReveal, useIntroDone } from "./motion";
 import { HeroCard } from "./hero-card";
-import type { Project } from "@/lib/types";
+import type { Project, Testimonial } from "@/lib/types";
+import { Testimonials } from "./testimonials";
 import { ProjectGrid } from "./project-card";
 
 export function HomeView({
   name,
   avatarUrl,
   projects,
+  testimonials = [],
 }: {
   name: string;
   avatarUrl: string;
   projects: Project[];
+  testimonials?: Testimonial[];
 }) {
   const t = useT();
   const ready = useIntroDone();
@@ -108,6 +111,8 @@ export function HomeView({
           ))}
         </div>
       </section>
+
+      <Testimonials items={testimonials} />
 
       {/* CTA */}
       <Reveal className="container-site mt-28">

@@ -20,3 +20,15 @@ export interface Project {
 }
 
 export type ProjectCategory = Project["category"];
+
+export interface Testimonial {
+  id: string;
+  quote: string;
+  name: string;
+  role: string;
+  company: string;
+  photoUrl: string;
+  link: string;
+  visible: boolean;
+  order: number;
+}

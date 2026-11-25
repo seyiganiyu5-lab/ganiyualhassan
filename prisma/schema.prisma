@@ -23,6 +23,13 @@ model Project {
   images      String   @default("[]")
   featured    Boolean  @default(false)
   order       Int      @default(0)
+  // Case study (all optional — the section only shows when something is filled)
+  role        String   @default("")
+  client      String   @default("")
+  duration    String   @default("")
+  challenge   String   @default("")
+  approach    String   @default("")
+  outcome     String   @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

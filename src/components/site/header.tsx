@@ -94,9 +94,9 @@ export function Header({ name }: { name: string }) {
       <div className="container-site flex h-16 items-center justify-between gap-4">
         <Link href="/" className="group flex items-center gap-2.5 text-sm font-semibold tracking-tight">
           <Logomark className="h-7 w-7 transition-transform duration-300 ease-out group-hover:-translate-y-0.5" />
-          <span className="font-display text-[15px] font-semibold tracking-[-0.03em]">
-            {first}
-            <span className="hidden sm:inline"> {withGoldHyphen(rest[0] ?? "")}</span>
+          {/* Phones show the mark only; the name returns from the sm breakpoint. */}
+          <span className="sr-only font-display text-[15px] font-semibold tracking-[-0.03em] sm:not-sr-only sm:whitespace-nowrap">
+            {first} {withGoldHyphen(rest[0] ?? "")}
           </span>
         </Link>
 

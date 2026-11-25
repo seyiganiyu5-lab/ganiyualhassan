@@ -60,7 +60,7 @@ export function Logomark({
 export function Wordmark({ name, className }: { name: string; className?: string }) {
   const i = name.indexOf("-");
   return (
-    <span className={cn("font-display font-semibold tracking-[-0.03em]", className)}>
+    <span className={cn("whitespace-nowrap font-display font-semibold tracking-[-0.03em]", className)}>
       {i < 0 ? (
         name
       ) : (

@@ -60,3 +60,16 @@ model MediaAsset {
   type      String   @default("image")
   createdAt DateTime @default(now())
 }
+model Testimonial {
+  id        String   @id @default(cuid())
+  quote     String
+  name      String
+  role      String   @default("")
+  company   String   @default("")
+  photoUrl  String   @default("")
+  link      String   @default("")
+  visible   Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

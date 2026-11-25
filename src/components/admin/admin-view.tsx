@@ -15,6 +15,7 @@ import {
   LogOut,
   Mail,
   Menu,
+  MessageSquareQuote,
   Search as SeoIcon,
   Settings,
   UserCircle,
@@ -29,6 +30,7 @@ import { AdminCv } from "./admin-cv";
 import { AdminMedia } from "./admin-media";
 import { AdminSettings } from "./admin-settings";
 import { AdminSeo } from "./admin-seo";
+import { AdminTestimonials } from "./testimonials";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { EASE } from "@/components/site/motion";
@@ -39,6 +41,7 @@ import { BlockLoader, Skeleton } from "@/components/ui/skeleton";
 export type AdminTab =
   | "dashboard"
   | "projects"
+  | "testimonials"
   | "hero-image"
   | "cv"
   | "media"
@@ -46,7 +49,7 @@ export type AdminTab =
   | "settings"
   | "seo";
 
-const TAB_IDS: AdminTab[] = ["dashboard", "projects", "hero-image", "cv", "media", "messages", "settings", "seo"];
+const TAB_IDS: AdminTab[] = ["dashboard", "projects", "testimonials", "hero-image", "cv", "media", "messages", "settings", "seo"];
 
 /** The active section lives in the URL hash, so refresh and Back both work. */
 function useHashTab(): [AdminTab, (t: AdminTab) => void] {
@@ -145,6 +148,7 @@ export function AdminView() {
       label: t.admin.ui.groupContent,
       items: [
         { id: "projects", label: t.admin.projects, icon: FolderGit2 },
+        { id: "testimonials", label: t.admin.testimonials, icon: MessageSquareQuote },
         { id: "hero-image", label: t.admin.ui.profilePhoto, icon: UserCircle },
         { id: "cv", label: t.admin.cv, icon: FileText },
         { id: "media", label: t.admin.media, icon: ImageIcon },
@@ -439,6 +443,7 @@ export function AdminView() {
               {activeTab === "dashboard" && <AdminDashboard onNavigate={setActiveTab} />}
               {activeTab === "hero-image" && <AdminHeroImage />}
               {activeTab === "projects" && <AdminProjects />}
+              {activeTab === "testimonials" && <AdminTestimonials />}
               {activeTab === "messages" && <AdminMessages />}
               {activeTab === "cv" && <AdminCv />}
               {activeTab === "media" && <AdminMedia />}

@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "@/lib/db";
-import type { Project } from "@/lib/types";
+import type { Project, Testimonial } from "@/lib/types";
 
 /** Public site settings, editable from the admin panel. */
 export interface SiteSettings {
@@ -69,4 +69,18 @@ export async function getSelectedProjects(limit = 6): Promise<Project[]> {
   const all = await getProjects();
   const featured = all.filter((p) => p.featured);
   return (featured.length > 0 ? featured : all).slice(0, limit);
+}
+
+/** Testimonials shown on the site (hidden ones are left out). */
+export async function getTestimonials(): Promise<Testimonial[]> {
+  try {
+    const rows = await db.testimonial.findMany({
+      where: { visible: true },
+      orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+    });
+    return rows.map(({ createdAt: _c, updatedAt: _u, ...t }) => t);
+  } catch (error) {
+    console.error("getTestimonials error:", error);
+    return [];
+  }
 }
